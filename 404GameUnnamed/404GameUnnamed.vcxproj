@@ -117,13 +117,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractAI.cpp" />
+    <ClCompile Include="AbstractAIState.cpp" />
+    <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="Observor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h" />
+    <ClInclude Include="AbstractAIState.h" />
     <ClInclude Include="AIController.h" />
     <ClInclude Include="AnimationManager.h" />
+    <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionData.h" />
@@ -131,6 +140,7 @@
     <ClInclude Include="CollisionReaction.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />

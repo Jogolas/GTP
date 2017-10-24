@@ -13,60 +13,126 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{0968bafd-6658-407e-a6a7-8eb452408c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{fa69e8bf-dee3-4f80-bc33-fe8eff5febec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Collisions">
+      <UniqueIdentifier>{f743cacb-75e2-4f92-803f-62e016423482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{03dbc492-776f-4008-922a-000b680562ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pathing">
+      <UniqueIdentifier>{682ca368-0bf8-42f1-833b-5a6f1ef18f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{25c6c9dd-c0b6-44ae-b888-a5c0349d7859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{05b7d7a6-f0be-4e73-accb-3fe9b7afbd85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI\States">
+      <UniqueIdentifier>{33df6667-46c7-4699-b222-b24cc62b5e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{8c0480c8-93a3-4184-b261-e30c60a56902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pathing">
+      <UniqueIdentifier>{094df123-d92d-46a0-95d2-0bb5880471f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI\States">
+      <UniqueIdentifier>{fa4a4bb5-c44a-462f-bbd0-b04f0a174b21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{f975c080-84bd-43f2-bba6-eda099494c25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graph.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackState.cpp">
+      <Filter>Source Files\AI\States</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>Source Files\AI\States</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractAI.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractAIState.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Observor.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionData.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AbstractAI.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionDetection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionReaction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Forces.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AbstractAIState.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="AIController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractAI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="Graph.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="Observor.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionData.h">
+      <Filter>Header Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetection.h">
+      <Filter>Header Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionReaction.h">
+      <Filter>Header Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Forces.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Mass.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\AI\States</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>Header Files\AI\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
