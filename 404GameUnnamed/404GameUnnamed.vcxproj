@@ -87,6 +87,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\dev\glm-0.9.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -116,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +130,7 @@
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
     <ClInclude Include="Forces.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />
