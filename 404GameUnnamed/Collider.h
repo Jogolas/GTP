@@ -9,11 +9,3 @@ public:
 private:
 
 };
-
-Collider::Collider()
-{
-}
-
-Collider::~Collider()
-{
-}

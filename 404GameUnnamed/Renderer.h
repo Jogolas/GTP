@@ -9,11 +9,3 @@ public:
 private:
 
 };
-
-Renderer::Renderer()
-{
-}
-
-Renderer::~Renderer()
-{
-}

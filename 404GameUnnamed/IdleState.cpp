@@ -2,12 +2,13 @@
 
 AbstractAIState* IdleState::CurrentState(AbstractAI* a)
 {
-	return a->getState();
+	return nullptr;
 }
 
 AbstractAIState* IdleState::SwitchState(AbstractAI* a)
 {
 	//code to switch to attack state when player starts combat
+	return nullptr;
 }
 
 void IdleState::handle(AbstractAI* a)

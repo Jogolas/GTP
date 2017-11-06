@@ -117,8 +117,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractAI.cpp" />
-    <ClCompile Include="AbstractAIState.cpp" />
     <ClCompile Include="AIController.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="Graph.cpp" />
