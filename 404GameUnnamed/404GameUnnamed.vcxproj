@@ -87,8 +87,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\glm-0.9.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dev\glm-0.9.8.0;..\dev\SDL2 plugins;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -124,6 +129,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Observor.cpp" />
+    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="rt3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h" />
@@ -144,6 +151,7 @@
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Observor.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="rt3D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

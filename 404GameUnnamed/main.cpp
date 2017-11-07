@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include "Renderer.h"
 #include <iostream>
 
 using namespace std;
@@ -7,6 +8,10 @@ int main()
 {
 	CGraph testGraph = CGraph();
 	char test;
+	Renderer render = Renderer();
+
+	SDL_Window * window;
+	render.setUpWindow(window);
 
 	testGraph.addNode(); // node index 0
 	testGraph.addNode(); // node index 1
