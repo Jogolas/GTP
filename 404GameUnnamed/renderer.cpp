@@ -18,11 +18,11 @@ void Renderer::renderFBX(const char* fbx) //will render the specified FBX models
 
 void Renderer::draw(glm::mat4 stack, GLuint texture, glm::vec3 position, GLuint shader) //this method will draw the model specified
 {
-	rt3d::updateMesh(mesh, RT3D_VERTEX, verts, size);
+	//rt3d::updateMesh(mesh, RT3D_VERTEX, verts, size);
 
 	glBindTexture(GL_TEXTURE_2D, texture); //asigns the objects texture
 	stack = glm::translate(stack, position); //sets it's position
-	stack = glm::scale(mv, vec3(1 * 0.05f, 1 * 0.05, 1 * 0.05)); //sets it's size
+	stack = glm::scale(stack, glm::vec3(1 * 0.05f, 1 * 0.05, 1 * 0.05)); //sets it's size
 
 	rt3d::setUniformMatrix4fv(shader, "modelview", glm::value_ptr(stack));
 	rt3d::drawMesh(mesh, meshIndexCount, GL_TRIANGLES);

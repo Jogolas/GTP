@@ -13,10 +13,10 @@ public:
 
 	GLuint mesh;
 	//sets up the data for the object
-	vector<GLfloat> verts;
-	vector<GLfloat> norms;
-	vector<GLfloat> tex_coords;
-	vector<GLuint> indices;
+	std::vector<GLfloat> verts;
+	std::vector<GLfloat> norms;
+	std::vector<GLfloat> tex_coords;
+	std::vector<GLuint> indices;
 	GLuint size = indices.size();
 	GLuint meshIndexCount = size;
 

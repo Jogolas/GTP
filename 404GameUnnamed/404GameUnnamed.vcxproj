@@ -75,11 +75,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\SDL2-2.0.5\include;..\dev\glm-0.9.8.5\glm\;..\dev\glew-2.1.0\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\dev\SDL2-2.0.5\lib\x86;..\dev\glew-2.1.0\Debug\Win32</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,6 +138,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rt3D.cpp" />
     <ClCompile Include="rt3DObjLoader.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -164,6 +166,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="rt3D.h" />
     <ClInclude Include="rt3DObjLoader.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
