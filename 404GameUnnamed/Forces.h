@@ -1,19 +1,9 @@
-
+#pragma once
+#include "Entity.h"
 
 class Forces
 {
 public:
-	Forces();
-	~Forces();
-
-private:
-
+	virtual ~Forces() {}
+	virtual void updateForce(Entity *obj, float dt) = 0;
 };
-
-Forces::Forces()
-{
-}
-
-Forces::~Forces()
-{
-}

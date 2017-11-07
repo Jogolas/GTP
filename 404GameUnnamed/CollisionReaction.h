@@ -9,11 +9,3 @@ public:
 private:
 
 };
-
-CollisionReaction::CollisionReaction()
-{
-}
-
-CollisionReaction::~CollisionReaction()
-{
-}

@@ -49,9 +49,6 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{f975c080-84bd-43f2-bba6-eda099494c25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering">
-      <UniqueIdentifier>{9409d7d9-fa7b-4151-856c-76a48db4e7e8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,11 +72,17 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="rt3D.cpp">
-      <Filter>Source Files\Rendering</Filter>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Collisions</Filter>
     </ClCompile>
-    <ClCompile Include="renderer.cpp">
-      <Filter>Source Files\Rendering</Filter>
+    <ClCompile Include="CollisionData.cpp">
+      <Filter>Source Files\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="FrictionForce.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="AttackState.h">
       <Filter>Header Files\AI\States</Filter>
-    </ClInclude>
-    <ClInclude Include="rt3D.h">
-      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
