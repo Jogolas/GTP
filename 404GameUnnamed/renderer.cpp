@@ -1,5 +1,7 @@
 #include "Renderer.h"
 #include "rt3D.h"
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 void Renderer::setUpWindow(SDL_Window * window) //this method creates a window
 {
@@ -29,18 +31,15 @@ void Renderer::setUpWindow(SDL_Window * window) //this method creates a window
 }
 
 void Renderer::renderObject(GLuint texture, GLuint object, GLuint indexCount, glm::vec3 position,
-	GLuint shader, glm::vec3 size, GLuint material) //this method will render an object with the passed in varaibles
+		GLuint shader, glm::vec3 size) //this method will render an object with the passed in varaibles
 {
 	//draws the specified object
 	glUseProgram(shader); //applies the passed in shader
 	glBindTexture(GL_TEXTURE_2D, texture); //binds the passed in texture
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), position); //sets it to the passed in position
-	mvStack.top() = glm::scale(mvStack.top(), size); //renders the object to the desired size
-	rt3d::setUniformMatrix4fv(shader, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setMaterial(shader, material); //renders the object with the correct material
+	modelview = glm::translate(modelview, position); //sets it to the passed in position
+	modelview = glm::scale(modelview, size); //renders the object to the desired size
+	rt3d::setUniformMatrix4fv(shader, "modelview", glm::value_ptr(modelview));
 	rt3d::drawIndexedMesh(object, indexCount, GL_TRIANGLES);
-	mvStack.pop();
 }
 
 void Renderer::renderFBX() //will render the FBX models we use
