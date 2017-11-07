@@ -4,11 +4,11 @@
 class GravityForce : public Forces
 {
 private:
-	vec3 gravity;
+	glm::vec3 gravity;
 
 public:
-	GravityForce() {};
-	GravityForce(const vec3& gravity) : gravity(gravity) {};
-	virtual ~GravityForce() {};
-	void updateForce(GameObject *obj, float dt);
+	GravityForce() {}
+	GravityForce(const glm::vec3& gravity) : gravity(gravity) {}
+	~GravityForce() {}
+	void updateForce(Entity *obj, float dt);
 };

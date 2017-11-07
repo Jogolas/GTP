@@ -1,11 +1,15 @@
 #include "AABB.h"
+#include "CollisionData.h" //using this in here to prevent re-definitions
+						   //programs would usually have a better structure and definitions to prevent this
+						   //so don't use this as a fix in the future and get this s*** fixed.
 
-vec3 AABB::getCentre() const
+
+glm::vec3 AABB::getCentre() const
 {
 	return centre;
 }
 
-vec3 AABB::getRadius() const
+glm::vec3 AABB::getRadius() const
 {
 	return radius;
 }
@@ -19,10 +23,10 @@ bool AABB::isColliding(Collider * const c)
 	return false;
 }
 
-vec3 AABB::contactNormal() const
+glm::vec3 AABB::contactNormal() const
 {
 	char mask = Utils::computePointMask(collider->getCentre(), this);
-	vec3 normal(0, 0, 0);
+	glm::vec3 normal(0, 0, 0);
 
 	if ((mask & 1) == 1)
 		normal += Utils::right;
@@ -40,9 +44,9 @@ vec3 AABB::contactNormal() const
 	return normal;
 }
 
-vector<vec3> AABB::contactPoints() const
+std::vector<glm::vec3> AABB::contactPoints() const
 {
-	vector<vec3> points;
+	std::vector<glm::vec3> points;
 	points.push_back(Utils::projectPointOnAABB(collider->getCentre(), this));
 	return points;
 }

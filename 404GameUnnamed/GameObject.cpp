@@ -30,7 +30,7 @@ float GameObject::getMass()
 	return mass;
 }
 
-vec3 GameObject::getCenter()
+glm::vec3 GameObject::getCenter()
 {
 	centre.x = width / 2;
 	centre.y = height / 2;
@@ -44,14 +44,14 @@ GameObject::GameObject()
 	init();
 }
 
-GameObject::GameObject(vec3 position)
+GameObject::GameObject(glm::vec3 position)
 {
 	this->position = position;
-	vec3 iVelocity(0, 0, 0);
+	glm::vec3 iVelocity(0, 0, 0);
 	this->velocity = iVelocity;
 }
 
-vec3 GameObject::applyGravity()
+glm::vec3 GameObject::applyGravity()
 {
 	if (position.y > 0)
 	{
@@ -60,7 +60,7 @@ vec3 GameObject::applyGravity()
 	}
 }
 
-vec3 GameObject::addForce(const vec3& force)
+glm::vec3 GameObject::addForce(const glm::vec3& force)
 {
 	forceAccum += force;
 	return forceAccum;
@@ -68,18 +68,13 @@ vec3 GameObject::addForce(const vec3& force)
 
 void GameObject::clearAccumilator()
 {
-	forceAccum = vec3(0.0f, 0.0f, 0.0f);
+	forceAccum = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 void GameObject::init()
 {
-	transform.Translate(vec3(50, 0, 0));
-	collider = new AABB(vec3(getWidth(), getHeight(), getLength()), transform);
-}
-
-Collider* GameObject::getCollider()
-{
-	return collider;
+	transform.Translate(glm::vec3(50, 0, 0));
+	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
 }
 
 void GameObject::update(float dt)
@@ -87,9 +82,4 @@ void GameObject::update(float dt)
 	
 	grav.updateForce(this, dt);
 	collider->update(transform);
-}
-
-GameObject::GameObject()
-{
-	init();
 }

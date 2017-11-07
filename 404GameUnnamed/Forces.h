@@ -1,14 +1,9 @@
 #pragma once
-#include "GameObject.h"
+#include "Entity.h"
 
 class Forces
 {
 public:
-	Forces();
-	~Forces();
-
-	virtual void updateForce(GameObject *obj, float dt) = 0;
-
-private:
-
+	virtual ~Forces() {}
+	virtual void updateForce(Entity *obj, float dt) = 0;
 };

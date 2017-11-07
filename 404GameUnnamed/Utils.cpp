@@ -2,45 +2,43 @@
 #include "AABB.h"
 #include <limits>
 
-using namespace std;
-
 //UP: vec3(0, 1, 0)
-const vec3 Utils::up = vec3(0, 1, 0);
+const glm::vec3 Utils::up = glm::vec3(0, 1, 0);
 //UP: vec3(0, -1, 0)
-const vec3 Utils::down = vec3(0, -1, 0);
+const glm::vec3 Utils::down = glm::vec3(0, -1, 0);
 
 //RIGHT: vec3(1, 0, 0)
-const vec3 Utils::right = vec3(1, 0, 0);
+const glm::vec3 Utils::right = glm::vec3(1, 0, 0);
 //LEFT: vec3(-1, 0, 0)
-const vec3 Utils::left = vec3(-1, 0, 0);
+const glm::vec3 Utils::left = glm::vec3(-1, 0, 0);
 
 //FRONT: vec3(0, 0, 1)
-const vec3 Utils::front = vec3(0, 0, 1);
+const glm::vec3 Utils::front = glm::vec3(0, 0, 1);
 //BACK: vec3(0, 0, -1)
-const vec3 Utils::back = vec3(0, 0, -1);
+const glm::vec3 Utils::back = glm::vec3(0, 0, -1);
 
-float Utils::DistanceBetweenPoints(const vec3 & P, const vec3 & Q)
+float Utils::DistanceBetweenPoints(const glm::vec3 & P, const glm::vec3 & Q)
 {
 	return distance(P, Q);
 }
 
-float Utils::DistanceBetweenPointAndPlane(const vec3 & P, const vec3 & n, float d)
+float Utils::DistanceBetweenPointAndPlane(const glm::vec3 & P, const glm::vec3 & n, float d)
 {
 	return abs(dot(P, n) + d);
 }
 
-bool Utils::PointIsAbovePlane(const vec3 & P, const vec3 & n, float d)
+bool Utils::PointIsAbovePlane(const glm::vec3 & P, const glm::vec3 & n, float d)
 {
 	return dot(n, P) + d > FLT_EPSILON;
 }
 
-vec3 Utils::projectPointOnAABB(const vec3 & P, const AABB* const aabb)
+glm::vec3 Utils::projectPointOnAABB(const glm::vec3 & P, const AABB* const aabb)
 {
-	vec3 center = aabb->getCentre();
-	vec3 radii = aabb->getRadius();
+	glm::vec3 center = aabb->getCentre();
+	glm::vec3 radii = aabb->getRadius();
 
 	char mask = Utils::computePointMask(P, aabb);
-	vec3 point = P;
+	glm::vec3 point = P;
 
 	if ((mask & 1) == 1)	// +x
 	{
@@ -76,7 +74,7 @@ vec3 Utils::projectPointOnAABB(const vec3 & P, const AABB* const aabb)
 	return point;
 }
 
-vec3 Utils::projectPointOnPlane(const vec3& P, const vec3& n, float c)
+glm::vec3 Utils::projectPointOnPlane(const glm::vec3& P, const glm::vec3& n, float c)
 {
 	float d = Utils::DistanceBetweenPointAndPlane(P, n, c);
 	return P - d*n;
@@ -97,10 +95,10 @@ the 3D case for +/-z is similar but using 6 bits instead of 4
 
 */
 
-char Utils::computePointMask(const vec3& P, const AABB* aabb)
+char Utils::computePointMask(const glm::vec3& P, const AABB* aabb)
 {
-	vec3 center = aabb->getCentre();
-	vec3 radii = aabb->getRadius();
+	glm::vec3 center = aabb->getCentre();
+	glm::vec3 radii = aabb->getRadius();
 
 	char mask = 0;
 	if (PointIsAbovePlane(P, Utils::right, -center.x - radii.x))

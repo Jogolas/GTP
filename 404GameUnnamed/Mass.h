@@ -9,11 +9,3 @@ public:
 private:
 
 };
-
-Mass::Mass()
-{
-}
-
-Mass::~Mass()
-{
-}

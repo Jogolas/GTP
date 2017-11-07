@@ -117,15 +117,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="AIController.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="CollisionData.cpp" />
+    <ClCompile Include="FrictionForce.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GravityForce.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Observor.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="AbstractAI.h" />
     <ClInclude Include="AbstractAIState.h" />
     <ClInclude Include="AIController.h" />
@@ -136,14 +144,20 @@
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Forces.h" />
+    <ClInclude Include="FrictionForce.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="GravityForce.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Observor.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,6 @@
 // Based on the work of Marco Gilardi's from IPM
-
 #pragma once
-#include "glm\glm\glm.hpp"
+#include "glm.hpp"
 #include "AABB.h"
 #include "CollisionDetection.h"
 #include "GameObject.h"
