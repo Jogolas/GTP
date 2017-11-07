@@ -10,8 +10,7 @@ int main()
 	char test;
 	Renderer render = Renderer();
 
-	SDL_Window * window;
-	render.setUpWindow(window);
+	render.renderObject("bunny.obj");
 
 	testGraph.addNode(); // node index 0
 	testGraph.addNode(); // node index 1

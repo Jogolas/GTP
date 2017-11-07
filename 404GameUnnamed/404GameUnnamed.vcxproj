@@ -136,6 +136,7 @@
     <ClCompile Include="Observor.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rt3D.cpp" />
+    <ClCompile Include="rt3DObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Observor.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="rt3D.h" />
+    <ClInclude Include="rt3DObjLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

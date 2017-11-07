@@ -102,6 +102,9 @@
     <ClCompile Include="rt3D.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="rt3DObjLoader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="rt3D.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="rt3DObjLoader.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
