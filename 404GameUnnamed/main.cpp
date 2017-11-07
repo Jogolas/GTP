@@ -8,10 +8,9 @@ int main()
 {
 	CGraph testGraph = CGraph();
 	char test;
-	//Renderer render = Renderer();
+	Renderer render = Renderer();
 
-	//SDL_Window * window;
-	//render.setUpWindow(window);
+	render.renderObject("bunny.obj");
 
 	testGraph.addNode(); // node index 0
 	testGraph.addNode(); // node index 1
@@ -26,7 +25,7 @@ int main()
 	cout << testGraph.GetNode(0)->debug_position.x << endl;
 	cout << testGraph.GetNode(1)->debug_position.x << endl;
 	cout << testGraph.GetNode(2)->debug_position.x << endl;
-	cout << testGraph.FollowEdge(0, 1) << endl;
+
 	cin >> test;
 
 	return 0;
