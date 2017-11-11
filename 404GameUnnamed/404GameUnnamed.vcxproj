@@ -136,8 +136,6 @@
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Observor.cpp" />
     <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="rt3D.cpp" />
-    <ClCompile Include="rt3DObjLoader.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,8 +162,6 @@
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Observor.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="rt3D.h" />
-    <ClInclude Include="rt3DObjLoader.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

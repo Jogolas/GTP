@@ -8,9 +8,7 @@ int main()
 {
 	CGraph testGraph = CGraph();
 	char test;
-	Renderer render = Renderer();
 
-	render.renderObject("bunny.obj");
 
 	testGraph.addNode(); // node index 0
 	testGraph.addNode(); // node index 1
