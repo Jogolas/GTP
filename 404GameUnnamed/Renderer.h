@@ -15,15 +15,15 @@
 #define FORMAT_VTN 3
 #define FORMAT_VN 4
 
-using namespace std;
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 
-class Renderer
+namespace Renderer
 {
-public:	
 	char* fileReader(const char *fname, GLint &fSize); //loads in needed files
 	GLuint initiliaseShader(const char *vertShader, const char *fragShader); //initialises our shaders
 	
-	SDL_Window * createWindow(SDL_Window * window, SDL_GLContext &context); //creates a window to render in
+	SDL_Window * createWindow(SDL_GLContext &context); //creates a window to render in
 	SDL_Window * toggleFullScreen(SDL_Window * window); //toggles full screen
 	SDL_Window * changeRes(int width, int height); //changes window resolution to what is resolution is selected
 
@@ -34,7 +34,4 @@ public:
 	void loadFBX(); //load in fbx model
 	void setFBXProperties(); //set the properties for an fbx model
 	void drawFBX(); //draw the fbx model
-
-private:
-	int width = 800, height = 600; //default window size, maybe we'll add in an array of resolutions that you can select from in a menu
 };
