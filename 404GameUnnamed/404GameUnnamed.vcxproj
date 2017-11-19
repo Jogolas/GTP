@@ -132,9 +132,11 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GravityForce.cpp" />
     <ClCompile Include="IdleState.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Observor.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -162,6 +164,7 @@
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Observor.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />

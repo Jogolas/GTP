@@ -1,10 +1,19 @@
+////brings up console window
+#if _DEBUG
+#pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
+#endif
+
+
 #include "Graph.h"
 #include "Renderer.h"
 #include <iostream>
+#include "Player.h"
+
+Player* p1 = new Player(glm::vec3(0, 0, 0));
 
 void update()
 {
-
+	p1->update();
 }
 
 void draw(SDL_Window * window)

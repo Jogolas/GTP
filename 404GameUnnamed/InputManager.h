@@ -1,19 +1,7 @@
+//still deciding how to set this up...
 
-
+//handles player inputs
 class InputManager
 {
-public:
-	InputManager();
-	~InputManager();
-
-private:
 
 };
-
-InputManager::InputManager()
-{
-}
-
-InputManager::~InputManager()
-{
-}
