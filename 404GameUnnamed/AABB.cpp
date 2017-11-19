@@ -25,7 +25,9 @@ bool AABB::isColliding(Collider * const c)
 
 glm::vec3 AABB::contactNormal() const
 {
-	char mask = Utils::computePointMask(collider->getCentre(), this);
+	//use casting to fix the getCentre problem you were having here, do not put it in the abstract class if you can downcast.
+	char mask = Utils::computePointMask(dynamic_cast<AABB*>(collider)->getCentre(), this);
+
 	glm::vec3 normal(0, 0, 0);
 
 	if ((mask & 1) == 1)
@@ -47,7 +49,9 @@ glm::vec3 AABB::contactNormal() const
 std::vector<glm::vec3> AABB::contactPoints() const
 {
 	std::vector<glm::vec3> points;
-	points.push_back(Utils::projectPointOnAABB(collider->getCentre(), this));
+
+	//use casting to fix the getCentre problem you were having here, do not put it in the abstract class if you can downcast.
+	points.push_back(Utils::projectPointOnAABB(dynamic_cast<AABB*>(collider)->getCentre(), this));
 	return points;
 }
 

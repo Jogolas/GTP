@@ -45,9 +45,10 @@ bool CollisionData::groundCollision(Entity* object1, Entity* object2)
 			object1->setPosition(start);
 			return true;
 		}
-		else
-			return false;
 	}
+
+	//if it doesn't return true then default return false
+	return false;
 }
 
 bool CollisionData::playerObjectCollision(Entity* object1, Entity* object2)
@@ -70,7 +71,8 @@ bool CollisionData::playerObjectCollision(Entity* object1, Entity* object2)
 			object1->setPosition(start);
 			return true;
 		}
-		else
-			return false;
 	}
+
+	//if it doesn't return true then by default return false
+	return false;
 }

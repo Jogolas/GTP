@@ -6,8 +6,8 @@
 class Collider
 {
 public:
-	bool isColliding(Collider* collider);
-	glm::vec3 getCentre();
+	// you had methods here that weren't virtual aka cannot be overridden. removed them since you cannot have a semi-abstract class.
+
 	virtual void update(const Transform& transform) = 0;
 	virtual CollisionDetection* getContact() const = 0;
 

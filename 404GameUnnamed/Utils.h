@@ -21,6 +21,6 @@ public:
 	static bool PointIsAbovePlane(const glm::vec3& p1, const glm::vec3& p3, float p4);
 	static glm::vec3 projectPointOnPlane(const glm::vec3& p1, const glm::vec3& p3, float p4);
 
-private:
-	Utils() {};
+	//do not put a constructor in a private statement
+	Utils() {}
 };

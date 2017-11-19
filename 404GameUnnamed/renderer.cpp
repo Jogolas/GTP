@@ -31,7 +31,7 @@ char* Renderer::fileReader(const char *fname, GLint &fSize)
 //will initialise the shaders for use in other methods
 GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader)
 {
-
+	return NULL;
 }
 
 //taken from the mains in previous work 

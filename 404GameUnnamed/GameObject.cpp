@@ -58,6 +58,8 @@ glm::vec3 GameObject::applyGravity()
 		position += downForce;
 		return position;
 	}
+
+	return position;
 }
 
 glm::vec3 GameObject::addForce(const glm::vec3& force)
