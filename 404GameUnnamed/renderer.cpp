@@ -102,7 +102,7 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
 
-		// Create 800x600 window
+														   // Create 800x600 window
 		window = SDL_CreateWindow("this is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 		if (!window) // Check window was created OK
@@ -161,7 +161,7 @@ void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::v
 	GLint a, b, c;
 
 	int i = 0, iCount = 0;
-	position tmp; 
+	position tmp;
 	std::map<std::string, GLuint> indexMap;
 	int fFormat = FORMAT_UNKNOWN;
 
@@ -229,7 +229,7 @@ void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::v
 	std::cout << "finished parsing obj image..." << std::endl;
 }
 
-void Renderer::setObjProperties(const GLuint shader, lightStruct light, materialStruct material)
+void Renderer::setObjProperties(const GLuint shader, lightStruct light, const GLfloat *lightPos, materialStruct material, const char* uniformName, const GLfloat *data)
 {
 	//will set the properties like the light, light position and material used. Maybe also texture will be loaded in here too
 	//pass in the light
@@ -242,15 +242,23 @@ void Renderer::setObjProperties(const GLuint shader, lightStruct light, material
 	uniformIndex = glGetUniformLocation(shader, "light.position");
 	glUniform4fv(uniformIndex, 1, light.position);
 
+	//pass in light postion
+	uniformIndex = glGetUniformLocation(shader, "lightPosition");
+	glUniform4fv(uniformIndex, 1, lightPos);
+
 	//pass in the material
 	uniformIndex = glGetUniformLocation(shader, "material.ambient");
 	glUniform4fv(uniformIndex, 1, material.ambient);
-	uniformIndex = glGetUniformLocation(shader, "material.ambient");
-	glUniform4fv(uniformIndex, 1, material.ambient);
-	uniformIndex = glGetUniformLocation(shader, "material.ambient");
-	glUniform4fv(uniformIndex, 1, material.ambient);
+	uniformIndex = glGetUniformLocation(shader, "material.diffuse");
+	glUniform4fv(uniformIndex, 1, material.diffuse);
+	uniformIndex = glGetUniformLocation(shader, "material.specular");
+	glUniform4fv(uniformIndex, 1, material.specular);
 	uniformIndex = glGetUniformLocation(shader, "material.shininess");
 	glUniform1f(uniformIndex, material.shininess);
+
+	//pass in the matrix
+	uniformIndex = glGetUniformLocation(shader, uniformName);
+	glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 }
 
 void Renderer::drawObj(const GLuint mesh, const GLuint indexCount, const GLuint primitive)
@@ -347,9 +355,9 @@ void Renderer::loadFBX(const char* filename, std::vector<GLfloat> &verts, std::v
 	}
 
 	// copy vertex data to output vectors in case only single index was provided....
-	if (fFormat == FORMAT_V) 
+	if (fFormat == FORMAT_V)
 	{
-		for (int v = 0; v < Verts.size(); v++) 
+		for (int v = 0; v < Verts.size(); v++)
 		{
 			verts.push_back(Verts[v].x);
 			verts.push_back(Verts[v].y);
@@ -414,32 +422,105 @@ faceIndex Renderer::getFace(std::string string, int format)
 	return f;
 }
 
+GLuint Renderer::createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours, const GLfloat* normals, const GLfloat* texcoords, const GLuint indexCount, const GLuint* indices)
+{
+	GLuint VAO;
+	// generate and set up a VAO for the mesh
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	GLuint *pMeshBuffers = new GLuint[5];
+
+
+	if (vertices == nullptr) {
+		// cant create a mesh without vertices... oops
+		std::cout << "Attempt to create a mesh with no vertices" << std::endl;
+	}
+
+	// generate and set up the VBOs for the data
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+
+	// VBO for vertex data
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer((GLuint)VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(VERTEX);
+	pMeshBuffers[VERTEX] = VBO;
+
+
+	// VBO for colour data
+	if (colours != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), colours, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(COLOUR);
+		pMeshBuffers[COLOUR] = VBO;
+	}
+
+	// VBO for normal data
+	if (normals != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), normals, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(NORMAL);
+		pMeshBuffers[NORMAL] = VBO;
+	}
+
+	// VBO for tex-coord data
+	if (texcoords != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 2 * numVerts * sizeof(GLfloat), texcoords, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(TEXCOORD);
+		pMeshBuffers[TEXCOORD] = VBO;
+	}
+
+	if (indices != nullptr && indexCount > 0) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
+		pMeshBuffers[INDEX] = VBO;
+	}
+	// unbind vertex array
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	// return the identifier needed to draw this mesh
+
+	vertexArrayMap.insert(std::pair<GLuint, GLuint *>(VAO, pMeshBuffers));
+
+	return VAO;
+}
+
 void Renderer::addVertex(std::string fString, std::map<std::string, GLuint> &indexMap, std::vector<position> &inVerts, std::vector<position> &inCoords, std::vector<position> &inNorms, std::vector<GLfloat> &verts, std::vector<GLfloat> &texcoords, std::vector<GLfloat> &norms, std::vector<GLuint> &indices, int fFormat, int &index)
 {
 
-		auto itr = indexMap.find(fString);
-		if (itr == indexMap.end())
+	auto itr = indexMap.find(fString);
+	if (itr == indexMap.end())
+	{
+		faceIndex f = getFace(fString, fFormat);
+		verts.push_back(inVerts[f.v].x);
+		verts.push_back(inVerts[f.v].y);
+		verts.push_back(inVerts[f.v].z);
+		if (fFormat < FORMAT_VN)
 		{
-			faceIndex f = getFace(fString, fFormat);
-			verts.push_back(inVerts[f.v].x);
-			verts.push_back(inVerts[f.v].y);
-			verts.push_back(inVerts[f.v].z);
-			if (fFormat < FORMAT_VN) 
-			{
-				texcoords.push_back(inCoords[f.t].x);
-				texcoords.push_back(inCoords[f.t].y);
-			}
-			if (fFormat > FORMAT_VT)
-			{
-				norms.push_back(inNorms[f.n].x);
-				norms.push_back(inNorms[f.n].y);
-				norms.push_back(inNorms[f.n].z);
-			}
-			indexMap.insert(std::pair<std::string, GLuint>(fString, index));
-			indices.push_back(index++);
+			texcoords.push_back(inCoords[f.t].x);
+			texcoords.push_back(inCoords[f.t].y);
 		}
-		else 
+		if (fFormat > FORMAT_VT)
 		{
-			indices.push_back(itr->second);
+			norms.push_back(inNorms[f.n].x);
+			norms.push_back(inNorms[f.n].y);
+			norms.push_back(inNorms[f.n].z);
 		}
+		indexMap.insert(std::pair<std::string, GLuint>(fString, index));
+		indices.push_back(index++);
+	}
+	else
+	{
+		indices.push_back(itr->second);
+	}
 }

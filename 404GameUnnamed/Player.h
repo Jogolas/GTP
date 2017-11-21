@@ -1,5 +1,6 @@
 #include "glm.hpp"
 #include "Renderer.h"
+#include "GameObject.h"
 
 class Player
 {
@@ -8,9 +9,11 @@ public:
 	void update();
 	void render();
 
+	glm::mat4 createCam(glm::mat4 camview);
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
+	GLfloat getRotation() { return rotation; }
 
 private:
 	//methods
@@ -20,7 +23,11 @@ private:
 	void collider();
 
 	//variables
+	Entity* player;
 	glm::vec3 position;
+	glm::vec3 eye;
+	glm::vec3 at;
+	glm::vec3 up;
 	GLfloat rotation;
 	const Uint8 *keys;
 };

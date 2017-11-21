@@ -114,6 +114,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="rt3d.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="rt3dObjLoader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h">
@@ -194,5 +200,19 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="rt3d.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="rt3dObjLoader.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="toonShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="toonShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

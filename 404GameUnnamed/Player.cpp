@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <gtc/matrix_transform.hpp>
 
 #define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
 
@@ -6,21 +7,37 @@ Player::Player(glm::vec3 pos)
 {
 	position = pos;
 	rotation = 0.0f;
+
+	player = new GameObject(position);
+	player->init();
+	eye = glm::vec3(0.0f, 1.0f, 10.0f); // left, up, forward
+	at = glm::vec3(0.0f, 1.0f, 3.0f);
+	up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 
 
 void Player::update()
 {
+	player->update();
+	//position.y = player->getPosition().y;
 	inputHandler();
-
+	at = position;
+	eye = moveForward(at, rotation, -10.0f);
+	eye.y = position.y + 2;
 	collider();
 }
 
+////renders the camera
 void Player::render()
 {
-	//code to draw
+}
 
+glm::mat4 Player::createCam(glm::mat4 camview)
+{
+	camview = glm::lookAt(eye, at, up);
+
+	return camview;
 }
 
 void Player::collider()
@@ -58,4 +75,7 @@ void Player::inputHandler()
 	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
+
+	if (keys[SDL_SCANCODE_COMMA]) rotation -= 1.0f;
+	if (keys[SDL_SCANCODE_PERIOD]) rotation += 1.0f;
 }

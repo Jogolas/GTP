@@ -10,5 +10,5 @@ public:
 	GravityForce() {}
 	GravityForce(const glm::vec3& gravity) : gravity(gravity) {}
 	~GravityForce() {}
-	void updateForce(Entity *obj, float dt);
+	void updateForce(Entity *obj);
 };
