@@ -8,7 +8,14 @@ Player::Player(glm::vec3 pos)
 	rotation = 0.0f;
 }
 
-
+void Player::init()
+{
+	std::vector<GLfloat> verts, norms, texCoords;
+	std::vector<GLuint> indices;
+	Renderer::loadObj("bunny-5000.obj", verts, norms, texCoords, indices);
+	GLuint size = indices.size(), indexCount = size;
+	model = Renderer::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), nullptr, indexCount, indices.data());
+}
 
 void Player::update()
 {
@@ -17,10 +24,17 @@ void Player::update()
 	collider();
 }
 
-void Player::render()
+void Player::render(const GLuint shader)
 {
 	//code to draw
-
+	/*Renderer::setObjLightPos(shader, glm::value_ptr(tmp));
+	Renderer::setObjMatrix(shader, "projection", glm::value_ptr(projection));
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-25.0f + i + i * 4, -0.8f, 0.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0f, 20.0f, 20.0f));
+	Renderer::setObjMatrix(shader, "modelView", glm::value_ptr(mvStack.top()));
+	Renderer::setObjMaterial(shader, material);
+	Renderer::drawObj(model, indexCount, GL_TRIANGLES);*/
 }
 
 void Player::collider()

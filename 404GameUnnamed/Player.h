@@ -5,8 +5,10 @@ class Player
 {
 public:
 	Player(glm::vec3 pos);
+	GLuint model;
+	void init();
 	void update();
-	void render();
+	void render(const GLuint shader);
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }

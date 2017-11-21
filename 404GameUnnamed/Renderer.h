@@ -26,22 +26,6 @@
 #define TEXCOORD    3
 #define INDEX		4
 
-struct lightStruct 
-{
-	GLfloat ambient[4];
-	GLfloat diffuse[4];
-	GLfloat specular[4];
-	GLfloat position[4];
-};
-
-struct materialStruct
-{
-	GLfloat ambient[4];
-	GLfloat diffuse[4];
-	GLfloat specular[4];
-	GLfloat shininess;
-};
-
 struct position 
 {
 	GLfloat x;
@@ -62,24 +46,54 @@ struct faceIndex
 
 namespace Renderer
 {
+	struct lightStruct
+	{
+		GLfloat ambient[4];
+		GLfloat diffuse[4];
+		GLfloat specular[4];
+		GLfloat position[4];
+	};
+
+	struct materialStruct
+	{
+		GLfloat ambient[4];
+		GLfloat diffuse[4];
+		GLfloat specular[4];
+		GLfloat shininess;
+	};
+
+	static std::map<GLuint, GLuint *> vertexArrayMap;
+
 	//based on methods in the RT3D obj loader class
 	char* fileReader(const char *fname, GLint &fSize); //loads in needed files
 	GLuint initiliaseShader(const char *vertShader, const char *fragShader); //initialises our shaders
-	
+
 	SDL_Window * createWindow(SDL_GLContext &context); //creates a window to render in
 	void toggleFullScreen(SDL_Window * window); //toggles full screen
 	void changeRes(int width, int height); //changes window resolution to what is resolution is selected
 
+	GLuint bitMapLoader(char *name);
+
+	//obj loader and realted methods
 	//based on methods in the RT3D obj loader class
 	void loadObj(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in object model
-	void setObjProperties(const GLuint shader, lightStruct light, materialStruct material); //sets the properties for an object model, might set up something like the light and material structs from rt3D
+	void setObjLight(const GLuint shader, lightStruct light);
+	void setObjLightPos(const GLuint shader, const GLfloat *lightPos);
+	void setObjMaterial(const GLuint shader, materialStruct material);
+	void setObjMatrix(const GLuint shader, const char* uniformName, const GLfloat *data);
 	void drawObj(const GLuint mesh, const GLuint indexCount, const GLuint primitive); //draws the object model
 
+	//FBX loader and related methods
 	void loadFBX(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in fbx model
 	void setFBXProperties(); //set the properties for an fbx model
+	void setFBXLight();
+	void setFBXLightPos();
+	void setFBXMaterial();
+	void setFBXMatrix();
 	void drawFBX(); //draw the fbx model
 
 	//based on methods in the RT3D obj loader class
+	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours, const GLfloat* normals, const GLfloat* texcoords, const GLuint indexCount, const GLuint* indices);
 	int determineFace(std::string string);
 	faceIndex getFace(std::string string, int format);
 	void addVertex(std::string fString, std::map<std::string, GLuint> &indexMap, std::vector<position> &inVerts, std::vector<position> &inCoords, std::vector<position> &inNorms, std::vector<GLfloat> &verts, std::vector<GLfloat> &texcoords, std::vector<GLfloat> &norms, std::vector<GLuint> &indices, int fFormat, int &index);
