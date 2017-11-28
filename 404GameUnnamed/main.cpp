@@ -67,7 +67,7 @@ void init()
 
 void update()
 {
-	p1->update();
+	p1->pUpdate();
 }
 
 void draw(SDL_Window * window)

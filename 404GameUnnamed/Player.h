@@ -1,17 +1,18 @@
 #include "glm.hpp"
 #include "Renderer.h"
+#include "GameObject.h"
 
-class Player
+class Player : public GameObject
 {
 public:
 	Player(glm::vec3 pos);
 	GLuint model;
-	void init();
-	void update();
+	void pInit();
+	void pUpdate();
 	void render(const GLuint shader);
 
-	glm::vec3 getPosition() { return position; }
-	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+	glm::vec3 getPPosition() { return getPosition(); }
+	glm::vec3 setPPosition(glm::vec3 pos) { return setPosition(pos); }
 
 
 private:

@@ -8,7 +8,7 @@ Player::Player(glm::vec3 pos)
 	rotation = 0.0f;
 }
 
-void Player::init()
+void Player::pInit()
 {
 	std::vector<GLfloat> verts, norms, texCoords;
 	std::vector<GLuint> indices;
@@ -17,10 +17,10 @@ void Player::init()
 	model = Renderer::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), nullptr, indexCount, indices.data());
 }
 
-void Player::update()
+void Player::pUpdate()
 {
 	inputHandler();
-
+	update(getInverseMass());
 	collider();
 }
 
@@ -39,8 +39,7 @@ void Player::render(const GLuint shader)
 
 void Player::collider()
 {
-	//code to collide
-
+	init();
 }
 
 
