@@ -2,17 +2,17 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-class Player : public GameObject
+class Player
 {
 public:
 	Player(glm::vec3 pos);
 	GLuint model;
-	void pInit();
-	void pUpdate();
+	void init();
+	void update();
 	void render(const GLuint shader);
 
-	glm::vec3 getPPosition() { return getPosition(); }
-	glm::vec3 setPPosition(glm::vec3 pos) { return setPosition(pos); }
+	glm::vec3 getPosition() { return position; }
+	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
 
 private:
@@ -23,6 +23,7 @@ private:
 	void collider();
 
 	//variables
+	Entity* player;
 	glm::vec3 position;
 	GLfloat rotation;
 	const Uint8 *keys;

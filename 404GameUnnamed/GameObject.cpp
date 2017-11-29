@@ -49,6 +49,7 @@ GameObject::GameObject(glm::vec3 position)
 	this->position = position;
 	glm::vec3 iVelocity(0, 0, 0);
 	this->velocity = iVelocity;
+	init();
 }
 
 glm::vec3 GameObject::applyGravity()
@@ -75,7 +76,7 @@ void GameObject::clearAccumilator()
 
 void GameObject::init()
 {
-	transform.Translate(glm::vec3(50, 0, 0));
+	transform.Translate(glm::vec3(50, 50, 50));
 	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
 }
 

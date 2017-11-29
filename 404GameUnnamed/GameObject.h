@@ -40,7 +40,7 @@ private:
 	Collider* collider;
 
 	float mass;
-	float inverseMass = 1 / mass;
+	float inverseMass = 1 / getMass();
 	float height;
 	float width;
 	float length;
