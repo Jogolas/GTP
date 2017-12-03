@@ -5,7 +5,7 @@
 
 #define DEG_TO_RADIANS 0.017453293
 
-#include "Graph.h"
+#include "NPC.h"
 #include <iostream>
 #include "Player.h"
 #include <gtc/matrix_transform.hpp>
@@ -14,10 +14,8 @@
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
 
-CGraph* node = new CGraph();
+AbstractAI* boss = new NPC(glm::vec3(0.0f, 2.0f, 0.0f));
 Player* p1 = new Player(glm::vec3(5, 1, 4));
-glm::vec3 bossPos = glm::vec3(0, 1, 0);
-glm::vec3 tmpNodePos = glm::vec3(0, 1, 0);
 
 ////Some Globals for testerino
 GLuint shaderProgram;
@@ -42,7 +40,6 @@ GLfloat attConstant = 0.05f;
 GLfloat attLinear = 0.0f;
 GLfloat attQuadratic = 0.0f;
 
-GLfloat bossRot = 0.0f;
 
 rt3d::materialStruct material0 = {
 	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
@@ -50,11 +47,6 @@ rt3d::materialStruct material0 = {
 	{ 0.2f, 0.2f, 0.2f, 1.0f }, // specular
 	2.0f  // shininess
 };
-
-glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
-{
-	return glm::vec3(pos.x + d*std::sin(angle * DEG_TO_RADIANS), pos.y, pos.z - d*std::cos(angle * DEG_TO_RADIANS));
-}
 
 // A simple texture loading function
 // lots of room for improvement - and better error checking!
@@ -96,36 +88,21 @@ GLuint loadBitmap(char *fname) {
 	return texID;	// return value of texture ID
 }
 
-GLfloat findBossRotation(glm::vec3 tar)
-{
-	//put it in degrees
-	glm::vec3 bossRotation = bossPos - tar;
-	GLfloat angle = atan2(bossRotation.z, bossRotation.x) * (180.0/3.14);
-
-	return angle;
-}
 
 void update()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
-
 	p1->update();
 
 	if (keys[SDL_SCANCODE_1]) {
-		bossRot = findBossRotation(node->GetNode(0)->debug_position);
-		bossPos = moveForward(bossPos, bossRot, -0.2f);
-		if (bossPos != node->GetNode(1)->debug_position) {
-			std::cout << "Rotation: " << bossRot << std::endl;
+		dynamic_cast<NPC*>(boss)->setTarget(p1->getPlayer());
+	}
 
-		}
-	}
-	if (keys[SDL_SCANCODE_2]) {
-		bossRot = findBossRotation(p1->getPosition());
-		bossPos = moveForward(bossPos, bossRot, 0.2f);
-		if (bossPos != p1->getPosition()) {
-			std::cout << "Rotation: " << bossRot << std::endl;
-		}
-	}
+	dynamic_cast<NPC*>(boss)->update();
+
+	glm::vec3 distance = dynamic_cast<NPC*>(boss)->getPosition() - p1->getPosition();
+
+	if (glm::length(distance) > 10) p1->findRotation(dynamic_cast<NPC*>(boss)->getPosition());
 }
 
 void draw(SDL_Window * window)
@@ -162,17 +139,15 @@ void draw(SDL_Window * window)
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 0.0f));
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0f, 0.1f, 20.0f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setUniformMatrix3fv(shaderProgram, "normalmatrix", glm::value_ptr(glm::transpose(glm::inverse(glm::mat3(mvStack.top())))));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
 	////boss cube
 	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(bossPos));
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(dynamic_cast<NPC*>(boss)->getPosition()));
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 2.0f, 1.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(bossRot * DEG_TO_RADIANS), glm::vec3(0, 1, 0));
+	mvStack.top() = glm::rotate(mvStack.top(), float(dynamic_cast<NPC*>(boss)->getRotation()), glm::vec3(0, 1, 0));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setUniformMatrix3fv(shaderProgram, "normalmatrix", glm::value_ptr(glm::transpose(glm::inverse(glm::mat3(mvStack.top())))));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
@@ -180,17 +155,16 @@ void draw(SDL_Window * window)
 	////player cube
 	mvStack.push(mvStack.top());
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(p1->getPosition()));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 1.0f));
 	mvStack.top() = glm::rotate(mvStack.top(), float((-90 + p1->getRotation()) * DEG_TO_RADIANS), glm::vec3(0, 1, 0));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setUniformMatrix3fv(shaderProgram, "normalmatrix", glm::value_ptr(glm::transpose(glm::inverse(glm::mat3(mvStack.top())))));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-
-
+	
 
 	mvStack.pop();//initial matrix
 
@@ -199,19 +173,9 @@ void draw(SDL_Window * window)
 	SDL_GL_SwapWindow(window);
 }
 
-void initNodes()
-{
-	node->addNode();
-	node->addNode();
-	node->addEdge(0, 1, 5);
-
-	node->GetNode(1)->debug_position = tmpNodePos;
-	std::cout << "Number of Nodes " << node->GetNumNodes() << std::endl;;
-}
 
 void init()
 {
-	initNodes();
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	//shaderProgram = Renderer::initiliseShaders("toonShader.vert", "toonShader.frag");
@@ -270,6 +234,7 @@ int main(int argc, char *argv[])
 		update();
 		draw(hWindow);
 	}
+
 
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(hWindow);

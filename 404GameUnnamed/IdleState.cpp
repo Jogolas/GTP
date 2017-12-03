@@ -1,4 +1,6 @@
 #include "IdleState.h"
+#include "NPC.h"
+#include <SDL.h>
 
 AbstractAIState* IdleState::CurrentState(AbstractAI* a)
 {
@@ -13,5 +15,12 @@ AbstractAIState* IdleState::SwitchState(AbstractAI* a)
 
 void IdleState::handle(AbstractAI* a)
 {
-	//code to handle boss idle state
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+	glm::vec3 position = glm::vec3(0, 0, 0);
+	dynamic_cast<NPC*>(a)->findRotation(position);
+
+	if (keys[SDL_SCANCODE_1]) {
+		dynamic_cast<NPC*>(a)->switchCurrentState(dynamic_cast<NPC*>(a)->getAttackState());
+	}
 }

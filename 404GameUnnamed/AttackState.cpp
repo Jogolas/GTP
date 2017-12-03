@@ -1,4 +1,13 @@
 #include "AttackState.h"
+#include "NPC.h"
+
+
+AttackState::AttackState()
+{
+
+}
+
+
 
 AbstractAIState* AttackState::CurrentState(AbstractAI* a)
 {
@@ -13,5 +22,12 @@ AbstractAIState* AttackState::SwitchState(AbstractAI* a)
 
 void AttackState::handle(AbstractAI* a)
 {
-	//code to cycle through ablities during combat with player.
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+
+
+	dynamic_cast<NPC*>(a)->findRotation(dynamic_cast<NPC*>(a)->getTarget()->getPosition());
+	if (keys[SDL_SCANCODE_2]) {
+		dynamic_cast<NPC*>(a)->switchCurrentState(dynamic_cast<NPC*>(a)->getIdleState());
+	}
 }

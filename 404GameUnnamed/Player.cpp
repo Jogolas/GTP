@@ -26,13 +26,16 @@ void Player::update()
 	eye = moveForward(at, rotation, -10.0f);
 	eye.y = position.y + 2;
 	collider();
+
+	player->setPosition(position); //update the GameObject position at the end.
 }
 
-////renders the camera
+
 void Player::render()
 {
 }
 
+//// creates the camera to give a third person view.
 glm::mat4 Player::createCam(glm::mat4 camview)
 {
 	camview = glm::lookAt(eye, at, up);
@@ -54,7 +57,7 @@ void Player::collider()
 //// anything above 0 will go forward, and less than 0 will move backwards.
 glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::sin(rotation * DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(rotation * DEG_TO_RADIAN));
+	return glm::vec3(pos.x + d*std::sin(rotation), pos.y, pos.z - d*std::cos(rotation));
 }
 
 //// moves the player either left or right.  
@@ -64,7 +67,7 @@ glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 //// anything above 0 will go right, and less than 0 will move left.
 glm::vec3 Player::moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::cos(rotation * DEG_TO_RADIAN), pos.y, pos.z + d*std::sin(rotation * DEG_TO_RADIAN));
+	return glm::vec3(pos.x + d*std::cos(rotation), pos.y, pos.z + d*std::sin(rotation));
 }
 
 ////handles keys being pressed.
@@ -76,6 +79,16 @@ void Player::inputHandler()
 	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
 
+
 	if (keys[SDL_SCANCODE_COMMA]) rotation -= 1.0f;
 	if (keys[SDL_SCANCODE_PERIOD]) rotation += 1.0f;
+}
+
+void Player::findRotation(glm::vec3 tar)
+{
+	glm::vec3 distance = tar - position;
+
+	if (glm::length(distance) >= 2) {
+		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
+	}
 }

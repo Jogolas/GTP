@@ -6,7 +6,7 @@ class IdleState : public AbstractAIState
 {
 public:
 	IdleState() {}
-	~IdleState() { delete this; }
+	virtual ~IdleState() { }
 	AbstractAIState* CurrentState(AbstractAI* a);
 	AbstractAIState* SwitchState(AbstractAI* a);
 	void handle(AbstractAI* a);

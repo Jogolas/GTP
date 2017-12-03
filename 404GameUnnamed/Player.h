@@ -8,10 +8,13 @@ public:
 	Player(glm::vec3 pos);
 	void update();
 	void render();
+	void findRotation(glm::vec3 tar);
 
 	glm::mat4 createCam(glm::mat4 camview);
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+
+	Entity* getPlayer() { return player; }
 
 	GLfloat getRotation() { return rotation; }
 
@@ -24,6 +27,7 @@ private:
 
 	//variables
 	Entity* player;
+
 	glm::vec3 position;
 	glm::vec3 eye;
 	glm::vec3 at;

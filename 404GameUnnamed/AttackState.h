@@ -5,9 +5,12 @@
 class AttackState : public AbstractAIState
 {
 public:
-	AttackState() {}
-	~AttackState() { delete this; }
+	AttackState();
+	virtual ~AttackState() {}
 	AbstractAIState* CurrentState(AbstractAI* a);
 	AbstractAIState* SwitchState(AbstractAI* a);
 	void handle(AbstractAI* a);
+
+private:
+	AbstractAI* npc;
 };

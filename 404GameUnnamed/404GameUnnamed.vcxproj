@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="AISpellDecorator.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -148,6 +150,7 @@
     <ClInclude Include="AbstractAI.h" />
     <ClInclude Include="AbstractAIState.h" />
     <ClInclude Include="AIController.h" />
+    <ClInclude Include="AISpellDecorator.h" />
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

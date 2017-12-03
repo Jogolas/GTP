@@ -6,6 +6,5 @@ class AbstractAI
 {
 public:
 	virtual ~AbstractAI() {}
-	virtual void render() = 0;
-	virtual void collider() = 0;
+	virtual glm::mat4 draw() = 0;
 };
