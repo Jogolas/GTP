@@ -1,13 +1,11 @@
 #pragma once
-#include "AIController.h"
+#include "AbstractAIState.h"
 
 class AttackState : public AbstractAIState
 {
 public:
 	AttackState();
 	virtual ~AttackState() {}
-	AbstractAIState* CurrentState(AbstractAI* a);
-	AbstractAIState* SwitchState(AbstractAI* a);
 	void handle(AIController* a);
 
 private:

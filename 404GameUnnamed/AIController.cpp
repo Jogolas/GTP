@@ -31,10 +31,10 @@ AIController::~AIController()
 void AIController::handleState()
 {
 	if (current == idle) {
-		dynamic_cast<IdleState*>(current)->handle(this);
+		current->handle(this);
 	}
 	if (current == attack) {
-		dynamic_cast<AttackState*>(current)->handle(this);
+		current->handle(this);
 	}
 }
 

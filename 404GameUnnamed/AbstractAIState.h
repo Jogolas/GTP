@@ -1,10 +1,12 @@
 #pragma once
 #include "AbstractAI.h"
 
+class AIController; //pre-definition
+
 class AbstractAIState
 {
 public:
 	virtual ~AbstractAIState() {}
-	virtual AbstractAIState* CurrentState(AbstractAI* a) = 0;
-	virtual AbstractAIState* SwitchState(AbstractAI* a) = 0;
+	virtual void handle(AIController* a) = 0;
+
 };
