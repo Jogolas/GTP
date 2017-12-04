@@ -18,11 +18,11 @@ void AttackState::handle(AIController* a)
 	a->findTarget(a->getTarget()->getPosition(), 5, move);
 	timer--;
 
-	if(!move) 
 
 	if (timer < 0) {
 		if(move) move = false;
 		else move = true;
+
 		timer = 100.0f;
 	}
 

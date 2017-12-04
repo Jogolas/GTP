@@ -8,7 +8,7 @@ Player::Player(glm::vec3 pos)
 	position = pos;
 	rotation = 0.0f;
 
-	player = new GameObject(position);
+	player = new GameObject();
 	player->init();
 	eye = glm::vec3(0.0f, 1.0f, 10.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
