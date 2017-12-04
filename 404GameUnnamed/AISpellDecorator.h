@@ -9,25 +9,32 @@ public:
 	glm::mat4 draw();
 
 	float getCooldown() { return cd; }
+	float cooldownTimer(float timer)
+	{ 
+		if(timer <= 0) timer--;
+		return timer;
+	}
+	float getDamage() { return dmg; }
 	bool getAbility() { return ablitiyUsed; }
 	const char* getName() { return name; }
 
 private:
 	AbstractAI* npc;
-	float cd;
+	float cd, dmg;
 	bool ablitiyUsed;
 	const char* name;
 
 protected:
 	void nameAbility(const char* name);
 	void createCooldown(float cooldown);
+	void setDamage(float dmg);
 };
 
 
 class Element : public AISpellDecorator
 {
 public:
-	Element(AbstractAI* decoration, const char* name, float cooldown);
+	Element(AbstractAI* decoration, const char* name, float cooldown, float dmg);
 	~Element();
 	glm::mat4 draw();
 };

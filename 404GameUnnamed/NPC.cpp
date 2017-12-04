@@ -1,7 +1,5 @@
 #include "NPC.h"
 
-#define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
-
 NPC::NPC()
 {
 	health = 100.0;
@@ -38,22 +36,12 @@ void NPC::findPath(CGraph* tarNode)
 
 void NPC::moveNPC()
 {
-	position = controller->moveForward(position, rotation, 0.1f);
+	position = controller->moveForward(position, controller->getRotation(), 0.1f);
 }
 
 void NPC::returnToCenter()
 {
 	glm::vec3 center = glm::vec3(0, 0, 0);
-}
-
-void NPC::findRotation(glm::vec3 tar)
-{
-	glm::vec3 distance = tar - position;
-
-	if (glm::length(distance) >= 5) {
-		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
-		moveNPC();
-	}
 }
 
 void NPC::closestNode(glm::vec3 tar, CGraph* nodes)

@@ -1,5 +1,6 @@
 #pragma once
 #include "AbstractAIState.h"
+#include "AISpellDecorator.h"
 
 class AttackState : public AbstractAIState
 {
@@ -10,4 +11,6 @@ public:
 
 private:
 	AbstractAI* npc;
+
+	AISpellDecorator* fireBlast;
 };

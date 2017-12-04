@@ -94,9 +94,9 @@ void update()
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	p1->update();
 
-	if (keys[SDL_SCANCODE_1]) {
+	if (keys[SDL_SCANCODE_1]) 
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(p1->getPlayer());
-	}
+	
 
 	dynamic_cast<NPC*>(boss)->update();
 

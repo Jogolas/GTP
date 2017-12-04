@@ -26,15 +26,21 @@ void AISpellDecorator::createCooldown(float cooldown)
 {
 	cd = cooldown;
 }
+
+void AISpellDecorator::setDamage(float dmg)
+{
+	this->dmg = dmg;
+}
 ////END OF AI SPELL DECORATOR CLASS
 
 
 
 ////ELEMENT CLASS
-Element::Element(AbstractAI* decoration, const char* name, float cooldown) : AISpellDecorator(decoration)
+Element::Element(AbstractAI* decoration, const char* name, float cooldown, float dmg) : AISpellDecorator(decoration)
 {
 	AISpellDecorator::createCooldown(cooldown);
 	AISpellDecorator::nameAbility(name);
+	AISpellDecorator::setDamage(dmg);
 }
 
 Element::~Element()

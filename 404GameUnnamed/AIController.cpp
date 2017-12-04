@@ -3,6 +3,7 @@
 #include "AttackState.h"
 #include "NPC.h"
 
+#define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
 
 AIController::AIController()
 {
@@ -47,4 +48,14 @@ void AIController::switchCurrentState(AbstractAIState* state)
 glm::vec3 AIController::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(pos.x + (d * std::sin(angle)), pos.y, pos.z - (d*std::cos(angle)));
+}
+
+void AIController::findTarget(glm::vec3 tar, GLuint l, bool move)
+{
+	glm::vec3 distance = tar - dynamic_cast<NPC*>(_npc)->getPosition();
+
+	if (glm::length(distance) >= l) {
+		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
+		if (move) dynamic_cast<NPC*>(_npc)->moveNPC();
+	}
 }

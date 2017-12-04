@@ -15,7 +15,7 @@ public: //methods
 	glm::mat4 draw();
 	void update();
 	void findPath(CGraph* node);
-	void findRotation(glm::vec3 tar);
+
 	void moveNPC();
 
 	GLfloat getHealth() { return health; }
@@ -37,7 +37,6 @@ private:
 
 	//variables
 	GLfloat health;
-	GLfloat rotation;
 	glm::vec3 position;
 
 };
