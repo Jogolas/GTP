@@ -6,14 +6,17 @@ class Player
 {
 public:
 	Player(glm::vec3 pos);
-	GLuint model;
-	void init();
 	void update();
-	void render(const GLuint shader);
+	void render();
+	void findRotation(glm::vec3 tar);
 
+	glm::mat4 createCam(glm::mat4 camview);
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
+	Entity* getPlayer() { return player; }
+
+	GLfloat getRotation() { return rotation; }
 
 private:
 	//methods
@@ -24,7 +27,11 @@ private:
 
 	//variables
 	Entity* player;
+
 	glm::vec3 position;
+	glm::vec3 eye;
+	glm::vec3 at;
+	glm::vec3 up;
 	GLfloat rotation;
 	const Uint8 *keys;
 };

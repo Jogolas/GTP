@@ -5,5 +5,5 @@ class Forces
 {
 public:
 	virtual ~Forces() {}
-	virtual void updateForce(Entity *obj, float dt) = 0;
+	virtual void updateForce(Entity *obj) = 0;
 };

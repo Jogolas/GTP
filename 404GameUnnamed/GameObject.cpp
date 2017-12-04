@@ -52,14 +52,9 @@ GameObject::GameObject(glm::vec3 position)
 	init();
 }
 
-glm::vec3 GameObject::applyGravity()
+glm::vec3 GameObject::applyGravity() //gravity never goes away, so no need to do y > 0 check for it
 {
-	if (position.y > 0)
-	{
-		position += downForce;
-		return position;
-	}
-
+	position += downForce;
 	return position;
 }
 
@@ -80,9 +75,9 @@ void GameObject::init()
 	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
 }
 
-void GameObject::update(float dt)
+void GameObject::update()
 {
-	
-	grav.updateForce(this, dt);
+	grav.updateForce(this);
+	applyGravity();
 	collider->update(transform);
 }

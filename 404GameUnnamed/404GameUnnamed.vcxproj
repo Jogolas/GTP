@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="AISpellDecorator.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
@@ -135,9 +136,11 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="Observor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="rt3d.cpp" />
+    <ClCompile Include="rt3dObjLoader.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -146,6 +149,7 @@
     <ClInclude Include="AbstractAI.h" />
     <ClInclude Include="AbstractAIState.h" />
     <ClInclude Include="AIController.h" />
+    <ClInclude Include="AISpellDecorator.h" />
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
@@ -163,11 +167,17 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />
-    <ClInclude Include="Observor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="rt3d.h" />
+    <ClInclude Include="rt3dObjLoader.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="toonShader.frag" />
+    <None Include="toonShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

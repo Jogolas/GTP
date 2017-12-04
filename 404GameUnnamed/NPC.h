@@ -1,22 +1,42 @@
 #pragma once
-#include "AbstractAIState.h"
-#include "IdleState.h"
-#include "AttackState.h"
-#include "glm.hpp"
+#include "AIController.h"
+#include "Renderer.h"
+#include "Graph.h"
+#include "GameObject.h"
 
 
-class NPC : AbstractAI
+class NPC : public AbstractAI
 {
 public: //methods
+	NPC();
 	NPC(glm::vec3 position);
 	~NPC() { delete this; }
-	void render();
-	void collider();
-	AbstractAIState* getState();
-	void switchCurrentState(AbstractAIState* state);
+
+	glm::mat4 draw();
+	void update();
+	void findPath(CGraph* node);
+
+	void moveNPC();
+
+	GLfloat getHealth() { return health; }
+	Entity* getNPC() { return npc; }
+
+	AIController* getController() { return controller; }
+
+	glm::vec3 getPosition() { return position; }
+	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
 private:
-	AbstractAIState* idle;
-	AbstractAIState* attack;
-	AbstractAIState* current;
+	//methods
+	void closestNode(glm::vec3 tar, CGraph* nodes);
+	void returnToCenter();
+
+	Entity* npc;
+
+	AIController* controller;
+
+	//variables
+	GLfloat health;
+	glm::vec3 position;
+
 };

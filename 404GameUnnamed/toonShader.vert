@@ -1,6 +1,3 @@
-// phong-tex.vert
-// Vertex shader for use with a Phong or other reflection model fragment shader
-// Calculates and passes on V, L, N vectors for use in fragment shader, phong2.frag
 #version 330
 
 uniform mat4 modelview;
@@ -14,8 +11,6 @@ out vec3 ex_N;
 out vec3 ex_V;
 out vec3 ex_L;
 
-in vec2 in_TexCoord;
-out vec2 ex_TexCoord;
 out float ex_D;
 
 // multiply each vertex position by the MVP matrix
@@ -36,18 +31,8 @@ void main(void) {
 	mat3 normalmatrix = transpose(inverse(mat3(modelview)));
 	ex_N = normalize(normalmatrix * in_Normal);
 
-	// check if this is a directional light
-	if(lightPosition.w == 0.0) {
-		// it is a directional light.
-		// get the direction by converting to vec3 (ignore w) and negate it
-		ex_L = -lightPosition.xyz;
-	} else 
-	{
-		// L - to light source from vertex
-		ex_L = normalize(lightPosition.xyz - vertexPosition.xyz);
-	}
-
-	ex_TexCoord = in_TexCoord;
+	// L - to light source from vertex
+	ex_L = normalize(lightPosition.xyz - vertexPosition.xyz);
 
     gl_Position = projection * vertexPosition;
 

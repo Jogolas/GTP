@@ -33,7 +33,7 @@ public:
 
 	void clearAccumilator();
 	void init();
-	void update(float dt);
+	void update();
 
 private:
 	Transform transform;

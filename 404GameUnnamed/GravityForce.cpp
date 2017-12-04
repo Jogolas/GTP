@@ -1,7 +1,7 @@
 #include "GravityForce.h"
 #include "GameObject.h"
 
-void GravityForce::updateForce(Entity* object, float dt)
+void GravityForce::updateForce(Entity* object) //float dt was nothing being used, no reason to have it...
 {
 	dynamic_cast<GameObject*>(object)->setVelocity
 	(dynamic_cast<GameObject*>(object)->addForce

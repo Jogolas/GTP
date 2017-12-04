@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <iostream>
 
 void CGraph::addNode()
 {
@@ -36,8 +37,18 @@ CGraph::CEdge* CGraph::GetEdge(edge_t i)
 	return &edges[i];
 }
 
+////First parameter takes the index of the node and the second the index of the edge
+////Index count starts at 0
 node_t CGraph::FollowEdge(node_t node, edge_t edge)
 {
+	//return null if edge or node index does not exist.
+	if(node == NULL || edge == NULL) {
+		
+		if (node == NULL) std::cout << "ERROR: Node index does not exist." << std::endl;
+		if (edge == NULL) std::cout << "ERROR: Edge index does not exist." << std::endl;
+		return NULL;
+	}
+
 	if (edges[edge].first == node)
 		return edges[edge].second;
 	else
