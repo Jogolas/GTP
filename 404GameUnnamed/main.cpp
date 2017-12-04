@@ -95,7 +95,7 @@ void update()
 	p1->update();
 
 	if (keys[SDL_SCANCODE_1]) {
-		dynamic_cast<NPC*>(boss)->setTarget(p1->getPlayer());
+		dynamic_cast<NPC*>(boss)->getController()->setTarget(p1->getPlayer());
 	}
 
 	dynamic_cast<NPC*>(boss)->update();
@@ -146,7 +146,7 @@ void draw(SDL_Window * window)
 	mvStack.push(mvStack.top());
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(dynamic_cast<NPC*>(boss)->getPosition()));
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 2.0f, 1.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(dynamic_cast<NPC*>(boss)->getRotation()), glm::vec3(0, 1, 0));
+	mvStack.top() = glm::rotate(mvStack.top(), float(dynamic_cast<NPC*>(boss)->getController()->getRotation()), glm::vec3(0, 1, 0));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();

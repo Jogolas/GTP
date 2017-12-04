@@ -136,7 +136,6 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="Observor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rt3d.cpp" />
@@ -168,7 +167,6 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NPC.h" />
-    <ClInclude Include="Observor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="rt3d.h" />

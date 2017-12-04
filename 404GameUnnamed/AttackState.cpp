@@ -20,14 +20,14 @@ AbstractAIState* AttackState::SwitchState(AbstractAI* a)
 	return nullptr;
 }
 
-void AttackState::handle(AbstractAI* a)
+void AttackState::handle(AIController* a)
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 
 
-	dynamic_cast<NPC*>(a)->findRotation(dynamic_cast<NPC*>(a)->getTarget()->getPosition());
+	a->getNPC()->findRotation(a->getTarget()->getPosition());
 	if (keys[SDL_SCANCODE_2]) {
-		dynamic_cast<NPC*>(a)->switchCurrentState(dynamic_cast<NPC*>(a)->getIdleState());
+		a->switchCurrentState(a->getIdleState());
 	}
 }

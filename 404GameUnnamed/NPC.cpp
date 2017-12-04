@@ -5,11 +5,9 @@
 NPC::NPC()
 {
 	health = 100.0;
-	idle = new IdleState();
-	attack = new AttackState();
-	npc = new GameObject();
 
-	current = idle;
+	npc = new GameObject();
+	controller = new AIController(this);
 }
 
 NPC::NPC(glm::vec3 position)
@@ -18,10 +16,7 @@ NPC::NPC(glm::vec3 position)
 	npc = new GameObject();
 	npc->setPosition(position);
 
-	idle = new IdleState();
-	attack = new AttackState();
-
-	current = idle;
+	controller = new AIController(this);
 }
 
 glm::mat4 NPC::draw() 
@@ -33,22 +28,7 @@ glm::mat4 NPC::draw()
 
 void NPC::update()
 {
-	handleState();
-}
-
-void NPC::handleState()
-{
-	if (current == idle) {
-		current->handle(this);
-	}
-	if (current == attack) {
-		current->handle(this);
-	}
-}
-
-void NPC::switchCurrentState(AbstractAIState* state)
-{
-	current = state;
+	controller->handleState();
 }
 
 void NPC::findPath(CGraph* tarNode)
@@ -56,14 +36,9 @@ void NPC::findPath(CGraph* tarNode)
 
 }
 
-glm::vec3 NPC::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
-{
-	return glm::vec3(pos.x + (d*std::sin(angle)), pos.y, pos.z - (d*std::cos(angle)));
-}
-
 void NPC::moveNPC()
 {
-	position = moveForward(position, rotation, 0.1f);
+	position = controller->moveForward(position, rotation, 0.1f);
 }
 
 void NPC::returnToCenter()

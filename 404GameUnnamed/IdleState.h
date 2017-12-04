@@ -1,6 +1,5 @@
 #pragma once
-
-#include "AbstractAIState.h"
+#include "AIController.h"
 
 class IdleState : public AbstractAIState
 {
@@ -9,5 +8,5 @@ public:
 	virtual ~IdleState() { }
 	AbstractAIState* CurrentState(AbstractAI* a);
 	AbstractAIState* SwitchState(AbstractAI* a);
-	void handle(AbstractAI* a);
+	void handle(AIController* a);
 };

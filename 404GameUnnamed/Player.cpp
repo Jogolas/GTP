@@ -20,7 +20,6 @@ Player::Player(glm::vec3 pos)
 void Player::update()
 {
 	player->update();
-	//position.y = player->getPosition().y;
 	inputHandler();
 	at = position;
 	eye = moveForward(at, rotation, -10.0f);

@@ -13,14 +13,14 @@ AbstractAIState* IdleState::SwitchState(AbstractAI* a)
 	return nullptr;
 }
 
-void IdleState::handle(AbstractAI* a)
+void IdleState::handle(AIController* a)
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 	glm::vec3 position = glm::vec3(0, 0, 0);
-	dynamic_cast<NPC*>(a)->findRotation(position);
+	a->getNPC()->findRotation(position);
 
 	if (keys[SDL_SCANCODE_1]) {
-		dynamic_cast<NPC*>(a)->switchCurrentState(dynamic_cast<NPC*>(a)->getAttackState());
+		a->switchCurrentState(a->getAttackState());
 	}
 }
