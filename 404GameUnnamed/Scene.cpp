@@ -5,43 +5,43 @@
 #define DEG_TO_RADIAN 0.017453293
 
 Renderer::lightStruct light = {
-	{ 0.3f, 0.3f, 0.3f, 1.0f }, // ambient
+	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
 	{ 10.0f, 10.0f, 10.0f, 1.0f }  // position
 };
 
 
-Renderer::materialStruct material = {
+Renderer::materialStruct tmaterial = {
 	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
 	{ 0.4f, 0.4f, 0.4f, 1.0f }, // diffuse
 	{ 0.2f, 0.2f, 0.2f, 1.0f }, // specular
 	2.0f  // shininess
 };
 
-Renderer::materialStruct tMaterial = {
-	{ 0.2f, 0.2f, 0.2f, 1.0f }, // ambient
-	{ 0.5f, 0.5f, 0.5f, 1.0f }, // diffuse
-	{ 0.5f, 0.5f, 0.5f, 1.0f }, // specular
-	2.0f  // shininess
+Renderer::materialStruct material = {
+	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
+	{ 0.8f, 0.8f, 0.8f, 1.0f }, // diffuse
+	{ 0.8f, 0.8f, 0.8f, 1.0f }, // specular
+	1.0f  // shininess
 };
 
 glm::vec4 lightPos(0.0f, 10.0f, 0.0f, 1.0f); //light position
 
-GLfloat attConstant = 0.05f;
+GLfloat attConstant = 1.0f;
 GLfloat attLinear = 0.0f;
 GLfloat attQuadratic = 0.0f;
 GLuint texture[1];
 
 Scene::Scene()
 {
-	player = new Player(glm::vec3(5, 10, 8));
+	player = new Player(glm::vec3(5, 1, 8));
 	cam = new Camera();
 	ground = new Environment(glm::vec3(0, -1, 0), glm::vec3(50.0, 0.5, 50.0), 0, glm::vec3(0, 1, 0));
 	shader = new Shader();
 
 	////phong tex shader program
-	program[0] = shader->createShader("phong-tex.vert", "phong-tex.frag", tMaterial, light);
+	program[0] = shader->createShader("phong-tex.vert", "phong-tex.frag", material, light);
 	shader->setAttenuation(program[0], attConstant, attLinear, attQuadratic);
 	////skybox program
 	skyProgram = Renderer::initiliaseShader("cubeMap.vert", "cubeMap.frag");
@@ -55,6 +55,8 @@ Scene::Scene()
 		"cloudy-skybox/down.bmp"
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
+
+	texture[0] = Renderer::bitMapLoader("sky.bmp");
 
 	meshes[0].createMesh(cubeMeshID, "cube.obj");
 
@@ -139,16 +141,18 @@ void Scene::drawScene()
 	light.position[1] = tmp.y;
 	light.position[2] = tmp.z;
 
+
+
 	shader->bindShaderProgram(program[0]);
 	shader->useMatrix4fv(projection, "projection");
-	Renderer::setLightPos(program[0], glm::value_ptr(tmp));
 
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glm::mat4 modelMatrix(1.0);
 	mvStack.push(mvStack.top());
 	modelMatrix = ground->draw(modelMatrix);
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
-	Renderer::setMaterial(program[0], material);
+	Renderer::setLightPos(program[0], glm::value_ptr(tmp));
 	ground->getMesh().drawMesh(ground->getMesh().getMeshID());
 	mvStack.pop();
 
@@ -158,8 +162,10 @@ void Scene::drawScene()
 	modelMatrix = player->draw(modelMatrix);
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
-	Renderer::setMaterial(program[0], material);
 	player->getMesh().drawMesh(player->getMesh().getMeshID());
+	mvStack.pop();
+	shader->unbindShaderProgram();
+
 
 	mvStack.pop(); //initial matrix
 }
