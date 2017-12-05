@@ -1,9 +1,9 @@
 #pragma once
 #include "glm.hpp"
 #include "Renderer.h"
-#include "GameObject.h"
+#include "DrawableObject.h"
 
-class Player
+class Player : public DrawableObject
 {
 public:
 	Player(glm::vec3 pos);
@@ -12,14 +12,20 @@ public:
 	void findRotation(glm::vec3 tar);
 
 	glm::mat4 createCam(glm::mat4 camview);
+
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+
+	Entity* getGameObject() { return player; }
+	Entity* setGameObject(Entity* object) { return player = object; }
+
+	Mesh getMesh() { return mesh; }
+	Mesh setMesh(Mesh mesh) { return this->mesh = mesh; }
 
 	glm::vec3 getEye() { return eye; }
 	glm::vec3 getAt() { return at; }
 	glm::vec3 getUp() { return up; }
 
-	Entity* getPlayer() { return player; }
 
 	GLfloat getRotation() { return rotation; }
 
@@ -32,6 +38,7 @@ private:
 
 	//variables
 	Entity* player;
+	Mesh mesh;
 
 	glm::vec3 position;
 	glm::vec3 eye;

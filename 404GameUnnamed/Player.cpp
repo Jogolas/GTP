@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <gtc/matrix_transform.hpp>
+#include "GameObject.h"
 
 #define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
 
@@ -32,8 +33,11 @@ void Player::update()
 
 glm::mat4 Player::draw(glm::mat4 modelmatrix)
 {
+	modelmatrix = mesh.meshTranslation(modelmatrix, position);
+	modelmatrix = mesh.meshScaling(modelmatrix, glm::vec3(1.0, 1.5, 1.0));
+	modelmatrix = mesh.meshRotation(modelmatrix, -90 + rotation, glm::vec3(0, 1, 0));
 
-	return glm::mat4(1.0);
+	return modelmatrix;
 }
 
 //// creates the camera to give a third person view.
@@ -81,8 +85,8 @@ void Player::inputHandler()
 	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
 
 
-	if (keys[SDL_SCANCODE_COMMA]) rotation -= 1.0f;
-	if (keys[SDL_SCANCODE_PERIOD]) rotation += 1.0f;
+	if (keys[SDL_SCANCODE_COMMA]) rotation -= 0.1f;
+	if (keys[SDL_SCANCODE_PERIOD]) rotation += 0.1f;
 }
 
 void Player::findRotation(glm::vec3 tar)

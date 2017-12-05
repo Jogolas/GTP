@@ -57,6 +57,9 @@ Scene::Scene()
 	loadCubeMap(cubeTexFiles, &skybox[0]);
 
 	meshes[0].createMesh(cubeMeshID, "cube.obj");
+
+	player->setMesh(meshes[0]);
+	ground->setMesh(meshes[0]);
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -136,13 +139,34 @@ void Scene::drawScene()
 	light.position[1] = tmp.y;
 	light.position[2] = tmp.z;
 
+	shader->bindShaderProgram(program[0]);
+	shader->useMatrix4fv(projection, "projection");
+	Renderer::setLightPos(program[0], glm::value_ptr(tmp));
+
+	glm::mat4 modelMatrix(1.0);
+	mvStack.push(mvStack.top());
+	modelMatrix = ground->draw(modelMatrix);
+	mvStack.top() *= modelMatrix;
+	shader->useMatrix4fv(mvStack.top(), "modelview");
+	Renderer::setMaterial(program[0], material);
+	ground->getMesh().drawMesh(ground->getMesh().getMeshID());
+	mvStack.pop();
+
+	mvStack.push(mvStack.top());
+	modelMatrix = glm::mat4(1.0); //reset model matrix
+
+	modelMatrix = player->draw(modelMatrix);
+	mvStack.top() *= modelMatrix;
+	shader->useMatrix4fv(mvStack.top(), "modelview");
+	Renderer::setMaterial(program[0], material);
+	player->getMesh().drawMesh(player->getMesh().getMeshID());
 
 	mvStack.pop(); //initial matrix
 }
 
 void Scene::updateScene()
 {
-	player->update();
+	dynamic_cast<Player*>(player)->update();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 

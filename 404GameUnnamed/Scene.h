@@ -19,9 +19,8 @@ private:
 	GLuint program[1];
 	GLuint currProgram;
 	GLuint skybox[5];
-	Player* player;
-	Entity* ground;
-	Entity* wall[4], *box[4];
+	DrawableObject* player;
+	DrawableObject* ground;
 	Camera* cam;
 	Mesh meshes[2];
 	Shader* shader;

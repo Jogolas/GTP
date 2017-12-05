@@ -162,6 +162,7 @@
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
+    <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Forces.h" />
