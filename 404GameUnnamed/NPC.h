@@ -42,5 +42,5 @@ private:
 	//variables
 	GLfloat health;
 	glm::vec3 position;
-
+	glm::vec3 veloctiy;
 };

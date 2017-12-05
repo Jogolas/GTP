@@ -1,6 +1,7 @@
 #include "AttackState.h"
 #include "NPC.h"
 #include "AIController.h"
+#include "Player.h"
 
 AttackState::AttackState()
 {
@@ -15,13 +16,20 @@ void AttackState::handle(AIController* a)
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-	a->findTarget(a->getTarget(), 5, move);
+	npc = a->getNPC();
+	a->findTarget(a->getTarget(), 3, move);
 	timer--;
 
 	if (!move) {
-		npc = a->getNPC();
 		dynamic_cast<NPC*>(npc)->setSpell(fireBlast);
 		dynamic_cast<NPC*>(npc)->getSpell()->fireForward(npc, a->getTarget()->getPosition());
+	}
+
+	glm::vec3 distance = a->getTarget()->getPosition() - dynamic_cast<NPC*>(npc)->getPosition();
+	
+	if (length(distance) < 3) {
+		Entity* player = a->getTarget();
+		player->setPosition(glm::vec3(player->getPosition().x + dynamic_cast<NPC*>(npc)->getPosition().x))
 	}
 
 	if (timer < 0) {
