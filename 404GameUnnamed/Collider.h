@@ -7,7 +7,7 @@ class Collider
 {
 public:
 	// you had methods here that weren't virtual aka cannot be overridden. removed them since you cannot have a semi-abstract class.
-
+	virtual bool isColliding(Collider* const c) = 0;
 	virtual void update(const Transform& transform) = 0;
 	virtual CollisionDetection* getContact() const = 0;
 

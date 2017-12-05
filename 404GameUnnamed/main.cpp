@@ -103,6 +103,8 @@ void update()
 	glm::vec3 distance = dynamic_cast<NPC*>(boss)->getPosition() - p1->getPosition();
 
 	if (glm::length(distance) > 10) p1->findRotation(dynamic_cast<NPC*>(boss)->getPosition());
+
+	//dynamic_cast<Player*>(p1)->getPlayer()->getCollider()->isColliding(dynamic_cast<NPC*>(boss)->getNPC()->getCollider());
 }
 
 void draw(SDL_Window * window)

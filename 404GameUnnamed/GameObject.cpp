@@ -39,6 +39,17 @@ glm::vec3 GameObject::getCenter()
 	return centre;
 }
 
+glm::vec3 GameObject::getSize(float x, float y, float z)
+{
+	width = x;
+	height = y;
+	length = z;
+
+	size = glm::vec3(x, y, z);
+
+	return size;
+}
+
 GameObject::GameObject()
 {
 	init();
@@ -72,7 +83,7 @@ void GameObject::clearAccumilator()
 void GameObject::init()
 {
 	transform.Translate(glm::vec3(50, 50, 50));
-	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
+	collider = new AABB(glm::vec3(size), transform);
 }
 
 void GameObject::update()

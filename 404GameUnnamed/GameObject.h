@@ -27,7 +27,7 @@ public:
 	glm::vec3 addForce(const glm::vec3& force);
 	glm::vec3 setVelocity(glm::vec3 vel) { velocity = vel; return velocity; }
 	glm::vec3 getVelocity() { return velocity; }
-
+	glm::vec3 getSize(float x, float y, float z);
 	Collider* getCollider() { return collider; }
 	const AABB* const getAABB() { return nullptr; } // not supported.
 
@@ -52,6 +52,7 @@ private:
 	glm::vec3 forceAccum;
 	glm::vec3 force;
 	glm::vec3 centre;
+	glm::vec3 size;
 	
 	const glm::vec3 downForce = { 0.0f, -0.15f, 0.0f };
 	GravityForce grav = GravityForce(downForce);

@@ -9,6 +9,7 @@ Player::Player(glm::vec3 pos)
 	rotation = 0.0f;
 
 	player = new GameObject();
+	player->getSize(2.0f, 2.0f, 2.0f);
 	player->init();
 	eye = glm::vec3(0.0f, 1.0f, 10.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
@@ -45,7 +46,11 @@ glm::mat4 Player::createCam(glm::mat4 camview)
 void Player::collider()
 {
 	//code to collide
-
+	colliding = player->getCollider()->isColliding(dynamic_cast<NPC*>(npc)->getNPC()->getCollider());
+	if (colliding == true)
+	{
+		collision->playerObjectCollision(player, dynamic_cast<NPC*>(npc)->getNPC());
+	}
 }
 
 

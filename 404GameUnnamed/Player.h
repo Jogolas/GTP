@@ -1,6 +1,8 @@
 #include "glm.hpp"
 #include "Renderer.h"
 #include "GameObject.h"
+#include "NPC.h"
+#include "CollisionData.h"
 
 class Player
 {
@@ -27,6 +29,8 @@ private:
 
 	//variables
 	Entity* player;
+	NPC* npc;
+	CollisionData* collision;
 
 	glm::vec3 position;
 	glm::vec3 eye;
@@ -34,4 +38,5 @@ private:
 	glm::vec3 up;
 	GLfloat rotation;
 	const Uint8 *keys;
+	bool colliding = false;
 };

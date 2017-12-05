@@ -10,7 +10,7 @@ public:
 	AABB(glm::vec3& radius, const Transform& transform) : radius(radius), centre(transform.getPosition()) {};
 	virtual ~AABB() {};
 
-	bool isColliding(Collider* const collider);
+	bool isColliding(Collider* const c);
 	void update(const Transform& transform);
 
 	CollisionDetection* getContact() const;
