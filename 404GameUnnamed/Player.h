@@ -7,7 +7,7 @@ class Player
 public:
 	Player(glm::vec3 pos);
 	void update();
-	void render();
+	glm::mat4 draw(glm::mat4 modelmatrix);
 	void findRotation(glm::vec3 tar);
 
 	glm::mat4 createCam(glm::mat4 camview);

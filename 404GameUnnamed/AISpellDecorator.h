@@ -1,6 +1,7 @@
 #pragma once
 #include "AbstractAI.h"
 
+////incorrect setup, (WIP)
 class AISpellDecorator : public AbstractAI
 {
 public:
@@ -8,21 +9,29 @@ public:
 	virtual ~AISpellDecorator();
 	glm::mat4 draw();
 
-	float getCooldown() { return cd; }
+	glm::vec3 getPosition() { return position; }
+	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+
+	void fireForward(AbstractAI* ai, glm::vec3 tar);
+	void returnToCenter() {} //dummy
+
+	float getDamage() { return dmg; }
 	float cooldownTimer(float timer)
 	{ 
 		if(timer <= 0) timer--;
 		return timer;
 	}
-	float getDamage() { return dmg; }
+
 	bool getAbility() { return ablitiyUsed; }
+
 	const char* getName() { return name; }
 
 private:
 	AbstractAI* npc;
-	float cd, dmg;
+	float dmg;
 	bool ablitiyUsed;
 	const char* name;
+	glm::vec3 position;
 
 protected:
 	void nameAbility(const char* name);
@@ -34,7 +43,7 @@ protected:
 class Element : public AISpellDecorator
 {
 public:
-	Element(AbstractAI* decoration, const char* name, float cooldown, float dmg);
+	Element(AbstractAI* decoration, const char* name, float dmg);
 	~Element();
 	glm::mat4 draw();
 };

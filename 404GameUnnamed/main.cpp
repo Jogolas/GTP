@@ -102,7 +102,7 @@ void update()
 
 	glm::vec3 distance = dynamic_cast<NPC*>(boss)->getPosition() - p1->getPosition();
 
-	if (glm::length(distance) > 10) p1->findRotation(dynamic_cast<NPC*>(boss)->getPosition());
+	if(keys[SDL_SCANCODE_TAB]) p1->findRotation(dynamic_cast<NPC*>(boss)->getPosition());
 }
 
 void draw(SDL_Window * window)
@@ -150,6 +150,15 @@ void draw(SDL_Window * window)
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
+
+	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
+		mvStack.push(mvStack.top());
+		mvStack.top() = glm::translate(mvStack.top(), glm::vec3(dynamic_cast<NPC*>(boss)->getSpell()->getPosition()));
+		mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.25f, 0.25f, 0.25f));
+		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+		rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+		mvStack.pop();
+	}
 
 
 	////player cube

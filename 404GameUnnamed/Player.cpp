@@ -30,8 +30,10 @@ void Player::update()
 }
 
 
-void Player::render()
+glm::mat4 Player::draw(glm::mat4 modelmatrix)
 {
+
+	return glm::mat4(1.0);
 }
 
 //// creates the camera to give a third person view.

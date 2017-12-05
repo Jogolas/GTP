@@ -41,7 +41,18 @@ void NPC::moveNPC()
 
 void NPC::returnToCenter()
 {
-	glm::vec3 center = glm::vec3(0, 0, 0);
+	if (controller->getState() == controller->getIdleState()) {
+		glm::vec3 center = glm::vec3(0, 0, 0);
+		glm::vec3 distance = center - position;
+
+		if (length(distance) > 2) {
+			Entity* tar = new GameObject();
+			tar->setPosition(center);
+			controller->findTarget(tar, 2, true);
+
+			delete tar; //delete to free up memory
+		}
+	}
 }
 
 void NPC::closestNode(glm::vec3 tar, CGraph* nodes)

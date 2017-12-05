@@ -50,9 +50,9 @@ glm::vec3 AIController::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 	return glm::vec3(pos.x + (d * std::sin(angle)), pos.y, pos.z - (d*std::cos(angle)));
 }
 
-void AIController::findTarget(glm::vec3 tar, GLuint l, bool move)
+void AIController::findTarget(Entity* tar, GLuint l, bool move)
 {
-	glm::vec3 distance = tar - dynamic_cast<NPC*>(_npc)->getPosition();
+	glm::vec3 distance = tar->getPosition() - dynamic_cast<NPC*>(_npc)->getPosition();
 
 	if (glm::length(distance) >= l) {
 		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
