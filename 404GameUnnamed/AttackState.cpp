@@ -29,7 +29,7 @@ void AttackState::handle(AIController* a)
 	
 	if (length(distance) < 3) {
 		Entity* player = a->getTarget();
-		player->setPosition(glm::vec3(player->getPosition().x + dynamic_cast<NPC*>(npc)->getPosition().x))
+		player->setPosition(glm::vec3(player->getPosition().x + dynamic_cast<NPC*>(npc)->getPosition().x));
 	}
 
 	if (timer < 0) {
