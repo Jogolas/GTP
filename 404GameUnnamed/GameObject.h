@@ -5,6 +5,7 @@
 #include <iostream>
 #include "GravityForce.h"
 #include "AABB.h"
+#include "Mesh.h"
 
 class GameObject : public Entity 
 {

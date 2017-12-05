@@ -102,8 +102,8 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
 
-														   // Create 800x600 window
-		window = SDL_CreateWindow("this is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		// Create 800x600 window
+		window = SDL_CreateWindow("dis is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 		if (!window) // Check window was created OK
 		{
@@ -120,8 +120,20 @@ void Renderer::toggleFullScreen(SDL_Window * window)
 {
 	//this will toggle between fullscreen and window of whatever resolution it is set to via a key press
 	//depending if it's full screen or not
-	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	bool isTheScreenFull = true;
 
+	if (isTheScreenFull == false)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		isTheScreenFull = true;
+		std::cout << "full screen" << std::endl;
+	}
+	else
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+		isTheScreenFull = false;
+		std::cout << "smol screen" << std::endl;
+	}
 }
 
 void Renderer::changeRes(int Width, int Height)
@@ -277,7 +289,7 @@ void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::v
 //	Renderer::setObjMatrix(shader, uniformName, data);
 //}
 
-void Renderer::setObjLight(const GLuint shader, lightStruct light)
+void Renderer::setLight(const GLuint shader, lightStruct light)
 {
 	//pass in the light
 	int uniformIndex = glGetUniformLocation(shader, "light.ambient");
@@ -290,14 +302,14 @@ void Renderer::setObjLight(const GLuint shader, lightStruct light)
 	glUniform4fv(uniformIndex, 1, light.position);
 }
 
-void Renderer::setObjLightPos(const GLuint shader, const GLfloat *lightPos)
+void Renderer::setLightPos(const GLuint shader, const GLfloat *lightPos)
 {
 	//pass in light postion
 	int uniformIndex = glGetUniformLocation(shader, "lightPosition");
 	glUniform4fv(uniformIndex, 1, lightPos);
 }
 
-void Renderer::setObjMaterial(const GLuint shader, materialStruct material)
+void Renderer::setMaterial(const GLuint shader, materialStruct material)
 {
 	//pass in the material
 	int uniformIndex = glGetUniformLocation(shader, "material.ambient");
@@ -310,7 +322,7 @@ void Renderer::setObjMaterial(const GLuint shader, materialStruct material)
 	glUniform1f(uniformIndex, material.shininess);
 }
 
-void Renderer::setObjMatrix(const GLuint shader, const char* uniformName, const GLfloat *data)
+void Renderer::setMatrix(const GLuint shader, const char* uniformName, const GLfloat *data)
 {
 	//pass in the matrix
 	int uniformIndex = glGetUniformLocation(shader, uniformName);
@@ -422,11 +434,6 @@ void Renderer::loadFBX(const char* filename, std::vector<GLfloat> &verts, std::v
 	}
 
 	std::cout << "finished parsing fbx image..." << std::endl;
-}
-
-void Renderer::setFBXProperties()
-{
-
 }
 
 void Renderer::drawFBX()

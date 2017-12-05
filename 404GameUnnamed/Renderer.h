@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <glm.hpp>
 #include <SDL.h>
+#include <assimp\Importer.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -77,20 +78,17 @@ namespace Renderer
 	//obj loader and realted methods
 	//based on methods in the RT3D obj loader class
 	void loadObj(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in object model
-	void setObjLight(const GLuint shader, lightStruct light);
-	void setObjLightPos(const GLuint shader, const GLfloat *lightPos);
-	void setObjMaterial(const GLuint shader, materialStruct material);
-	void setObjMatrix(const GLuint shader, const char* uniformName, const GLfloat *data);
+	void setLight(const GLuint shader, lightStruct light);
+	void setLightPos(const GLuint shader, const GLfloat *lightPos);
+	void setMaterial(const GLuint shader, materialStruct material);
+	void setMatrix(const GLuint shader, const char* uniformName, const GLfloat *data);
 	void drawObj(const GLuint mesh, const GLuint indexCount, const GLuint primitive); //draws the object model
 
 	//FBX loader and related methods
 	void loadFBX(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in fbx model
 	void setFBXProperties(); //set the properties for an fbx model
-	void setFBXLight();
-	void setFBXLightPos();
-	void setFBXMaterial();
-	void setFBXMatrix();
 	void drawFBX(); //draw the fbx model
+	
 
 	//based on methods in the RT3D obj loader class
 	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours, const GLfloat* normals, const GLfloat* texcoords, const GLuint indexCount, const GLuint* indices);

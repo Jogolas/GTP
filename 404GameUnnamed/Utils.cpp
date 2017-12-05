@@ -37,6 +37,7 @@ glm::vec3 Utils::projectPointOnAABB(const glm::vec3 & P, const AABB* const aabb)
 	glm::vec3 center = aabb->getCentre();
 	glm::vec3 radii = aabb->getRadius();
 
+
 	char mask = Utils::computePointMask(P, aabb);
 	glm::vec3 point = P;
 

@@ -1,47 +1,51 @@
-#include "Player.h"
+#include "player.h"
 
-#define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
+#define DEG_TO_RADS 0.017453293
 
-Player::Player(glm::vec3 pos)
+Player::Player()
 {
-	position = pos;
-	rotation = 0.0f;
+	position = glm::vec3(5, 10, 8);
+	eye = glm::vec3(0.0f, 1.0f, 10.0f); // left, up, forward
+	at = glm::vec3(0.0f, 1.0f, 3.0f);
+	up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	player = new GameObject(position);
+	box.vecMin = glm::vec3(-1, -1, -1);
+	box.vecMax = glm::vec3(0.5, 0.5, 0.5);
+
+	mesh = Mesh();
 }
 
-void Player::init()
+void Player::MouseMotion(GLuint x, GLuint y)
 {
-	std::vector<GLfloat> verts, norms, texCoords;
-	std::vector<GLuint> indices;
-	Renderer::loadObj("bunny-5000.obj", verts, norms, texCoords, indices);
-	GLuint size = indices.size(), indexCount = size;
-	model = Renderer::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), nullptr, indexCount, indices.data());
+	//if (fov > 10) fov = 10;
+	//else if (fov < 2) fov = 2;
+
+	//if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT)) fov += 0.05f;
+	//if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT)) fov -= 0.05f;
+	if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		rotation = x;
+	}
 }
 
 void Player::update()
 {
+	at = position;
+	eye = moveForward(at, rotation, -10.0f);
+	eye.y = position.y + 2;
+
 	inputHandler();
-	player->update(player->getInverseMass());
-	collider();
 }
 
-void Player::render(const GLuint shader)
+
+glm::mat4 Player::draw(glm::mat4 modelMatrix)
 {
-	//code to draw
-	/*Renderer::setObjLightPos(shader, glm::value_ptr(tmp));
-	Renderer::setObjMatrix(shader, "projection", glm::value_ptr(projection));
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-25.0f + i + i * 4, -0.8f, 0.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0f, 20.0f, 20.0f));
-	Renderer::setObjMatrix(shader, "modelView", glm::value_ptr(mvStack.top()));
-	Renderer::setObjMaterial(shader, material);
-	Renderer::drawObj(model, indexCount, GL_TRIANGLES);*/
+	modelMatrix = mesh.meshTranslation(modelMatrix, position);
+	modelMatrix = mesh.meshScaling(modelMatrix, glm::vec3(20, 20, 20));
+	modelMatrix = mesh.meshRotation(modelMatrix, -90 + rotation, glm::vec3(0, 1, 0));
+	return modelMatrix;
 }
 
-void Player::collider()
-{
-}
 
 
 //// moves the player either forwards or backwards.  
@@ -51,7 +55,7 @@ void Player::collider()
 //// anything above 0 will go forward, and less than 0 will move backwards.
 glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::sin(rotation * DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(rotation * DEG_TO_RADIAN));
+	return glm::vec3(pos.x + d*std::sin(rotation * DEG_TO_RADS), pos.y, pos.z - d*std::cos(rotation * DEG_TO_RADS));
 }
 
 //// moves the player either left or right.  
@@ -61,15 +65,27 @@ glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 //// anything above 0 will go right, and less than 0 will move left.
 glm::vec3 Player::moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::cos(rotation * DEG_TO_RADIAN), pos.y, pos.z + d*std::sin(rotation * DEG_TO_RADIAN));
+	return glm::vec3(pos.x + d*std::cos(rotation * DEG_TO_RADS), pos.y, pos.z + d*std::sin(rotation * DEG_TO_RADS));
 }
 
-////handles keys being pressed.
+
 void Player::inputHandler()
 {
+	int x, y;
+	position += velocity;
+	velocity *= 0.89f;
+	mouse = SDL_GetMouseState(&x, &y);
 	keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_W]) position = moveForward(position, rotation, 0.1f);
+	if (keys[SDL_SCANCODE_W] && onground) {
+		position = moveForward(position, rotation, 0.1f);
+		//velocity.y += 0.5;
+	}
 	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
+
+	//resets position
+	if (keys[SDL_SCANCODE_E]) position = glm::vec3(5, 10, 8);
+
+	MouseMotion(x, y);
 }

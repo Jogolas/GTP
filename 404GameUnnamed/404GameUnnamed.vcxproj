@@ -75,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;C:\Program Files\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86</AdditionalLibraryDirectories>
@@ -88,7 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\glm-0.9.8.0;..\dev\SDL2 plugins;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Thomas\source\repos\GraphicsCoursework\dev\glm-0.9.8.5\glm;..\dev\SDL2 plugins;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -126,7 +126,10 @@
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="AIController.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionData.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph.cpp" />
@@ -134,12 +137,15 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Observor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -149,11 +155,14 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Environment.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="FrictionForce.h" />
     <ClInclude Include="GameObject.h" />
@@ -162,12 +171,21 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Observor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="UI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cubeMap.frag" />
+    <None Include="cubeMap.vert" />
+    <None Include="phong-tex.frag" />
+    <None Include="phong-tex.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
