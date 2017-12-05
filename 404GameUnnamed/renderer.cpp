@@ -56,12 +56,14 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		std::cout << "Vertex shader not compiled." << std::endl;
+		printShaderError(v);
 	}
 
 	glCompileShader(f);
 	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		std::cout << "Fragment shader not compiled." << std::endl;
+		printShaderError(f);
 	}
 
 	p = glCreateProgram();
@@ -69,10 +71,10 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 	glAttachShader(p, v);
 	glAttachShader(p, f);
 
-	glBindAttribLocation(p, VERTEX, "position");
-	glBindAttribLocation(p, COLOUR, "color");
-	glBindAttribLocation(p, NORMAL, "normal");
-	glBindAttribLocation(p, TEXCOORD, "texCoord");
+	glBindAttribLocation(p, VERTEX, "in_Position");
+	glBindAttribLocation(p, COLOUR, "in_Color");
+	glBindAttribLocation(p, NORMAL, "in_Normal");
+	glBindAttribLocation(p, TEXCOORD, "in_TexCoord");
 
 	glLinkProgram(p);
 	glUseProgram(p);
@@ -289,7 +291,7 @@ void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::v
 //	Renderer::setObjMatrix(shader, uniformName, data);
 //}
 
-void Renderer::setLight(const GLuint shader, lightStruct light)
+void Renderer::setLight(const GLuint shader, const lightStruct light)
 {
 	//pass in the light
 	int uniformIndex = glGetUniformLocation(shader, "light.ambient");
@@ -309,12 +311,12 @@ void Renderer::setLightPos(const GLuint shader, const GLfloat *lightPos)
 	glUniform4fv(uniformIndex, 1, lightPos);
 }
 
-void Renderer::setMaterial(const GLuint shader, materialStruct material)
+void Renderer::setMaterial(const GLuint shader, const materialStruct material)
 {
 	//pass in the material
 	int uniformIndex = glGetUniformLocation(shader, "material.ambient");
 	glUniform4fv(uniformIndex, 1, material.ambient);
-	uniformIndex = glGetUniformLocation(shader, "diffuse");
+	uniformIndex = glGetUniformLocation(shader, "material.diffuse");
 	glUniform4fv(uniformIndex, 1, material.diffuse);
 	uniformIndex = glGetUniformLocation(shader, "material.specular");
 	glUniform4fv(uniformIndex, 1, material.specular);
@@ -556,6 +558,29 @@ GLuint Renderer::createMesh(const GLuint numVerts, const GLfloat* vertices, cons
 	vertexArrayMap.insert(std::pair<GLuint, GLuint *>(VAO, pMeshBuffers));
 
 	return VAO;
+}
+
+void Renderer::printShaderError(const GLint shader) {
+	int maxLength = 0;
+	int logLength = 0;
+	GLchar *logMessage;
+
+	// Find out how long the error message is
+	if (!glIsShader(shader))
+		glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+	else
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+	if (maxLength > 0) { // If message has some contents
+		logMessage = new GLchar[maxLength];
+		if (!glIsShader(shader))
+			glGetProgramInfoLog(shader, maxLength, &logLength, logMessage);
+		else
+			glGetShaderInfoLog(shader, maxLength, &logLength, logMessage);
+		std::cout << "Shader Info Log:" << std::endl << logMessage << std::endl;
+		delete[] logMessage;
+	}
+	// should additionally check for OpenGL errors here
 }
 
 void Renderer::addVertex(std::string fString, std::map<std::string, GLuint> &indexMap, std::vector<position> &inVerts, std::vector<position> &inCoords, std::vector<position> &inNorms, std::vector<GLfloat> &verts, std::vector<GLfloat> &texcoords, std::vector<GLfloat> &norms, std::vector<GLuint> &indices, int fFormat, int &index)

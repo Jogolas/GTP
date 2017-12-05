@@ -75,6 +75,8 @@ namespace Renderer
 
 	GLuint bitMapLoader(char *name);
 
+	void printShaderError(const GLint shader);
+
 	//obj loader and realted methods
 	//based on methods in the RT3D obj loader class
 	void loadObj(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in object model
