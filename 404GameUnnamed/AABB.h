@@ -1,27 +1,18 @@
-// Based on the work of Marco Gilardi's from IPM
 #pragma once
-#include "Collider.h"
-#include "Utils.h"
-#include "CollisionDetection.h"
+#include "glm.hpp"
 
-class AABB : public Collider
+class AABB
 {
 public:
-	AABB(glm::vec3& radius, const Transform& transform) : radius(radius), centre(transform.getPosition()) {};
-	virtual ~AABB() {};
+	AABB operator+(const glm::vec3& p) const
+	{
+		AABB result = (*this);
+		result.vecMin = p + vecMin;
+		result.vecMax = p + vecMax;
 
-	bool isColliding(Collider* const collider);
-	void update(const Transform& transform);
+		return result;
+	}
 
-	CollisionDetection* getContact() const;
-	glm::vec3 getRadius() const;
-	glm::vec3 getCentre() const;
-
-private:
-	std::vector<glm::vec3> contactPoints() const;
-	glm::vec3 contactNormal() const;
-
-	glm::vec3 radius;
-	glm::vec3 centre;
-	Collider* collider;
+	glm::vec3 vecMin;
+	glm::vec3 vecMax;
 };
