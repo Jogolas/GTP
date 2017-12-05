@@ -1,3 +1,4 @@
+#pragma once
 #include "glm.hpp"
 #include "Renderer.h"
 #include "GameObject.h"
@@ -13,6 +14,10 @@ public:
 	glm::mat4 createCam(glm::mat4 camview);
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+
+	glm::vec3 getEye() { return eye; }
+	glm::vec3 getAt() { return at; }
+	glm::vec3 getUp() { return up; }
 
 	Entity* getPlayer() { return player; }
 

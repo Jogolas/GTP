@@ -10,8 +10,8 @@ Environment::Environment(glm::vec3 position, glm::vec3 scaled, GLfloat rotate, g
 	this->rotate = rotate;
 	this->rotateAxis = rotateAxis;
 
-	box.vecMin = glm::vec3(-scale.x, -scale.y, -scale.z);
-	box.vecMax = glm::vec3(scale.x, scale.y, scale.z);
+	//box.vecMin = glm::vec3(-scale.x, -scale.y, -scale.z);
+	//box.vecMax = glm::vec3(scale.x, scale.y, scale.z);
 }
 
 void Environment::update()

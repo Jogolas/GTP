@@ -35,14 +35,14 @@ GLuint texture[1];
 
 Scene::Scene()
 {
-	//player = new Player();
+	player = new Player(glm::vec3(5, 10, 8));
 	cam = new Camera();
 	ground = new Environment(glm::vec3(0, -1, 0), glm::vec3(50.0, 0.5, 50.0), 0, glm::vec3(0, 1, 0));
+	shader = new Shader();
 
 	////phong tex shader program
 	program[0] = shader->createShader("phong-tex.vert", "phong-tex.frag", tMaterial, light);
-	shader->setAttenuation(program[1], attConstant, attLinear, attQuadratic);
-
+	shader->setAttenuation(program[0], attConstant, attLinear, attQuadratic);
 	////skybox program
 	skyProgram = Renderer::initiliaseShader("cubeMap.vert", "cubeMap.frag");
 
@@ -55,6 +55,8 @@ Scene::Scene()
 		"cloudy-skybox/down.bmp"
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
+
+	meshes[0].createMesh(cubeMeshID, "cube.obj");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -134,13 +136,13 @@ void Scene::drawScene()
 	light.position[1] = tmp.y;
 	light.position[2] = tmp.z;
 
-	shader->unbindShaderProgram();
+
 	mvStack.pop(); //initial matrix
 }
 
 void Scene::updateScene()
 {
-	player->update(10);
+	player->update();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 

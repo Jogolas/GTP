@@ -13,21 +13,21 @@
 #include "Player.h"
 #include "Scene.h"
 
-#define DEG_TO_RADIAN 0.017453293
+Scene* scene;
 
 void init()
 {
-	
+	scene = new Scene();
 }
 
 void update()
 {
-	
+	scene->updateScene();
 }
 
 void draw(SDL_Window * window)
 {
-	
+	scene->drawScene();
 }
 
 int main(int argc, char *argv[])

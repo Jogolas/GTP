@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <glm.hpp>
 #include <SDL.h>
-#include <assimp\Importer.hpp>
+//#include <assimp\Importer.hpp>
 
 #include <iostream>
 #include <fstream>
