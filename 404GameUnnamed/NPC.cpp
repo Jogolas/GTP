@@ -5,6 +5,8 @@ NPC::NPC()
 	health = 100.0;
 
 	npc = new GameObject();
+	npc->getSize(1.0, 2.0, 1.0);
+	npc->init();
 	controller = new AIController(this);
 }
 
@@ -13,7 +15,8 @@ NPC::NPC(glm::vec3 position)
 	this->position = position;
 	npc = new GameObject();
 	npc->setPosition(position);
-
+	npc->getSize(1.0, 2.0, 1.0);
+	npc->init();
 	controller = new AIController(this);
 }
 
