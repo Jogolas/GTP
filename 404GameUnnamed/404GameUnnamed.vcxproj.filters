@@ -259,5 +259,11 @@
     <None Include="phong-tex.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

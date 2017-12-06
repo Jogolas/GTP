@@ -187,6 +187,8 @@
   <ItemGroup>
     <None Include="cubeMap.frag" />
     <None Include="cubeMap.vert" />
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.frag" />
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.vert" />
     <None Include="phong-tex.frag" />
     <None Include="phong-tex.vert" />
     <None Include="toonShader.frag" />

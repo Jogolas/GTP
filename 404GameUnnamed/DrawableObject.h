@@ -1,13 +1,15 @@
 #pragma once
 #include "Mesh.h"
 #include "Entity.h"
-#include "glm.hpp"
+#include "AbstractAI.h"
 
-class DrawableObject
+class DrawableObject : public AbstractAI
 {
 public:
 	DrawableObject() {}
 	virtual ~DrawableObject() {}
+
+	virtual void returnToCenter() = 0;
 
 	virtual glm::mat4 draw(glm::mat4 modelMatrix) = 0;
 

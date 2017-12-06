@@ -8,6 +8,9 @@ public:
 	Environment() {}
 	Environment(glm::vec3 position, glm::vec3 scaled, GLfloat rotate, glm::vec3 rotateAxis);
 	void update();
+
+	void returnToCenter() {} //dummy
+
 	glm::mat4 draw(glm::mat4 modelMatrix);
 
 	glm::vec3 getPosition() { return position; }

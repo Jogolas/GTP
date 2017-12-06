@@ -17,6 +17,7 @@ void AttackState::handle(AIController* a)
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 	npc = a->getNPC();
+	
 	a->findTarget(a->getTarget(), 3, move);
 	timer--;
 
@@ -27,10 +28,6 @@ void AttackState::handle(AIController* a)
 
 	glm::vec3 distance = a->getTarget()->getPosition() - dynamic_cast<NPC*>(npc)->getPosition();
 	
-	if (length(distance) < 3) {
-		Entity* player = a->getTarget();
-		player->setPosition(glm::vec3(player->getPosition().x + dynamic_cast<NPC*>(npc)->getPosition().x));
-	}
 
 	if (timer < 0) {
 		if (move) {

@@ -1,4 +1,5 @@
 #include "NPC.h"
+#include "GameObject.h"
 
 NPC::NPC()
 {
@@ -17,16 +18,21 @@ NPC::NPC(glm::vec3 position)
 	controller = new AIController(this);
 }
 
-glm::mat4 NPC::draw() 
+glm::mat4 NPC::draw(glm::mat4 modelMatrix) 
 {
-	//code to render in model
-	return glm::mat4(1.0);
+	GLdouble rot = abs(controller->getRotation() * 57.2958);
+	modelMatrix = mesh.meshTranslation(modelMatrix, position);
+	modelMatrix = mesh.meshRotation(modelMatrix, -90 + rot, glm::vec3(0, -1, 0));
+	modelMatrix = mesh.meshScaling(modelMatrix, glm::vec3(1.75, 1.75, 1.75));
+
+	return modelMatrix;
 }
 
 
 void NPC::update()
 {
 	controller->handleState();
+
 }
 
 void NPC::findPath(CGraph* tarNode)

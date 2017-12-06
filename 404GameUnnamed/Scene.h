@@ -15,14 +15,13 @@ public:
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
-	GLuint cubeMeshID, bunnyMeshID, skyProgram;
-	GLuint program[1];
-	GLuint currProgram;
+	GLuint meshID[4], skyProgram;
+	GLuint program[2];
 	GLuint skybox[5];
-	DrawableObject* player;
-	DrawableObject* ground;
+	DrawableObject *player, *ground, *boss;
+	DrawableObject *wall[4];
 	Camera* cam;
-	Mesh meshes[2];
+	Mesh meshes[4];
 	Shader* shader;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;

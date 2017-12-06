@@ -11,7 +11,7 @@ public:
 	glm::mat4 draw(glm::mat4 modelmatrix);
 	void findRotation(glm::vec3 tar);
 
-	glm::mat4 createCam(glm::mat4 camview);
+	void returnToCenter() {} //dummy
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
@@ -33,6 +33,7 @@ private:
 	//methods
 	glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d);
 	glm::vec3 moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d);
+	void mouseMotion(GLuint x, GLuint y);
 	void inputHandler();
 	void collider();
 
@@ -45,5 +46,7 @@ private:
 	glm::vec3 at;
 	glm::vec3 up;
 	GLfloat rotation;
+	GLfloat camRot;
 	const Uint8 *keys;
+	GLuint mouse;
 };

@@ -11,7 +11,7 @@ Player::Player(glm::vec3 pos)
 
 	player = new GameObject();
 	player->init();
-	eye = glm::vec3(0.0f, 1.0f, 10.0f); // left, up, forward
+	eye = glm::vec3(0.0f, 1.0f, 5.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
@@ -23,7 +23,7 @@ void Player::update()
 	player->update();
 	inputHandler();
 	at = position;
-	eye = moveForward(at, rotation, -10.0f);
+	eye = moveForward(at, camRot, -5.0f);
 	eye.y = position.y + 2;
 	collider();
 
@@ -34,18 +34,10 @@ void Player::update()
 glm::mat4 Player::draw(glm::mat4 modelmatrix)
 {
 	modelmatrix = mesh.meshTranslation(modelmatrix, position);
-	modelmatrix = mesh.meshScaling(modelmatrix, glm::vec3(1.0, 1.5, 1.0));
-	modelmatrix = mesh.meshRotation(modelmatrix, -90 + rotation, glm::vec3(0, 1, 0));
+	modelmatrix = mesh.meshScaling(modelmatrix, glm::vec3(1, 1, 1));
+	modelmatrix = mesh.meshRotation(modelmatrix, -180 + rotation, glm::vec3(0, -1, 0));
 
 	return modelmatrix;
-}
-
-//// creates the camera to give a third person view.
-glm::mat4 Player::createCam(glm::mat4 camview)
-{
-	camview = glm::lookAt(eye, at, up);
-
-	return camview;
 }
 
 void Player::collider()
@@ -62,7 +54,7 @@ void Player::collider()
 //// anything above 0 will go forward, and less than 0 will move backwards.
 glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::sin(rotation), pos.y, pos.z - d*std::cos(rotation));
+	return glm::vec3(pos.x + d*std::sin(rotation * DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(rotation * DEG_TO_RADIAN));
 }
 
 //// moves the player either left or right.  
@@ -72,21 +64,37 @@ glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 //// anything above 0 will go right, and less than 0 will move left.
 glm::vec3 Player::moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::cos(rotation), pos.y, pos.z + d*std::sin(rotation));
+	return glm::vec3(pos.x + d*std::cos(rotation * DEG_TO_RADIAN), pos.y, pos.z + d*std::sin(rotation * DEG_TO_RADIAN));
 }
 
 ////handles keys being pressed.
 void Player::inputHandler()
 {
+	int x, y;
+
 	keys = SDL_GetKeyboardState(NULL);
+	mouse = SDL_GetMouseState(&x, &y);
 	if (keys[SDL_SCANCODE_W]) position = moveForward(position, rotation, 0.1f);
 	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
 	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
 
 
-	if (keys[SDL_SCANCODE_COMMA]) rotation -= 0.1f;
-	if (keys[SDL_SCANCODE_PERIOD]) rotation += 0.1f;
+	mouseMotion(x, y);
+}
+
+void Player::mouseMotion(GLuint x, GLuint y)
+{
+	int tmp = x;
+	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		x = 0;
+		rotation = x + tmp;
+	}
+	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+		x = 0;
+		camRot = x;
+	}
 }
 
 void Player::findRotation(glm::vec3 tar)
@@ -94,6 +102,6 @@ void Player::findRotation(glm::vec3 tar)
 	glm::vec3 distance = tar - position;
 
 	if (glm::length(distance) >= 2) {
-		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
+		rotation = (float)atan2(distance.z, distance.x);
 	}
 }
