@@ -77,7 +77,7 @@ Scene::Scene()
 
 	meshes[0].createMesh(meshID[0], "BossModel.obj");
 	meshes[1].createMesh(meshID[1], "cube.obj");
-	//meshes[2].createMesh(meshID[2], "HeroMan.obj");
+	meshes[2].createMesh(meshID[2], "HeroMan.obj");
 	meshes[3].createMesh(meshID[3], "bossAbility.obj");
 
 	boss->setMesh(meshes[0]);
