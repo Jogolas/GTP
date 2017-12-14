@@ -18,8 +18,10 @@ private:
 	GLuint meshID[4], skyProgram;
 	GLuint program[2];
 	GLuint skybox[5];
-	DrawableObject *player, *ground, *boss;
-	DrawableObject *wall[4];
+	Player *player;
+	Environment *ground;
+	Environment *wall[4];
+	AbstractAI *boss;
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;

@@ -77,14 +77,14 @@ Scene::Scene()
 
 	meshes[0].createMesh(meshID[0], "BossModel.obj");
 	meshes[1].createMesh(meshID[1], "cube.obj");
-	meshes[2].createMesh(meshID[2], "HeroMan.obj");
+	//meshes[2].createMesh(meshID[2], "HeroMan.obj");
 	meshes[3].createMesh(meshID[3], "bossAbility.obj");
 
-	boss->setMesh(meshes[0]);
-	ground->setMesh(meshes[1]);
-	player->setMesh(meshes[2]);
+	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
+	ground->getDrawingObject()->setMesh(meshes[1]);
+	player->getDrawingObject()->setMesh(meshes[0]);
 
-	for (GLuint i = 0; i < 4; i++) wall[i]->setMesh(meshes[1]);
+	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -177,7 +177,7 @@ void Scene::drawScene()
 	modelMatrix = ground->draw(modelMatrix);
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
-	ground->getMesh().drawMesh(ground->getMesh().getMeshID());
+	ground->getDrawingObject()->getMesh().drawMesh(ground->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
 
 	//// walls
@@ -189,7 +189,7 @@ void Scene::drawScene()
 		modelMatrix = wall[i]->draw(modelMatrix);
 		mvStack.top() *= modelMatrix;
 		shader->useMatrix4fv(mvStack.top(), "modelview");
-		wall[i]->getMesh().drawMesh(wall[i]->getMesh().getMeshID());
+		wall[i]->getDrawingObject()->getMesh().drawMesh(wall[i]->getDrawingObject()->getMesh().getMeshID());
 		mvStack.pop();
 	}
 
@@ -207,14 +207,14 @@ void Scene::drawScene()
 	////player
 	mvStack.push(mvStack.top());
 	modelMatrix = glm::mat4(1.0); //reset model matrix
-	modelMatrix = player->draw(modelMatrix);
+	modelMatrix = player->draw(modelMatrix, glm::vec3(1, 1, 1));
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
 	shader->useMatrix4fv(modelMatrix, "modelMatrix");
 	GLuint uniformIndex = glGetUniformLocation(program[1], "cameraPos");
 	glUniform3fv(uniformIndex, 1, glm::value_ptr(dynamic_cast<Player*>(player)->getEye()));
 	Renderer::setMaterial(program[1], material);
-	player->getMesh().drawMesh(player->getMesh().getMeshID());
+	player->getDrawingObject()->getMesh().drawMesh(player->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
 
 
@@ -222,29 +222,28 @@ void Scene::drawScene()
 	////boss
 	mvStack.push(mvStack.top());
 	modelMatrix = glm::mat4(1.0); //reset model matrix
-	modelMatrix = boss->draw(modelMatrix);
+	modelMatrix = dynamic_cast<NPC*>(boss)->draw(modelMatrix, glm::vec3(1.75f, 1.75f, 1.75f));
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
 	shader->useMatrix4fv(modelMatrix, "modelMatrix");
 	uniformIndex = glGetUniformLocation(program[1], "cameraPos");
 	glUniform3fv(uniformIndex, 1, glm::value_ptr(dynamic_cast<Player*>(player)->getEye()));
 	Renderer::setMaterial(program[1], material);
-	boss->getMesh().drawMesh(boss->getMesh().getMeshID());
+	dynamic_cast<NPC*>(boss)->getDrawingObject()->getMesh().drawMesh(dynamic_cast<NPC*>(boss)->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
+	shader->unbindShaderProgram();
+
+
+	shader->bindShaderProgram(program[0]);
+	shader->useMatrix4fv(projection, "projection");
 
 	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
 		glBindTexture(GL_TEXTURE_2D, texture[3]);
 		mvStack.push(mvStack.top());
-		modelMatrix = glm::mat4(1.0); //reset model matrix
-		modelMatrix = glm::translate(modelMatrix, dynamic_cast<NPC*>(boss)->getSpell()->getPosition());
+		mvStack.top() = glm::translate(mvStack.top(), dynamic_cast<NPC*>(boss)->getSpell()->getPosition());
 		mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.25f, 0.25f, 0.25f));
-		mvStack.top() *= modelMatrix;
-		shader->useMatrix4fv(mvStack.top(), "modelview");
-		shader->useMatrix4fv(modelMatrix, "modelMatrix");
-		uniformIndex = glGetUniformLocation(program[1], "cameraPos");
-		glUniform3fv(uniformIndex, 1, glm::value_ptr(dynamic_cast<Player*>(player)->getEye()));
-		Renderer::setMaterial(program[1], material);
-		meshes[3].drawMesh(meshes[3].getMeshID());
+		Renderer::setMatrix(program[0], "modelview", glm::value_ptr(mvStack.top()));
+		Renderer::drawObj(meshes[1].getMeshID(), meshes[1].getIndexCount(), GL_TRIANGLES);
 		mvStack.pop();
 	}
 
@@ -257,11 +256,11 @@ void Scene::drawScene()
 void Scene::updateScene()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	player->update();
 
 	if (keys[SDL_SCANCODE_1])
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
 
-	dynamic_cast<Player*>(player)->update();
 	dynamic_cast<NPC*>(boss)->update();
 
 

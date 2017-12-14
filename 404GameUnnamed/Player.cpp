@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <gtc/matrix_transform.hpp>
 #include "GameObject.h"
+#include "D_Object.h"
 
 #define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
 
@@ -9,6 +10,7 @@ Player::Player(glm::vec3 pos)
 	position = pos;
 	rotation = 0.0f;
 
+	d_object = new D_Object();
 	player = new GameObject();
 	player->init();
 	eye = glm::vec3(0.0f, 1.0f, 5.0f); // left, up, forward
@@ -27,17 +29,18 @@ void Player::update()
 	eye.y = position.y + 2;
 	collider();
 
-	player->setPosition(position); //update the GameObject position at the end.
+	player->setPosition(position); //update the colliding object
 }
 
 
-glm::mat4 Player::draw(glm::mat4 modelmatrix)
+glm::mat4 Player::draw(glm::mat4 modelmatrix, glm::vec3 scale)
 {
-	modelmatrix = mesh.meshTranslation(modelmatrix, position);
-	modelmatrix = mesh.meshScaling(modelmatrix, glm::vec3(1, 1, 1));
-	modelmatrix = mesh.meshRotation(modelmatrix, -180 + rotation, glm::vec3(0, -1, 0));
+	d_object->setPosition(position);
+	d_object->setScale(scale);
+	d_object->setFloatRotation(rotation);
+	d_object->setVectorRotation(glm::vec3(0, -1, 0));
 
-	return modelmatrix;
+	return modelmatrix = d_object->draw(modelmatrix);
 }
 
 void Player::collider()

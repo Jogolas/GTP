@@ -3,29 +3,24 @@
 #include "Renderer.h"
 #include "DrawableObject.h"
 
-class Player : public DrawableObject
+class Player
 {
 public:
 	Player(glm::vec3 pos);
 	void update();
-	glm::mat4 draw(glm::mat4 modelmatrix);
+	glm::mat4 draw(glm::mat4 modelmatrix, glm::vec3 scale);
 	void findRotation(glm::vec3 tar);
-
-	void returnToCenter() {} //dummy
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
 	Entity* getGameObject() { return player; }
-	Entity* setGameObject(Entity* object) { return player = object; }
 
-	Mesh getMesh() { return mesh; }
-	Mesh setMesh(Mesh mesh) { return this->mesh = mesh; }
+	DrawableObject* getDrawingObject() { return d_object; }
 
 	glm::vec3 getEye() { return eye; }
 	glm::vec3 getAt() { return at; }
 	glm::vec3 getUp() { return up; }
-
 
 	GLfloat getRotation() { return rotation; }
 
@@ -40,6 +35,7 @@ private:
 	//variables
 	Entity* player;
 	Mesh mesh;
+	DrawableObject* d_object;
 
 	glm::vec3 position;
 	glm::vec3 eye;

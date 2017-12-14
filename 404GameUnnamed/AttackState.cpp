@@ -5,12 +5,11 @@
 
 AttackState::AttackState()
 {
-	////not the ideal place to create this, testing for now
-	fireBlast = new AISpellDecorator(new Element(new Burning(npc), "Fire Blast", 100.0f));
 }
 
 bool move = false;
 GLfloat timer = 100.0f;
+glm::vec3 tmpPosition;
 
 void AttackState::handle(AIController* a)
 {
@@ -18,23 +17,25 @@ void AttackState::handle(AIController* a)
 
 	npc = a->getNPC();
 	
-	a->findTarget(a->getTarget(), 3, move);
+	a->findTarget(a->getTarget(), 3);
 	timer--;
 
-	if (!move) {
-		dynamic_cast<NPC*>(npc)->setSpell(fireBlast);
-		dynamic_cast<NPC*>(npc)->getSpell()->fireForward(npc, a->getTarget()->getPosition());
+	if (!move && dynamic_cast<NPC*>(npc)->getSpell() != nullptr) {
+		dynamic_cast<NPC*>(npc)->getSpell()->fireForward(npc, tmpPosition);
 	}
-
-	glm::vec3 distance = a->getTarget()->getPosition() - dynamic_cast<NPC*>(npc)->getPosition();
+	else if(move) dynamic_cast<NPC*>(npc)->moveNPC();
 	
 
 	if (timer < 0) {
 		if (move) {
+			dynamic_cast<NPC*>(npc)->getSpell()->setPosition(npc->getPosition());
+			tmpPosition = a->getTarget()->getPosition();
 			move = false;
-			fireBlast->setPosition(dynamic_cast<NPC*>(npc)->getPosition());
 		}
-		else move = true;
+		else {
+			tmpPosition = glm::vec3(0, 0, 0);
+			move = true;
+		}
 
 		timer = 200.0f;
 	}

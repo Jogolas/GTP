@@ -129,6 +129,7 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionData.cpp" />
+    <ClCompile Include="D_Object.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
     <ClInclude Include="DrawableObject.h" />
+    <ClInclude Include="D_Object.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Forces.h" />
