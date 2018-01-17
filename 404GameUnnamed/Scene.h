@@ -4,6 +4,7 @@
 #include <stack>
 #include "Environment.h"
 #include "Collider.h"
+#include "CollisionData.h"
 
 class Scene
 {
@@ -12,6 +13,7 @@ public:
 
 	void updateScene();
 	void drawScene();
+	void collisions();
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
@@ -25,6 +27,7 @@ private:
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;
+	CollisionData* cd;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
 };

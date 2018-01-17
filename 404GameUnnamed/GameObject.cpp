@@ -44,6 +44,17 @@ GameObject::GameObject()
 	init();
 }
 
+glm::vec3 GameObject::getSize(float x, float y, float z)
+{
+	width = x;
+	height = y;
+	length = z;
+
+	size = glm::vec3(x, y, z);
+
+	return size;
+}
+
 GameObject::GameObject(glm::vec3 position)
 {
 	this->position = position;

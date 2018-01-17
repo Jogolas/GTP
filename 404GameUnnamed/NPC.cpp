@@ -18,7 +18,7 @@ NPC::NPC(glm::vec3 position)
 	this->position = position;
 	npc = new GameObject();
 	npc->setPosition(position);
-
+	npc->getSize(10.0, 10.0, 10.0);
 	controller = new AIController(this);
 	spell = new AISpellDecorator(new Element(new Burning(this), "Fire Blast", 100.0f));
 }

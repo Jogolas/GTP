@@ -75,10 +75,10 @@ Scene::Scene()
 	texture[2] = Renderer::bitMapLoader("boxTexture.bmp");
 	texture[3] = Renderer::bitMapLoader("ball.bmp");
 
-	meshes[0].createMesh(meshID[0], "BossModel.obj");
+	meshes[0].createMesh(meshID[0], "cube.obj");
 	meshes[1].createMesh(meshID[1], "cube.obj");
 	//meshes[2].createMesh(meshID[2], "HeroMan.obj");
-	meshes[3].createMesh(meshID[3], "bossAbility.obj");
+	meshes[3].createMesh(meshID[3], "cube.obj");
 
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
 	ground->getDrawingObject()->setMesh(meshes[1]);
@@ -253,6 +253,14 @@ void Scene::drawScene()
 	mvStack.pop(); //initial matrix
 }
 
+void Scene::collisions()
+{
+	if (dynamic_cast<Player*>(player)->getGameObject()->getCollider()->isColliding(dynamic_cast<NPC*>(boss)->getGameObject()->getCollider()) == true)
+	{
+		cd->playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+	}
+}
+
 void Scene::updateScene()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -262,6 +270,6 @@ void Scene::updateScene()
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
 
 	dynamic_cast<NPC*>(boss)->update();
-
+	collisions();
 
 }

@@ -58,6 +58,7 @@ std::vector<glm::vec3> AABB::contactPoints() const
 void AABB::update(const Transform& transform)
 {
 	centre = transform.getPosition();
+	
 }
 
 CollisionDetection* AABB::getContact() const
