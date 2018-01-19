@@ -9,11 +9,9 @@ public:
 	virtual void init() = 0;
 	virtual float getInverseMass() = 0;
 
-	virtual glm::vec3 getSize(float x, float y, float z) = 0;
 	virtual glm::vec3 getPosition() = 0;
 	virtual glm::vec3 setPosition(glm::vec3 position) = 0;
-	virtual glm::vec3 getSize(float x, float y, float z) = 0;
-	
+
 	virtual const AABB* const getAABB() = 0;
 	virtual Collider* getCollider() = 0;
 };

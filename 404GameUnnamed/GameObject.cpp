@@ -22,7 +22,7 @@ void GameObject::verletSolver(float dt)
 
 float GameObject::getMass()
 {
-	if ((acceleration.x > 0 || acceleration.y > 0 || acceleration.z > 0) 
+	if ((acceleration.x > 0 || acceleration.y > 0 || acceleration.z > 0)
 		|| (force.x > 0 || force.y > 0 || force.y > 0))
 	{
 		mass = force.y / acceleration.y;
@@ -39,31 +39,9 @@ glm::vec3 GameObject::getCenter()
 	return centre;
 }
 
-glm::vec3 GameObject::getSize(float x, float y, float z)
-{
-	width = x;
-	height = y;
-	length = z;
-
-	size = glm::vec3(x, y, z);
-
-	return size;
-}
-
 GameObject::GameObject()
 {
 	init();
-}
-
-glm::vec3 GameObject::getSize(float x, float y, float z)
-{
-	width = x;
-	height = y;
-	length = z;
-
-	size = glm::vec3(x, y, z);
-
-	return size;
 }
 
 GameObject::GameObject(glm::vec3 position)
@@ -94,7 +72,7 @@ void GameObject::clearAccumilator()
 void GameObject::init()
 {
 	transform.Translate(glm::vec3(50, 50, 50));
-	collider = new AABB(glm::vec3(size), transform);
+	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
 }
 
 void GameObject::update()
