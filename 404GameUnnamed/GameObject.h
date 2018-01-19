@@ -5,6 +5,7 @@
 #include <iostream>
 #include "GravityForce.h"
 #include "AABB.h"
+#include "Mesh.h"
 
 class GameObject : public Entity 
 {
@@ -28,7 +29,7 @@ public:
 	glm::vec3 setVelocity(glm::vec3 vel) { velocity = vel; return velocity; }
 	glm::vec3 getVelocity() { return velocity; }
 	glm::vec3 getSize(float x, float y, float z);
-	
+
 	Collider* getCollider() { return collider; }
 	const AABB* const getAABB() { return nullptr; } // not supported.
 

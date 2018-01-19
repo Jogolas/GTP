@@ -1,9 +1,10 @@
 #pragma once
-#include "Collider.h"
+#include "glm.hpp"
 
 class AbstractAI
 {
 public:
 	virtual ~AbstractAI() {}
-	virtual glm::mat4 draw() = 0;
+	virtual void returnToCenter() = 0;
+	virtual glm::vec3 getPosition() = 0;
 };

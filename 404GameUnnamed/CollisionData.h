@@ -23,5 +23,5 @@ public:
 	bool playerObjectCollision(Entity* object1, Entity* object2);
 
 private:
-	
+
 };

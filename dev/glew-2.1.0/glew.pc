@@ -1,0 +1,11 @@
+prefix=C:/Users/B00307861/AppData/Local/CMakeBuild/520fd2a4-1933-dd31-a329-cdd8265ee736/build/install
+exec_prefix=${prefix}
+libdir=C:/Users/B00307861/AppData/Local/CMakeBuild/520fd2a4-1933-dd31-a329-cdd8265ee736/build/install/lib
+includedir=${prefix}/include
+
+Name: glew
+Description: The OpenGL Extension Wrangler library
+Version: 2.1.0
+Cflags: -I${includedir} 
+Libs: -L${libdir} -lglew32
+Requires: glu

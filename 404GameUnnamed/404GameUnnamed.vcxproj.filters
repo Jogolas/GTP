@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{b7c3b451-3300-457d-baed-d4ef6903fa2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{1542fd55-81a8-4ae4-9d2f-671f73e001dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{a9f7e048-e26e-4156-a601-90fed440248a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,6 +129,24 @@
     <ClCompile Include="AISpellDecorator.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="D_Object.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h">
@@ -144,9 +168,6 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="AnimationManager.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioManager.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
@@ -212,12 +233,51 @@
     <ClInclude Include="AISpellDecorator.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableObject.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="D_Object.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="toonShader.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="toonShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cubeMap.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cubeMap.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="phong-tex.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="phong-tex.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

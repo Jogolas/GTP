@@ -11,7 +11,7 @@ public:
 	AIController(AbstractAI* npc);
 	~AIController();
 
-	void findTarget(glm::vec3 tar, GLuint l, bool move);
+	void findTarget(Entity* tar, GLuint l);
 	void switchCurrentState(AbstractAIState* state);
 	void handleState();
 

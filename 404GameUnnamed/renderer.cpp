@@ -1,5 +1,8 @@
 #include "Renderer.h"
 
+bool fullScreen = true;
+SDL_Window * window;
+
 //file reader from previous work since it works
 char* Renderer::fileReader(const char *fname, GLint &fSize)
 {
@@ -56,12 +59,14 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		std::cout << "Vertex shader not compiled." << std::endl;
+		printShaderError(v);
 	}
 
 	glCompileShader(f);
 	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		std::cout << "Fragment shader not compiled." << std::endl;
+		printShaderError(f);
 	}
 
 	p = glCreateProgram();
@@ -69,10 +74,10 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 	glAttachShader(p, v);
 	glAttachShader(p, f);
 
-	glBindAttribLocation(p, VERTEX, "position");
-	glBindAttribLocation(p, COLOUR, "color");
-	glBindAttribLocation(p, NORMAL, "normal");
-	glBindAttribLocation(p, TEXCOORD, "texCoord");
+	glBindAttribLocation(p, VERTEX, "in_Position");
+	glBindAttribLocation(p, COLOUR, "in_Color");
+	glBindAttribLocation(p, NORMAL, "in_Normal");
+	glBindAttribLocation(p, TEXCOORD, "in_TexCoord");
 
 	glLinkProgram(p);
 	glUseProgram(p);
@@ -87,7 +92,7 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window so the window can be
 {																				//initialised in one place and called upon again to use in other
 	{																		    //commands like full screen and resizing
-		SDL_Window * window;
+																				//SDL_Window * window;
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize video
 		{
 			std::cout << "unable to set up window" << std::endl;
@@ -103,8 +108,7 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
 
 														   // Create 800x600 window
-		window = SDL_CreateWindow("this is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-
+		window = SDL_CreateWindow("dis is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 		if (!window) // Check window was created OK
 		{
 			std::cout << "unable to set up window" << std::endl;
@@ -116,12 +120,31 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 	}
 }
 
-void Renderer::toggleFullScreen(SDL_Window * window)
+void Renderer::toggleFullScreen()
 {
 	//this will toggle between fullscreen and window of whatever resolution it is set to via a key press
 	//depending if it's full screen or not
-	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	if (fullScreen == false)
+	{
+		fullScreen = true;
+	}
+	else
+	{
+		fullScreen = false;
+	}
+}
 
+void Renderer::setFullScreen(SDL_Window * window)
+{
+	//this will set fullscreen and window of whatever resolution it is set to via a key press
+	if (fullScreen == false)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	else
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+	}
 }
 
 void Renderer::changeRes(int Width, int Height)
@@ -131,6 +154,14 @@ void Renderer::changeRes(int Width, int Height)
 	//like from a list on the menu or something
 	//WINDOW_WIDTH = Width;
 	//WINDOW_HEIGHT = Height;
+	if (fullScreen == true)
+	{
+		SDL_SetWindowSize(window, Width, Height);
+	}
+	else
+	{
+		SDL_SetWindowSize(window, Width, Height);
+	}
 }
 
 GLuint Renderer::bitMapLoader(char *name)
@@ -138,7 +169,7 @@ GLuint Renderer::bitMapLoader(char *name)
 	GLuint texID;
 	glGenTextures(1, &texID); // generate texture ID
 
-	// load file - using core SDL library
+							  // load file - using core SDL library
 	SDL_Surface *tmpSurface;
 	tmpSurface = SDL_LoadBMP(name);
 	if (!tmpSurface) {
@@ -149,8 +180,8 @@ GLuint Renderer::bitMapLoader(char *name)
 	glBindTexture(GL_TEXTURE_2D, texID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	SDL_PixelFormat *format = tmpSurface->format;
 
@@ -277,7 +308,7 @@ void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::v
 //	Renderer::setObjMatrix(shader, uniformName, data);
 //}
 
-void Renderer::setObjLight(const GLuint shader, lightStruct light)
+void Renderer::setLight(const GLuint shader, const lightStruct light)
 {
 	//pass in the light
 	int uniformIndex = glGetUniformLocation(shader, "light.ambient");
@@ -290,19 +321,19 @@ void Renderer::setObjLight(const GLuint shader, lightStruct light)
 	glUniform4fv(uniformIndex, 1, light.position);
 }
 
-void Renderer::setObjLightPos(const GLuint shader, const GLfloat *lightPos)
+void Renderer::setLightPos(const GLuint shader, const GLfloat *lightPos)
 {
 	//pass in light postion
 	int uniformIndex = glGetUniformLocation(shader, "lightPosition");
 	glUniform4fv(uniformIndex, 1, lightPos);
 }
 
-void Renderer::setObjMaterial(const GLuint shader, materialStruct material)
+void Renderer::setMaterial(const GLuint shader, const materialStruct material)
 {
 	//pass in the material
 	int uniformIndex = glGetUniformLocation(shader, "material.ambient");
 	glUniform4fv(uniformIndex, 1, material.ambient);
-	uniformIndex = glGetUniformLocation(shader, "diffuse");
+	uniformIndex = glGetUniformLocation(shader, "material.diffuse");
 	glUniform4fv(uniformIndex, 1, material.diffuse);
 	uniformIndex = glGetUniformLocation(shader, "material.specular");
 	glUniform4fv(uniformIndex, 1, material.specular);
@@ -310,7 +341,7 @@ void Renderer::setObjMaterial(const GLuint shader, materialStruct material)
 	glUniform1f(uniformIndex, material.shininess);
 }
 
-void Renderer::setObjMatrix(const GLuint shader, const char* uniformName, const GLfloat *data)
+void Renderer::setMatrix(const GLuint shader, const char* uniformName, const GLfloat *data)
 {
 	//pass in the matrix
 	int uniformIndex = glGetUniformLocation(shader, uniformName);
@@ -422,11 +453,6 @@ void Renderer::loadFBX(const char* filename, std::vector<GLfloat> &verts, std::v
 	}
 
 	std::cout << "finished parsing fbx image..." << std::endl;
-}
-
-void Renderer::setFBXProperties()
-{
-
 }
 
 void Renderer::drawFBX()
@@ -549,6 +575,29 @@ GLuint Renderer::createMesh(const GLuint numVerts, const GLfloat* vertices, cons
 	vertexArrayMap.insert(std::pair<GLuint, GLuint *>(VAO, pMeshBuffers));
 
 	return VAO;
+}
+
+void Renderer::printShaderError(const GLint shader) {
+	int maxLength = 0;
+	int logLength = 0;
+	GLchar *logMessage;
+
+	// Find out how long the error message is
+	if (!glIsShader(shader))
+		glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+	else
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+	if (maxLength > 0) { // If message has some contents
+		logMessage = new GLchar[maxLength];
+		if (!glIsShader(shader))
+			glGetProgramInfoLog(shader, maxLength, &logLength, logMessage);
+		else
+			glGetShaderInfoLog(shader, maxLength, &logLength, logMessage);
+		std::cout << "Shader Info Log:" << std::endl << logMessage << std::endl;
+		delete[] logMessage;
+	}
+	// should additionally check for OpenGL errors here
 }
 
 void Renderer::addVertex(std::string fString, std::map<std::string, GLuint> &indexMap, std::vector<position> &inVerts, std::vector<position> &inCoords, std::vector<position> &inNorms, std::vector<GLfloat> &verts, std::vector<GLfloat> &texcoords, std::vector<GLfloat> &norms, std::vector<GLuint> &indices, int fFormat, int &index)

@@ -1,7 +1,7 @@
 #include "AABB.h"
 #include "CollisionData.h" //using this in here to prevent re-definitions
-						   //programs would usually have a better structure and definitions to prevent this
-						   //so don't use this as a fix in the future and get this s*** fixed.
+//programs would usually have a better structure and definitions to prevent this
+//so don't use this as a fix in the future and get this s*** fixed.
 
 
 glm::vec3 AABB::getCentre() const
@@ -58,6 +58,7 @@ std::vector<glm::vec3> AABB::contactPoints() const
 void AABB::update(const Transform& transform)
 {
 	centre = transform.getPosition();
+	
 }
 
 CollisionDetection* AABB::getContact() const

@@ -11,6 +11,4 @@ public:
 
 private:
 	AbstractAI* npc;
-
-	AISpellDecorator* fireBlast;
 };

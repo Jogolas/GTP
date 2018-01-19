@@ -7,6 +7,7 @@
 class AABB : public Collider
 {
 public:
+	AABB() {}
 	AABB(glm::vec3& radius, const Transform& transform) : radius(radius), centre(transform.getPosition()) {};
 	virtual ~AABB() {};
 

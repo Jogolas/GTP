@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -69,17 +69,19 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\B00307861\Source\Repos\group6-1718\dev\SDL2 plugins\lib;C:\Users\B00307861\Source\Repos\group6-1718\dev\SDL2-2.0.5;C:\Users\B00307861\Source\Repos\group6-1718\dev\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;..\dev\Assimp\include\assimp;..\dev\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;..\dev\Assimp\lib\x86;..\dev\OpenAL 1.1 SDK\libs\Win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32d.lib;OpenAL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -88,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\glm-0.9.8.0;..\dev\SDL2 plugins;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\B00307861\Source\Repos\group6-1718\dev\SDL2 plugins\lib;C:\Users\B00307861\Source\Repos\group6-1718\dev\glm-0.9.8.5\glm;..\dev\glm-0.9.8.0;..\dev\SDL2 plugins;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -127,7 +129,11 @@
     <ClCompile Include="AIController.cpp" />
     <ClCompile Include="AISpellDecorator.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionData.cpp" />
+    <ClCompile Include="D_Object.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph.cpp" />
@@ -135,12 +141,14 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -153,11 +161,15 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="CollisionReaction.h" />
+    <ClInclude Include="DrawableObject.h" />
+    <ClInclude Include="D_Object.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Environment.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="FrictionForce.h" />
     <ClInclude Include="GameObject.h" />
@@ -166,16 +178,24 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cubeMap.frag" />
+    <None Include="cubeMap.vert" />
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.frag" />
+    <None Include="D:\Uni Work\Graphics-Coursework-master\Graphics-Coursework-master\GraphicsCoursework\toonReflection.vert" />
+    <None Include="phong-tex.frag" />
+    <None Include="phong-tex.vert" />
     <None Include="toonShader.frag" />
     <None Include="toonShader.vert" />
   </ItemGroup>
