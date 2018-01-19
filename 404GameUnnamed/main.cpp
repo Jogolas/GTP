@@ -27,6 +27,11 @@ void init()
 void update()
 {
 	scene->updateScene();
+
+	//if (keys[SDL_SCANCODE_F])
+	//{
+	//	render.toggleFullScreen(hWindow);
+	//}
 }
 
 void draw(SDL_Window * window)
@@ -66,7 +71,7 @@ int main(int argc, char *argv[])
 
 		update();
 		draw(hWindow);
-		//Renderer::toggleFullScreen(hWindow);
+		Renderer::setFullScreen(hWindow);
 	}
 
 	SDL_GL_DeleteContext(glContext);

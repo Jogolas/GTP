@@ -1,5 +1,8 @@
 #include "Renderer.h"
 
+bool fullScreen = true;
+SDL_Window * window;
+
 //file reader from previous work since it works
 char* Renderer::fileReader(const char *fname, GLint &fSize)
 {
@@ -89,7 +92,7 @@ GLuint Renderer::initiliaseShader(const char *vertShader, const char *fragShader
 SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window so the window can be
 {																				//initialised in one place and called upon again to use in other
 	{																		    //commands like full screen and resizing
-		SDL_Window * window;
+																				//SDL_Window * window;
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize video
 		{
 			std::cout << "unable to set up window" << std::endl;
@@ -104,9 +107,8 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
 
-		// Create 800x600 window
+														   // Create 800x600 window
 		window = SDL_CreateWindow("dis is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-
 		if (!window) // Check window was created OK
 		{
 			std::cout << "unable to set up window" << std::endl;
@@ -118,23 +120,30 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 	}
 }
 
-void Renderer::toggleFullScreen(SDL_Window * window)
+void Renderer::toggleFullScreen()
 {
 	//this will toggle between fullscreen and window of whatever resolution it is set to via a key press
 	//depending if it's full screen or not
-	bool isTheScreenFull = true;
+	if (fullScreen == false)
+	{
+		fullScreen = true;
+	}
+	else
+	{
+		fullScreen = false;
+	}
+}
 
-	if (isTheScreenFull == false)
+void Renderer::setFullScreen(SDL_Window * window)
+{
+	//this will set fullscreen and window of whatever resolution it is set to via a key press
+	if (fullScreen == false)
 	{
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-		isTheScreenFull = true;
-		std::cout << "full screen" << std::endl;
 	}
 	else
 	{
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
-		isTheScreenFull = false;
-		std::cout << "smol screen" << std::endl;
 	}
 }
 
@@ -145,6 +154,14 @@ void Renderer::changeRes(int Width, int Height)
 	//like from a list on the menu or something
 	//WINDOW_WIDTH = Width;
 	//WINDOW_HEIGHT = Height;
+	if (fullScreen == true)
+	{
+		SDL_SetWindowSize(window, Width, Height);
+	}
+	else
+	{
+		SDL_SetWindowSize(window, Width, Height);
+	}
 }
 
 GLuint Renderer::bitMapLoader(char *name)
@@ -152,7 +169,7 @@ GLuint Renderer::bitMapLoader(char *name)
 	GLuint texID;
 	glGenTextures(1, &texID); // generate texture ID
 
-	// load file - using core SDL library
+							  // load file - using core SDL library
 	SDL_Surface *tmpSurface;
 	tmpSurface = SDL_LoadBMP(name);
 	if (!tmpSurface) {
