@@ -83,7 +83,7 @@ void GameObject::clearAccumilator()
 void GameObject::init()
 {
 	transform.Translate(glm::vec3(50, 50, 50));
-	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
+	collider = new AABB(glm::vec3(5, 5, 5), transform);
 }
 
 void GameObject::update()

@@ -255,10 +255,17 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	if (dynamic_cast<Player*>(player)->getGameObject()->getCollider()->isColliding(dynamic_cast<NPC*>(boss)->getGameObject()->getCollider()) == true)
+	cd.playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+
+	if (cd.playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject()))
 	{
-		cd->playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+		std::cout << "Colliding" << std::endl;
 	}
+	/*if (dynamic_cast<Player*>(player)->getGameObject()->getCollider()->isColliding(dynamic_cast<NPC*>(boss)->getGameObject()->getCollider()) == true)
+	{
+		std::cout << "Colliding" << std::endl;
+		cd->playerObjectCollision(player->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+	}*/
 }
 
 void Scene::updateScene()
