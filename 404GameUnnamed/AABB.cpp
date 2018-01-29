@@ -11,7 +11,7 @@ glm::vec3 AABB::getCentre() const
 
 glm::vec3 AABB::getRadius() const
 {
-	return radius;
+	return size;
 }
 
 bool AABB::isColliding(Collider * const c)

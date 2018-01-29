@@ -29,6 +29,10 @@ bool CollisionData::AABBCollisionTest(const AABB* const aabb1, const AABB* const
 	bool yCollision = CollisionData::yCollision(aabb1, aabb2);
 	bool zCollision = CollisionData::zCollision(aabb1, aabb2);
 
+	if(xCollision == true) std::cout << "X-axis Collision: " << xCollision << std::endl;
+	if(yCollision == true) std::cout << "Y-axis Collision: " << yCollision << std::endl;
+	if(zCollision == true) std::cout << "Z-axis Collision: " << zCollision << std::endl;
+
 	return xCollision || yCollision || zCollision;
 }
 

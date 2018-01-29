@@ -31,7 +31,7 @@ public:
 	glm::vec3 getSize(float x, float y, float z);
 
 	Collider* getCollider() { return collider; }
-	const AABB* const getAABB() { return nullptr; } // not supported.
+	const AABB* const getAABB() { return aabb; } // not supported.
 
 	void clearAccumilator();
 	void init();
@@ -40,6 +40,7 @@ public:
 private:
 	Transform transform;
 	Collider* collider;
+	const AABB* aabb;
 
 	float mass;
 	float inverseMass = 1 / getMass();

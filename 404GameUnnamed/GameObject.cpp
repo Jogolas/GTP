@@ -84,6 +84,7 @@ void GameObject::init()
 {
 	transform.Translate(glm::vec3(50, 50, 50));
 	collider = new AABB(glm::vec3(5, 5, 5), transform);
+	aabb = new AABB(glm::vec3(size), transform);
 }
 
 void GameObject::update()

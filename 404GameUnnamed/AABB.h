@@ -8,7 +8,7 @@ class AABB : public Collider
 {
 public:
 	AABB() {}
-	AABB(glm::vec3& radius, const Transform& transform) : radius(radius), centre(transform.getPosition()) {};
+	AABB(glm::vec3& size, const Transform& transform) : size(size), centre(transform.getPosition()) {};
 	virtual ~AABB() {};
 
 	bool isColliding(Collider* const c);
@@ -22,7 +22,7 @@ private:
 	std::vector<glm::vec3> contactPoints() const;
 	glm::vec3 contactNormal() const;
 
-	glm::vec3 radius;
+	glm::vec3 size;
 	glm::vec3 centre;
 	Collider* collider;
 };
