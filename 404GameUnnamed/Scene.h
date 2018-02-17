@@ -22,8 +22,10 @@ private:
 	GLuint skybox[5];
 	Player *player;
 	Environment *ground;
-	Environment *wall[4];
+	Environment *wall[3];
+	Environment *UI[1];
 	AbstractAI *boss;
+	AbstractAI *enemies[1];
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;

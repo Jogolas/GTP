@@ -28,10 +28,6 @@ void update()
 {
 	scene->updateScene();
 
-	//if (keys[SDL_SCANCODE_F])
-	//{
-	//	render.toggleFullScreen(hWindow);
-	//}
 }
 
 void draw(SDL_Window * window)

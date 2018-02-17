@@ -34,11 +34,13 @@ GLfloat attConstant = 1.0f;
 GLfloat attLinear = 0.0f;
 GLfloat attQuadratic = 0.0f;
 GLuint texture[4];
+GLuint UITexture[5];
 
 Scene::Scene()
 {
 	player = new Player(glm::vec3(5, 0, 8));
 	boss = new NPC();
+	enemies[0] = new NPC();
 	cam = new Camera();
 	ground = new Environment(glm::vec3(0, -1, 0), glm::vec3(50.0, 0.5, 50.0), 0, glm::vec3(0, 1, 0));
 	shader = new Shader();
@@ -46,7 +48,9 @@ Scene::Scene()
 	wall[0] = new Environment(glm::vec3(50, 10, 0), glm::vec3(2, 50, 50), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(0, 10, 50), glm::vec3(50, 50, 2), 0, glm::vec3(0, 1, 0));
 	wall[2] = new Environment(glm::vec3(-50, 10, 0), glm::vec3(2, 50, 50), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(0, 10, -50), glm::vec3(50, 50, 2), 0, glm::vec3(0, 1, 0));
+	//wall[3] = new Environment(glm::vec3(0, 10, -50), glm::vec3(50, 50, 2), 0, glm::vec3(0, 1, 0));
+
+	UI[0] = new Environment(glm::vec3(0, 2, -50), glm::vec3(2, 0.5, 0), 0, glm::vec3(0, 1, 0)); //ui box for the icon tray
 
 	program[0] = shader->createShader("phong-tex.vert", "phong-tex.frag", material, light);
 	shader->setAttenuation(program[0], attConstant, attLinear, attQuadratic);
@@ -62,12 +66,12 @@ Scene::Scene()
 	skyProgram = Renderer::initiliaseShader("cubeMap.vert", "cubeMap.frag");
 
 	const char *cubeTexFiles[6] = {
-		"cloudy-skybox/back.bmp",
-		"cloudy-skybox/front.bmp",
-		"cloudy-skybox/right.bmp",
-		"cloudy-skybox/left.bmp",
-		"cloudy-skybox/up.bmp",
-		"cloudy-skybox/down.bmp"
+		"dungeon-skybox/back.bmp",
+		"dungeon-skybox/front.bmp",
+		"dungeon-skybox/right.bmp",
+		"dungeon-skybox/left.bmp",
+		"dungeon-skybox/up.bmp",
+		"dungeon-skybox/down.bmp"
 	};
 	loadCubeMap(cubeTexFiles, &skybox[0]);
 
@@ -84,10 +88,15 @@ Scene::Scene()
 	meshes[3].createMesh(meshID[1], "cube.obj");
 
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
+	dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
 	ground->getDrawingObject()->setMesh(meshes[1]);
 	player->getDrawingObject()->setMesh(meshes[0]);
 
 	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
+
+	UI[0]->getDrawingObject()->setMesh(meshes[1]);
+
+	UITexture[0] = Renderer::bitMapLoader("iconTray.bmp");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -185,7 +194,7 @@ void Scene::drawScene()
 
 	//// walls
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
-	for (GLuint i = 0; i < 4; i++) {
+	for (GLuint i = 0; i < 3; i++) {
 
 		modelMatrix = glm::mat4(1.0); //reset modelmatrix
 		mvStack.push(mvStack.top());
@@ -220,6 +229,19 @@ void Scene::drawScene()
 	player->getDrawingObject()->getMesh().drawMesh(player->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
 
+	////UI elements
+	//glDisable(GL_DEPTH_TEST); // make sure writing to update depth test is off
+	//glBindTexture(GL_TEXTURE_2D, UITexture[0]);
+	//modelMatrix = glm::mat4(1.0); //reset modelmatrix
+	//mvStack.push(mvStack.top());
+	//modelMatrix = UI[0]->draw(modelMatrix);
+	//mvStack.top() *= modelMatrix;
+	//glm::value_ptr(glm::mat4(1.0));
+	//shader->useMatrix4fv(mvStack.top(), "modelview");
+	////uniformIndex = glGetUniformLocation(program[1], "cameraPos");
+	//UI[0]->getDrawingObject()->getMesh().drawMesh(UI[0]->getDrawingObject()->getMesh().getMeshID());
+	//mvStack.pop();
+	//glEnable(GL_DEPTH_TEST);
 
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	////boss
@@ -236,7 +258,6 @@ void Scene::drawScene()
 	mvStack.pop();
 	shader->unbindShaderProgram();
 
-
 	shader->bindShaderProgram(program[0]);
 	shader->useMatrix4fv(projection, "projection");
 
@@ -252,24 +273,25 @@ void Scene::drawScene()
 
 	shader->unbindShaderProgram();
 
-
 	mvStack.pop(); //initial matrix
 }
 
 void Scene::updateScene()
 {
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	const Uint8* currentKeys = SDL_GetKeyboardState(NULL);
+	const Uint8* previousKeys = SDL_GetKeyboardState(NULL);
 	player->update();
 
-	if (keys[SDL_SCANCODE_1])
+	if (currentKeys[SDL_SCANCODE_1])
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
 
-	if (keys[SDL_SCANCODE_F])
+	if (currentKeys[SDL_SCANCODE_F] == SDL_KEYDOWN && previousKeys[SDL_SCANCODE_F] == SDL_KEYUP) //this toggles fullscreen
 	{
 		Renderer::toggleFullScreen();
 	}
 
 	dynamic_cast<NPC*>(boss)->update();
 
-
+	//sets previous keyboard  state to new one.
+	previousKeys = SDL_GetKeyboardState(NULL);
 }

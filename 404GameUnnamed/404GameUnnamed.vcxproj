@@ -77,7 +77,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;..\dev\Assimp\include\assimp;..\dev\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;..\dev\Assimp\include;..\dev\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;..\dev\Assimp\lib\x86;..\dev\OpenAL 1.1 SDK\libs\Win32</AdditionalLibraryDirectories>
@@ -134,6 +134,7 @@
     <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="D_Object.cpp" />
     <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -170,6 +172,7 @@
     <ClInclude Include="D_Object.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="FrictionForce.h" />
     <ClInclude Include="GameObject.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mass.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />

@@ -77,6 +77,7 @@ namespace Renderer
 	void changeRes(int width, int height); //changes window resolution to what is resolution is selected
 
 	GLuint bitMapLoader(char *name);
+	void drawBitmap(int x, int y, int w, int h);
 
 	void printShaderError(const GLint shader);
 

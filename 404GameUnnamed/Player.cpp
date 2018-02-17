@@ -85,6 +85,24 @@ void Player::inputHandler()
 	if (keys[SDL_SCANCODE_E]) at.y += 0.1f;
 	if (keys[SDL_SCANCODE_R]) at.y -= 0.1f;
 
+	if (keys[SDL_SCANCODE_H])
+	{
+		std::cout << health << std::endl;
+	}
+
+	if (keys[SDL_SCANCODE_G])
+	{
+		health -= 1;
+		std::cout << health << std::endl;
+	}
+
+	if (keys[SDL_SCANCODE_J])
+	{
+		std::cout << "Health was " << health << std::endl;
+		health *= 1.03;
+		std::cout << "Health is now " << health << std::endl;
+	}
+
 	mouseMotion(x, y);
 }
 

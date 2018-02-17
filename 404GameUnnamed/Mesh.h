@@ -7,6 +7,7 @@ class Mesh
 public:
 	Mesh() {}
 	GLuint createMesh(GLuint meshID, const char* filename);
+	GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices);
 	GLuint getIndexCount() { return indexCount; }
 	GLuint getMeshID() { return meshIndex; }
 	glm::mat4 meshTranslation(glm::mat4 modelMatrix, glm::vec3 position);

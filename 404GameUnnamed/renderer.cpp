@@ -127,6 +127,7 @@ void Renderer::toggleFullScreen()
 	if (fullScreen == false)
 	{
 		fullScreen = true;
+		std::cout << "fuck me jerry" << std::endl;
 	}
 	else
 	{
@@ -201,6 +202,11 @@ GLuint Renderer::bitMapLoader(char *name)
 
 	SDL_FreeSurface(tmpSurface); // texture loaded, free the temporary buffer
 	return texID;	// return value of texture ID
+}
+
+void Renderer::drawBitmap(int x, int y, int w, int h)
+{
+	
 }
 
 void Renderer::loadObj(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices)
