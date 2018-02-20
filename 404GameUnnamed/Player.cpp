@@ -26,7 +26,6 @@ void Player::update()
 	inputHandler();
 	at = position;
 	eye = moveForward(at, camRot, -5.0f);
-	eye.y = position.y + 2;
 	collider();
 
 	player->setPosition(position); //update the colliding object
@@ -114,7 +113,8 @@ void Player::mouseMotion(GLuint x, GLuint y)
 		x = 0;
 		rotation = x + tmp;
 	}
-	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT))
+	{
 		x = 0;
 		camRot = x;
 	}

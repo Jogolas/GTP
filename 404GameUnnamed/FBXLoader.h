@@ -2,23 +2,6 @@
 #include "Renderer.h"
 #include "Shader.h"
 #include "Mesh.h"
-#include <assimp\Importer.hpp>
-#include <assimp\scene.h>
-#include <assimp\postprocess.h>
-#include "assimp\mesh.h"
-#include "assimp\texture.h"
-
-struct Vertex {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec2 TexCoords;
-};
-
-struct Texture {
-	unsigned int id;
-	std::string type;
-	aiString path;
-};
 
 class FBXLoader
 {

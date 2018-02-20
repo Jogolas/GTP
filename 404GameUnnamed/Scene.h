@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include <stack>
+#include <list>
 #include "Environment.h"
 #include "Collider.h"
 #include "CollisionData.h"
@@ -25,7 +26,7 @@ private:
 	Environment *wall[3];
 	Environment *UI[1];
 	AbstractAI *boss;
-	AbstractAI *enemies[1];
+	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;

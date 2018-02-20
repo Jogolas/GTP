@@ -40,7 +40,7 @@ Scene::Scene()
 {
 	player = new Player(glm::vec3(5, 0, 8));
 	boss = new NPC();
-	enemies[0] = new NPC();
+	//enemies[0] = new NPC();
 	cam = new Camera();
 	ground = new Environment(glm::vec3(0, -1, 0), glm::vec3(50.0, 0.5, 50.0), 0, glm::vec3(0, 1, 0));
 	shader = new Shader();
@@ -88,7 +88,7 @@ Scene::Scene()
 	meshes[3].createMesh(meshID[1], "cube.obj");
 
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
-	dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
+	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
 	ground->getDrawingObject()->setMesh(meshes[1]);
 	player->getDrawingObject()->setMesh(meshes[0]);
 
@@ -284,6 +284,11 @@ void Scene::updateScene()
 
 	if (currentKeys[SDL_SCANCODE_1])
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
+
+	if (currentKeys[SDL_SCANCODE_2])
+	{
+		//enemies->insert(enemies);
+	}
 
 	if (currentKeys[SDL_SCANCODE_F] == SDL_KEYDOWN && previousKeys[SDL_SCANCODE_F] == SDL_KEYUP) //this toggles fullscreen
 	{

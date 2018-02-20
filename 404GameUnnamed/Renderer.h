@@ -76,7 +76,7 @@ namespace Renderer
 	void setFullScreen(SDL_Window * window); //sets full screen if last method is true
 	void changeRes(int width, int height); //changes window resolution to what is resolution is selected
 
-	GLuint bitMapLoader(char *name);
+	GLuint bitMapLoader(const char *name);
 	void drawBitmap(int x, int y, int w, int h);
 
 	void printShaderError(const GLint shader);
