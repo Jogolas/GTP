@@ -8,6 +8,8 @@ NPC::NPC()
 
 	d_object = new D_Object();
 	npc = new GameObject();
+	npc->setSize(5.0, 5.0, 5.0);
+	npc->init();
 	controller = new AIController(this);
 	spell = new AISpellDecorator(new Element(new Burning(this), "Fire Blast", 100.0f));
 }
@@ -18,7 +20,8 @@ NPC::NPC(glm::vec3 position)
 	this->position = position;
 	npc = new GameObject();
 	npc->setPosition(position);
-	npc->getSize(10.0, 10.0, 10.0);
+	npc->setSize(10.0, 10.0, 10.0);
+	npc->init();
 	controller = new AIController(this);
 	spell = new AISpellDecorator(new Element(new Burning(this), "Fire Blast", 100.0f));
 }

@@ -12,7 +12,7 @@ Player::Player(glm::vec3 pos)
 
 	d_object = new D_Object();
 	player = new GameObject();
-	player->getSize(5.0, 5.0, 5.0);
+	player->setSize(5.0, 5.0, 5.0);
 	player->init();
 	eye = glm::vec3(0.0f, 1.0f, 5.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);

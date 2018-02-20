@@ -28,7 +28,8 @@ public:
 	glm::vec3 addForce(const glm::vec3& force);
 	glm::vec3 setVelocity(glm::vec3 vel) { velocity = vel; return velocity; }
 	glm::vec3 getVelocity() { return velocity; }
-	glm::vec3 getSize(float x, float y, float z);
+	glm::vec3 setSize(float x, float y, float z);
+	glm::vec3 getSize() { return size; }
 
 	Collider* getCollider() { return collider; }
 	const AABB* const getAABB() { return aabb; } // not supported.

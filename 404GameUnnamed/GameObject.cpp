@@ -44,7 +44,7 @@ GameObject::GameObject()
 	init();
 }
 
-glm::vec3 GameObject::getSize(float x, float y, float z)
+glm::vec3 GameObject::setSize(float x, float y, float z)
 {
 	width = x;
 	height = y;

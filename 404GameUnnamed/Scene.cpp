@@ -255,8 +255,10 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	cd.AABBCollisionTest(dynamic_cast<Player*>(player)->getGameObject()->getAABB(), dynamic_cast<NPC*>(boss)->getGameObject()->getAABB());
-	cd.playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+	if (cd.AABBCollisionTest(dynamic_cast<Player*>(player)->getGameObject()->getAABB(), dynamic_cast<NPC*>(boss)->getGameObject()->getAABB()) == true)
+	{
+		cd.playerObjectCollision(dynamic_cast<Player*>(player)->getGameObject(), dynamic_cast<NPC*>(boss)->getGameObject());
+	}
 	
 	/*for (GLuint i = 0; i < 4; i++)
 	{
@@ -278,8 +280,8 @@ void Scene::updateScene()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	player->update();
-
 	std::cout << "Player AABB: " << dynamic_cast<Player*>(player)->getGameObject()->getAABB() << std::endl;
+
 	if (keys[SDL_SCANCODE_1])
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
 
