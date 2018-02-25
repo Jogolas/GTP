@@ -153,6 +153,9 @@
     <ClCompile Include="FBXLoader.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="AStar_pathing.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="FBXLoader.h">
       <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar_pathing.h">
+      <Filter>Header Files\Pathing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
