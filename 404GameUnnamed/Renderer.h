@@ -3,9 +3,13 @@
 //https://sourceforge.net/p/irrext/code/91/tree/trunk/extensions/scene/IMeshLoader/fbx/ and
 //https://github.com/BSVino/MathForGameDevelopers/tree/shader-rimlight/renderer
 
+
 #include <GL/glew.h>
 #include <glm.hpp>
 #include <SDL.h>
+#include <SDL_image.h>
+#include "stb_image.h"
+
 //#include <assimp\Importer.hpp>
 
 #include <iostream>
@@ -77,6 +81,7 @@ namespace Renderer
 	void changeRes(int width, int height); //changes window resolution to what is resolution is selected
 
 	GLuint bitMapLoader(const char *name);
+	unsigned int pngLoader(const char *name);
 	void drawBitmap(int x, int y, int w, int h);
 
 	void printShaderError(const GLint shader);

@@ -4,6 +4,7 @@
 #include <stack>
 #include <list>
 #include "Environment.h"
+#include "FBXLoader.h"
 #include "Collider.h"
 #include "CollisionData.h"
 
@@ -11,7 +12,8 @@ class Scene
 {
 public:
 	Scene();
-
+	void initLevel1();
+	void initLevel2();
 	void updateScene();
 	void drawScene();
 	void collisions();
@@ -23,7 +25,7 @@ private:
 	GLuint skybox[5];
 	Player *player;
 	Environment *ground;
-	Environment *wall[3];
+	Environment *wall[4];
 	Environment *UI[1];
 	AbstractAI *boss;
 	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();
@@ -33,5 +35,6 @@ private:
 	CollisionData* cd;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
+	Collider collision;
 };
 

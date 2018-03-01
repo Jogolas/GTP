@@ -6,6 +6,8 @@
 
 #define DEG_TO_RADIAN 0.017453293
 
+FBXLoader fbxMesh("TEXTURES/cow.fbx");
+
 Renderer::lightStruct light = {
 	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
@@ -42,13 +44,7 @@ Scene::Scene()
 	boss = new NPC();
 	//enemies[0] = new NPC();
 	cam = new Camera();
-	ground = new Environment(glm::vec3(0, -1, 0), glm::vec3(50.0, 0.5, 50.0), 0, glm::vec3(0, 1, 0));
 	shader = new Shader();
-
-	wall[0] = new Environment(glm::vec3(50, 10, 0), glm::vec3(2, 50, 50), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(0, 10, 50), glm::vec3(50, 50, 2), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(-50, 10, 0), glm::vec3(2, 50, 50), 0, glm::vec3(0, 1, 0));
-	//wall[3] = new Environment(glm::vec3(0, 10, -50), glm::vec3(50, 50, 2), 0, glm::vec3(0, 1, 0));
 
 	UI[0] = new Environment(glm::vec3(0, 2, -50), glm::vec3(2, 0.5, 0), 0, glm::vec3(0, 1, 0)); //ui box for the icon tray
 
@@ -89,14 +85,16 @@ Scene::Scene()
 
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
 	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
-	ground->getDrawingObject()->setMesh(meshes[1]);
-	player->getDrawingObject()->setMesh(meshes[0]);
+	//ground->getDrawingObject()->setMesh(meshes[1]);
+	//player->getDrawingObject()->setMesh(fbxMesh);
 
-	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
+	//for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
 
 	UI[0]->getDrawingObject()->setMesh(meshes[1]);
 
 	UITexture[0] = Renderer::bitMapLoader("iconTray.bmp");
+
+	this->initLevel1();
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -138,6 +136,38 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 		SDL_FreeSurface(tmpSurface);
 	}
 	return *texID;	// return value of texure ID, redundant really
+}
+
+void Scene::initLevel1()
+{
+	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(0, -2, 50), glm::vec3(50, 5, 2), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(-50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(0, -2, -50), glm::vec3(50, 5, 2), 0, glm::vec3(0, 1, 0));
+
+	meshes[0].createMesh(meshID[1], "cube.obj");
+	ground->getDrawingObject()->setMesh(meshes[0]);
+	for (GLuint i = 0; i < 4; i++)
+	{
+		wall[i]->getDrawingObject()->setMesh(meshes[0]);
+	}
+}
+
+void Scene::initLevel2()
+{
+	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
+
+	meshes[0].createMesh(meshID[1], "cube.obj");
+	ground->getDrawingObject()->setMesh(meshes[0]);
+	for (GLuint i = 0; i < 4; i++)
+	{
+		wall[i]->getDrawingObject()->setMesh(meshes[0]);
+	}
 }
 
 
@@ -194,7 +224,7 @@ void Scene::drawScene()
 
 	//// walls
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
-	for (GLuint i = 0; i < 3; i++) {
+	for (GLuint i = 0; i < 4; i++) {
 
 		modelMatrix = glm::mat4(1.0); //reset modelmatrix
 		mvStack.push(mvStack.top());
@@ -226,22 +256,23 @@ void Scene::drawScene()
 	GLuint uniformIndex = glGetUniformLocation(program[1], "cameraPos");
 	glUniform3fv(uniformIndex, 1, glm::value_ptr(dynamic_cast<Player*>(player)->getEye()));
 	Renderer::setMaterial(program[1], material);
+	fbxMesh.Draw(program[1]);
 	player->getDrawingObject()->getMesh().drawMesh(player->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
 
 	////UI elements
-	//glDisable(GL_DEPTH_TEST); // make sure writing to update depth test is off
-	//glBindTexture(GL_TEXTURE_2D, UITexture[0]);
-	//modelMatrix = glm::mat4(1.0); //reset modelmatrix
-	//mvStack.push(mvStack.top());
-	//modelMatrix = UI[0]->draw(modelMatrix);
-	//mvStack.top() *= modelMatrix;
-	//glm::value_ptr(glm::mat4(1.0));
-	//shader->useMatrix4fv(mvStack.top(), "modelview");
-	////uniformIndex = glGetUniformLocation(program[1], "cameraPos");
-	//UI[0]->getDrawingObject()->getMesh().drawMesh(UI[0]->getDrawingObject()->getMesh().getMeshID());
-	//mvStack.pop();
-	//glEnable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST); // make sure writing to update depth test is off
+	glBindTexture(GL_TEXTURE_2D, UITexture[0]);
+	modelMatrix = glm::mat4(1.0); //reset modelmatrix
+	mvStack.push(mvStack.top());
+	modelMatrix = UI[0]->draw(modelMatrix);
+	mvStack.top() *= modelMatrix;
+	glm::value_ptr(glm::mat4(1.0));
+	shader->useMatrix4fv(mvStack.top(), "modelview");
+	uniformIndex = glGetUniformLocation(program[1], "cameraPos");
+	UI[0]->getDrawingObject()->getMesh().drawMesh(UI[0]->getDrawingObject()->getMesh().getMeshID());
+	mvStack.pop();
+	glEnable(GL_DEPTH_TEST);
 
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	////boss
@@ -280,12 +311,23 @@ void Scene::updateScene()
 {
 	const Uint8* currentKeys = SDL_GetKeyboardState(NULL);
 	const Uint8* previousKeys = SDL_GetKeyboardState(NULL);
+	//this->initLevel1();
 	player->update();
 
 	if (currentKeys[SDL_SCANCODE_1])
 		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
 
-	if (currentKeys[SDL_SCANCODE_2])
+	if (currentKeys[SDL_SCANCODE_4])
+	{
+		this->initLevel1();
+	}
+
+	if (currentKeys[SDL_SCANCODE_5])
+	{
+		this->initLevel2();
+	}
+
+	if (currentKeys[SDL_SCANCODE_3])
 	{
 		//enemies->insert(enemies);
 	}
