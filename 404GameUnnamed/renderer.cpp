@@ -165,7 +165,7 @@ void Renderer::changeRes(int Width, int Height)
 	}
 }
 
-GLuint Renderer::bitMapLoader(char *name)
+GLuint Renderer::bitMapLoader(const char *name)
 {
 	GLuint texID;
 	glGenTextures(1, &texID); // generate texture ID

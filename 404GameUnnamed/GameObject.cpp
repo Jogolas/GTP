@@ -75,9 +75,21 @@ void GameObject::init()
 	collider = new AABB(glm::vec3(getWidth(), getHeight(), getLength()), transform);
 }
 
-void GameObject::update()
+void GameObject::update() 
 {
 	grav.updateForce(this);
 	applyGravity();
 	collider->update(transform);
+	getPosition();
+	getVelocity();
+}
+
+void GameObject::update(float dt)
+{
+	verletSolver(dt);
+	grav.updateForce(this);
+	applyGravity();
+	collider->update(transform);
+	getPosition();
+	getVelocity();
 }

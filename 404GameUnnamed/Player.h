@@ -2,6 +2,7 @@
 #include "glm.hpp"
 #include "Renderer.h"
 #include "DrawableObject.h"
+#include "SDL_timer.h"
 
 class Player
 {
@@ -36,6 +37,7 @@ private:
 	Entity* player;
 	Mesh mesh;
 	DrawableObject* d_object;
+	SDL_TimerID timer;
 	GLuint health = 100;
 	glm::vec3 position;
 	glm::vec3 eye;

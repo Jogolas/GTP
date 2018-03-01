@@ -26,7 +26,6 @@ void Player::update()
 	inputHandler();
 	at = position;
 	eye = moveForward(at, camRot, -5.0f);
-	eye.y = position.y + 2;
 	collider();
 
 	player->setPosition(position); //update the colliding object
@@ -77,10 +76,32 @@ void Player::inputHandler()
 
 	keys = SDL_GetKeyboardState(NULL);
 	mouse = SDL_GetMouseState(&x, &y);
-	if (keys[SDL_SCANCODE_W]) position = moveForward(position, rotation, 0.1f);
-	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.1f);
-	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
-	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
+	if (keys[SDL_SCANCODE_W])
+	{
+		position = moveForward(position, rotation, 0.1f);
+		player->setVelocity(glm::vec3(1.0f, 0.0f, 0.0f));
+		player->update(timer);
+	}
+	if (keys[SDL_SCANCODE_S])
+	{
+		position = moveForward(position, rotation, -0.1f);
+		player->setVelocity(glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (keys[SDL_SCANCODE_A])
+	{
+		position = moveToSide(position, rotation, -0.1f);
+		player->setVelocity(glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (keys[SDL_SCANCODE_D])
+	{
+		position = moveToSide(position, rotation, 0.1f);
+		player->setVelocity(glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (keys[SDL_SCANCODE_SPACE])
+	{
+		position = player->getPosition() + glm::vec3(0.0f, 1.0f, 0.0f);
+		player->setVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
+	}
 
 	if (keys[SDL_SCANCODE_E]) at.y += 0.1f;
 	if (keys[SDL_SCANCODE_R]) at.y -= 0.1f;
@@ -114,7 +135,8 @@ void Player::mouseMotion(GLuint x, GLuint y)
 		x = 0;
 		rotation = x + tmp;
 	}
-	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT)) 
+	{
 		x = 0;
 		camRot = x;
 	}

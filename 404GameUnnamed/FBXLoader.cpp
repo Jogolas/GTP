@@ -42,14 +42,14 @@ Mesh FBXLoader::processMesh(aiMesh *mesh, const aiScene *scene)
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
 
-	Mesh m;
-	//std::vector<GLfloat> verts;
-	std::vector<GLfloat> norms;
-	std::vector<GLfloat> tex_coords;
-	std::vector<GLuint> indices;
-	//m.createMesh(mesh->mVertices, norms, tex_coords, indices);
-	m.createMesh(mesh->mNumVertices, &(mesh->mVertices[0].x), norms, tex_coords, indices);
-	return m;
+	//Mesh m;
+	////std::vector<GLfloat> verts;
+	//std::vector<GLfloat> norms;
+	//std::vector<GLfloat> tex_coords;
+	//std::vector<GLuint> indices;
+	////m.createMesh(mesh->mVertices, norms, tex_coords, indices);
+	//m.createMesh(mesh->mNumVertices, &(mesh->mVertices[0].x), norms, tex_coords, indices);
+	//return m;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -113,9 +113,9 @@ std::vector<Texture> FBXLoader::loadMaterialTextures(aiMaterial *mat, aiTextureT
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		Texture texture;
-		texture.id = TextureFromFile(str.C_Str(), directory);
+		texture.id = Renderer::bitMapLoader(str.C_Str());
 		texture.type = typeName;
-		texture.path = str;
+		texture.path = str.C_Str();
 		textures.push_back(texture);
 	}
 	return textures;

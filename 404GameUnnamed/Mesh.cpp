@@ -24,13 +24,13 @@ GLuint Mesh::createMesh(GLuint meshID, const char* filename)
 	return meshID;
 }
 
-GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices)
-{
-	indexCount = indices.size();
-	meshIndex = Renderer::createMesh(num_verts, verts, nullptr, norms.data(), tex_coords.data(), indexCount, indices.data());
-
-	return meshIndex;
-}
+//GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices)
+//{
+//	indexCount = indices.size();
+//	meshIndex = Renderer::createMesh(num_verts, verts, nullptr, norms.data(), tex_coords.data(), indexCount, indices.data());
+//
+//	return meshIndex;
+//}
 
 ////Function takes in the model matrix and vec3 position.
 glm::mat4 Mesh::meshTranslation(glm::mat4 modelMatrix, glm::vec3 position)

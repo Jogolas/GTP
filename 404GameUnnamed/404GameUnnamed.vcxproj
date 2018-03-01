@@ -80,7 +80,7 @@
       <AdditionalIncludeDirectories>..\dev\SDL2 plugins\include;..\dev\glm-0.9.8.5\glm;..\dev\glew-2.1.0\include\;..\dev\SDL2-2.0.5\include;..\dev\Assimp\include;..\dev\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;..\dev\Assimp\lib\x86;..\dev\OpenAL 1.1 SDK\libs\Win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Sam\Documents\UWS\University\Year 3\Games Technology Group Project\Coursework\dev\Assimp\Assimp\lib\x86;..\dev\SDL2 plugins\lib\x86;..\dev\glew-2.1.0\lib\Debug\Win32;..\dev\SDL2-2.0.5\lib\x86;..\dev\Assimp\lib\x86;..\dev\OpenAL 1.1 SDK\libs\Win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;opengl32.lib;glew32d.lib;OpenAL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
