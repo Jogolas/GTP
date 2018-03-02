@@ -76,10 +76,10 @@ void Player::inputHandler()
 
 	keys = SDL_GetKeyboardState(NULL);
 	mouse = SDL_GetMouseState(&x, &y);
-	if (keys[SDL_SCANCODE_W]) position = moveForward(position, rotation, 0.1f);
-	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.1f);
-	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.1f);
-	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.1f);
+	if (keys[SDL_SCANCODE_W]) position = moveForward(position, rotation, 0.3f);
+	if (keys[SDL_SCANCODE_S]) position = moveForward(position, rotation, -0.3f);
+	if (keys[SDL_SCANCODE_A]) position = moveToSide(position, rotation, -0.3f);
+	if (keys[SDL_SCANCODE_D]) position = moveToSide(position, rotation, 0.3f);
 
 	if (keys[SDL_SCANCODE_E]) at.y += 0.1f;
 	if (keys[SDL_SCANCODE_R]) at.y -= 0.1f;

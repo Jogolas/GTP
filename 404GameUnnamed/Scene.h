@@ -26,6 +26,7 @@ private:
 	Player *player;
 	Environment *ground;
 	Environment *wall[4];
+	Environment *crates[16];
 	Environment *UI[1];
 	AbstractAI *boss;
 	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();
@@ -35,6 +36,6 @@ private:
 	CollisionData* cd;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
-	Collider collision;
+	//Collider collision;
 };
 

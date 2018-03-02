@@ -46,6 +46,29 @@ Scene::Scene()
 	cam = new Camera();
 	shader = new Shader();
 
+	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(75, 100, 75), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(0, -2, 75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(-75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(0, -2, -75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
+
+	crates[0] = new Environment(glm::vec3(45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[1] = new Environment(glm::vec3(45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[2] = new Environment(glm::vec3(-45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[3] = new Environment(glm::vec3(-45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[4] = new Environment(glm::vec3(62, -2, 62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(62, -2, -62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-62, -2, -62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(-62, -2, 62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[8] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[9] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[10] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[11] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[12] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[13] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[14] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[15] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+
 	UI[0] = new Environment(glm::vec3(0, 2, -50), glm::vec3(2, 0.5, 0), 0, glm::vec3(0, 1, 0)); //ui box for the icon tray
 
 	program[0] = shader->createShader("phong-tex.vert", "phong-tex.frag", material, light);
@@ -85,16 +108,17 @@ Scene::Scene()
 
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
 	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
-	//ground->getDrawingObject()->setMesh(meshes[1]);
+	ground->getDrawingObject()->setMesh(meshes[1]);
 	//player->getDrawingObject()->setMesh(fbxMesh);
 
-	//for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
+	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
+	for (GLuint i = 0; i < 16; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
 
 	UI[0]->getDrawingObject()->setMesh(meshes[1]);
 
 	UITexture[0] = Renderer::bitMapLoader("iconTray.bmp");
 
-	this->initLevel1();
+	//this->initLevel1();
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -140,7 +164,7 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 
 void Scene::initLevel1()
 {
-	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
+	/*ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
 	wall[0] = new Environment(glm::vec3(50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(0, -2, 50), glm::vec3(50, 5, 2), 0, glm::vec3(0, 1, 0));
 	wall[2] = new Environment(glm::vec3(-50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
@@ -151,12 +175,12 @@ void Scene::initLevel1()
 	for (GLuint i = 0; i < 4; i++)
 	{
 		wall[i]->getDrawingObject()->setMesh(meshes[0]);
-	}
+	}*/
 }
 
 void Scene::initLevel2()
 {
-	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
+	/*ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
 	wall[0] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
 	wall[2] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
@@ -167,7 +191,7 @@ void Scene::initLevel2()
 	for (GLuint i = 0; i < 4; i++)
 	{
 		wall[i]->getDrawingObject()->setMesh(meshes[0]);
-	}
+	}*/
 }
 
 
@@ -232,6 +256,19 @@ void Scene::drawScene()
 		mvStack.top() *= modelMatrix;
 		shader->useMatrix4fv(mvStack.top(), "modelview");
 		wall[i]->getDrawingObject()->getMesh().drawMesh(wall[i]->getDrawingObject()->getMesh().getMeshID());
+		mvStack.pop();
+	}
+
+	//// crates
+	glBindTexture(GL_TEXTURE_2D, texture[2]);
+	for (GLuint i = 0; i < 16; i++) {
+
+		modelMatrix = glm::mat4(1.0); //reset modelmatrix
+		mvStack.push(mvStack.top());
+		modelMatrix = crates[i]->draw(modelMatrix);
+		mvStack.top() *= modelMatrix;
+		shader->useMatrix4fv(mvStack.top(), "modelview");
+		crates[i]->getDrawingObject()->getMesh().drawMesh(crates[i]->getDrawingObject()->getMesh().getMeshID());
 		mvStack.pop();
 	}
 
@@ -311,7 +348,6 @@ void Scene::updateScene()
 {
 	const Uint8* currentKeys = SDL_GetKeyboardState(NULL);
 	const Uint8* previousKeys = SDL_GetKeyboardState(NULL);
-	//this->initLevel1();
 	player->update();
 
 	if (currentKeys[SDL_SCANCODE_1])
@@ -319,12 +355,12 @@ void Scene::updateScene()
 
 	if (currentKeys[SDL_SCANCODE_4])
 	{
-		this->initLevel1();
+	//	this->initLevel1();
 	}
 
 	if (currentKeys[SDL_SCANCODE_5])
 	{
-		this->initLevel2();
+	//	this->initLevel2();
 	}
 
 	if (currentKeys[SDL_SCANCODE_3])
