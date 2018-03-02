@@ -26,7 +26,7 @@ private:
 	Player *player;
 	Environment *ground;
 	Environment *wall[4];
-	Environment *crates[16];
+	Environment *crates[8];
 	Environment *UI[1];
 	AbstractAI *boss;
 	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();

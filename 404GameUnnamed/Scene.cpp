@@ -56,18 +56,11 @@ Scene::Scene()
 	crates[1] = new Environment(glm::vec3(45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 	crates[2] = new Environment(glm::vec3(-45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 	crates[3] = new Environment(glm::vec3(-45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[4] = new Environment(glm::vec3(62, -2, 62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[5] = new Environment(glm::vec3(62, -2, -62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[6] = new Environment(glm::vec3(-62, -2, -62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[7] = new Environment(glm::vec3(-62, -2, 62), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[8] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[9] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[10] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[11] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[12] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[13] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[14] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[15] = new Environment(glm::vec3(0, -2, -60), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+
+	crates[4] = new Environment(glm::vec3(0, -2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(0, -2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 
 	UI[0] = new Environment(glm::vec3(0, 2, -50), glm::vec3(2, 0.5, 0), 0, glm::vec3(0, 1, 0)); //ui box for the icon tray
 
@@ -112,7 +105,7 @@ Scene::Scene()
 	//player->getDrawingObject()->setMesh(fbxMesh);
 
 	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
-	for (GLuint i = 0; i < 16; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
+	for (GLuint i = 0; i < 8; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
 
 	UI[0]->getDrawingObject()->setMesh(meshes[1]);
 
@@ -261,7 +254,7 @@ void Scene::drawScene()
 
 	//// crates
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
-	for (GLuint i = 0; i < 16; i++) {
+	for (GLuint i = 0; i < 8; i++) {
 
 		modelMatrix = glm::mat4(1.0); //reset modelmatrix
 		mvStack.push(mvStack.top());
