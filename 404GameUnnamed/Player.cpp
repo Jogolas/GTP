@@ -11,24 +11,25 @@ Player::Player(glm::vec3 pos)
 	rotation = 0.0f;
 
 	d_object = new D_Object();
-	player = new GameObject();
-	player->init();
+	colObj = new Colliable(position, glm::vec3(1, 1, 1));
 	eye = glm::vec3(0.0f, 1.0f, 5.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-
+Player::~Player()
+{
+	delete this;
+}
 
 void Player::update()
 {
-	player->update();
 	inputHandler();
 	at = position;
 	eye = moveForward(at, camRot, -5.0f);
-	collider();
 
-	player->setPosition(position); //update the colliding object
+	colObj->setPosition(position);
+	colObj->setRotation(rotation);
 }
 
 
@@ -40,12 +41,6 @@ glm::mat4 Player::draw(glm::mat4 modelmatrix, glm::vec3 scale)
 	d_object->setVectorRotation(glm::vec3(0, -1, 0));
 
 	return modelmatrix = d_object->draw(modelmatrix);
-}
-
-void Player::collider()
-{
-	//code to collide
-
 }
 
 

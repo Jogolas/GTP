@@ -102,7 +102,7 @@ Scene::Scene()
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
 	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
 	ground->getDrawingObject()->setMesh(meshes[1]);
-	//player->getDrawingObject()->setMesh(fbxMesh);
+	player->getDrawingObject()->setMesh(meshes[1]);
 
 	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
 	for (GLuint i = 0; i < 8; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
@@ -344,7 +344,7 @@ void Scene::updateScene()
 	player->update();
 
 	if (currentKeys[SDL_SCANCODE_1])
-		dynamic_cast<NPC*>(boss)->getController()->setTarget(player->getGameObject());
+		dynamic_cast<NPC*>(boss)->getController()->setTarget(player);
 
 	if (currentKeys[SDL_SCANCODE_4])
 	{
