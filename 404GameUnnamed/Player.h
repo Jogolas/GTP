@@ -3,6 +3,34 @@
 #include "CollisionHandler.h"
 #include "DrawableObject.h"
 
+
+//// for mouse rotation, should really write up an input manager... whose job was that again?... ohhhhhhhhhhh ****
+class EAngle
+{
+public:
+	EAngle()
+	{
+		p = y = r = 0;
+	}
+
+
+	EAngle(float pitch, float yaw, float roll)
+	{
+		p = pitch;
+		y = yaw;
+		r = roll;
+	}
+
+	glm::vec3 ToVector() const;
+	void Normalize();
+
+public:
+	float p;
+	float y;
+	float r;
+};
+
+
 class Player
 {
 public:
@@ -15,7 +43,7 @@ public:
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
-	//Entity* getGameObject() { return player; }
+	Collider* getColObject() { return colObj; }
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
@@ -49,4 +77,10 @@ private:
 	GLfloat camRot;
 	const Uint8 *keys;
 	GLuint mouse;
+
+
+	GLuint lastMouseX;
+	GLuint lastMouseY;
+
+	EAngle angView;
 };

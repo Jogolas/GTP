@@ -41,7 +41,7 @@ GLuint UITexture[5];
 Scene::Scene()
 {
 	player = new Player(glm::vec3(5, 0, 8));
-	boss = new NPC();
+	boss = new NPC(glm::vec3(0.0, 0.0 , 0.0), glm::vec3(1.75f, 1.75f, 1.75f));
 	//enemies[0] = new NPC();
 	cam = new Camera();
 	shader = new Shader();
@@ -308,7 +308,7 @@ void Scene::drawScene()
 	////boss
 	mvStack.push(mvStack.top());
 	modelMatrix = glm::mat4(1.0); //reset model matrix
-	modelMatrix = dynamic_cast<NPC*>(boss)->draw(modelMatrix, glm::vec3(1.75f, 1.75f, 1.75f));
+	modelMatrix = dynamic_cast<NPC*>(boss)->draw(modelMatrix);
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
 	shader->useMatrix4fv(modelMatrix, "modelMatrix");
@@ -335,6 +335,20 @@ void Scene::drawScene()
 	shader->unbindShaderProgram();
 
 	mvStack.pop(); //initial matrix
+}
+
+void Scene::collisions()
+{
+	bool colHap = false;
+	for (int i = 0; i < 8; i++)
+		if (cd.CollisionAgainstBox(player->getColObject(), crates[i]->getColObject()))
+			colHap = true;
+
+	for (int i = 0; i < 8; i++)
+		if (colHap) {
+			cd.CollisionAgainstBox(player->getColObject(), crates[i]->getColObject());
+			player->setPosition(player->getColObject()->getPosition());
+		}
 }
 
 void Scene::updateScene()
@@ -367,7 +381,8 @@ void Scene::updateScene()
 	}
 
 	dynamic_cast<NPC*>(boss)->update();
-
+	collisions();
+	std::cout << player->getRotation() << std::endl;
 	//sets previous keyboard  state to new one.
 	previousKeys = SDL_GetKeyboardState(NULL);
 }

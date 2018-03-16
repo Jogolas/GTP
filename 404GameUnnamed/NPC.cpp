@@ -38,9 +38,11 @@ glm::mat4 NPC::draw(glm::mat4 modelMatrix)
 void NPC::update()
 {
 	controller->handleState();
-	d_object->setPosition(position);
 
 	colObj->setPosition(position);
+	colObj->setRotation(abs(controller->getRotation() * 57.2958));
+
+	d_object->setPosition(position);
 }
 
 void NPC::findPath(CGraph* tarNode)

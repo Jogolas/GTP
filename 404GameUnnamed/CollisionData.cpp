@@ -1,4 +1,5 @@
 #include "CollisionData.h"
+#include <iostream>
 
 //// Sam yer code is in here commented out.
 //bool CollisionData::xCollision(const AABB* const aabb1, const AABB* const aabb2)
@@ -116,6 +117,7 @@ bool CollisionData::ClipLine(GLuint d, const AABB& aabbBox, const glm::vec3& v0,
 
 	return true;
 }
+
 bool CollisionData::lineAABBIntersection(const AABB& aabbBox, const glm::vec3& vBegin, const glm::vec3 vEnd, glm::vec3 vecIntersection, GLfloat fFraction)
 {
 	GLfloat f_low = 0;
@@ -185,15 +187,33 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 	}
 }
 
-//// attempting a line-box collision
+//// With proper collision reaction this could perform much better, so if you are still using physics and forces in the game,
+//// clean up that brute forced code with a proper reaction.
+//// also another area to clean up is the rotations, this is set up with the idea of the player facing the wall.
+//// so if the player is not facing a wall and walking sideways they can clip through it.
+//// the collision is detected through a line-box collision.
 bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 {
+
+	////draws the line using the player rotation, however the distance of the line is not implemented.
 	glm::vec3 vBegin = source->getPosition() + glm::vec3(0, 0, 0);
-	glm::vec3 vEnd = source->getPosition() + glm::vec3(1 * std::sin(source->getRotation() * DEG_TO_RADIAN), 0, 1 * std::cos(source->getRotation() * DEG_TO_RADIAN));
+	glm::vec3 vEnd = source->getPosition() + glm::vec3(std::sin(source->getRotation() * DEG_TO_RADIAN), 0, std::cos(source->getRotation() * DEG_TO_RADIAN));
 
 	glm::vec3 testIntersection;
+
+	////this is another way of brute forcing..., but less messy
 	if (lineAABBIntersection(target->getAABB() + target->getPosition(), vBegin, vEnd, testIntersection, 0)) {
-		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z));
+
+		if (source->getRotation() > -90 && source->getRotation() < 90)
+			source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z + 0.3));
+		if (source->getRotation() < -90  && source->getRotation() >= -180 || source->getRotation() > 90 && source->getRotation() <= 180)
+			source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z - 0.3));
+		if (source->getRotation() > -180 && source->getRotation() < 0)
+			source->setPosition(glm::vec3(source->getPosition().x + 0.3, source->getPosition().y, source->getPosition().z));
+		if (source->getRotation() < 180 && source->getRotation() > 0)
+			source->setPosition(glm::vec3(source->getPosition().x - 0.3, source->getPosition().y, source->getPosition().z));
+
+		collisionDetected = true;
 		return true;
 	}
 

@@ -33,7 +33,7 @@ private:
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;
-	CollisionData* cd;
+	CollisionData cd;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
 	//Collider collision;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Collider.h"
+#include "SDL.h"
 
 class AABB;
 
@@ -25,4 +26,5 @@ public:
 	bool CollisionAgainstBox(Collider* source, Collider* target);
 	bool AABBIntersection(const AABB& source, const AABB& target);
 
+	bool collisionDetected = false;
 };
