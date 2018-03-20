@@ -23,7 +23,7 @@ class Mesh
 {
 public:
 	Mesh() {}
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indicies, std::vector<Texture> textures) {}
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures){}
 	GLuint createMesh(GLuint meshID, const char* filename);
 	//GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices);
 	GLuint getIndexCount() { return indexCount; }
@@ -32,6 +32,7 @@ public:
 	glm::mat4 meshScaling(glm::mat4 modelMatrix, glm::vec3 scale);
 	glm::mat4 meshRotation(glm::mat4 modelMatrix, GLfloat roation, glm::vec3 rotate);
 	void drawMesh(GLuint meshID);
+	void drawFBXMesh(GLuint shader);
 
 private:
 	GLuint indexCount;

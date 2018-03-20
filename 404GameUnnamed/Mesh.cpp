@@ -6,7 +6,6 @@
 
 #define DEG_TO_RADIAN 0.017453293
 
-
 ////Function only supports loading in obj files, meshID is used to create the mesh data, file name is the name of the obj file.
 ////Function returns the indexCount which are the size of the indices.
 GLuint Mesh::createMesh(GLuint meshID, const char* filename)
@@ -58,4 +57,41 @@ glm::mat4 Mesh::meshRotation(glm::mat4 modelMatrix, GLfloat rotation, glm::vec3 
 void Mesh::drawMesh(GLuint meshID)
 {
 	Renderer::drawObj(meshID, indexCount, GL_TRIANGLES);
+}
+
+void Mesh::drawFBXMesh(Mesh mesh, GLuint shader)
+{
+	// bind appropriate textures
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	unsigned int normalNr = 1;
+	unsigned int heightNr = 1;
+	for (unsigned int i = 0; i < Texture.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
+										  // retrieve texture number (the N in diffuse_textureN)
+		std::string number;
+		std::string name = textures[i].type;
+		if (name == "texture_diffuse")
+			number = std::to_string(diffuseNr++);
+		else if (name == "texture_specular")
+			number = std::to_string(specularNr++); // transfer unsigned int to stream
+		else if (name == "texture_normal")
+			number = std::to_string(normalNr++); // transfer unsigned int to stream
+		else if (name == "texture_height")
+			number = std::to_string(heightNr++); // transfer unsigned int to stream
+
+												 // now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+		// and finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+	}
+
+	// draw mesh
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	// always good practice to set everything back to defaults once configured.
+	glActiveTexture(GL_TEXTURE0);
 }

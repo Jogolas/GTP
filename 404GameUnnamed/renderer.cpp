@@ -227,7 +227,7 @@ unsigned int Renderer::pngLoader(const char *name)
 	}
 	else
 	{
-		std::cout << "Failed to load texture at:\n" << name << std::endl;
+		std::cout << "Failed to load texture " << name << " at:\n" << name << std::endl;
 	}
 	stbi_image_free(data);
 

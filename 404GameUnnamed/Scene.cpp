@@ -6,7 +6,7 @@
 
 #define DEG_TO_RADIAN 0.017453293
 
-FBXLoader fbxMesh("TEXTURES/cow.fbx");
+//FBXLoader fbxMesh("models/hero.fbx");
 
 Renderer::lightStruct light = {
 	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
@@ -102,7 +102,7 @@ Scene::Scene()
 	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
 	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
 	ground->getDrawingObject()->setMesh(meshes[1]);
-	//player->getDrawingObject()->setMesh(fbxMesh);
+	player->getDrawingObject()->setMesh(meshes[0]);
 
 	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
 	for (GLuint i = 0; i < 8; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
@@ -110,6 +110,9 @@ Scene::Scene()
 	UI[0]->getDrawingObject()->setMesh(meshes[1]);
 
 	UITexture[0] = Renderer::bitMapLoader("iconTray.bmp");
+
+	//fbx model
+	fbxMesh = FBXLoader("models/hero.fbx");
 
 	//this->initLevel1();
 }
@@ -280,13 +283,13 @@ void Scene::drawScene()
 	mvStack.push(mvStack.top());
 	modelMatrix = glm::mat4(1.0); //reset model matrix
 	modelMatrix = player->draw(modelMatrix, glm::vec3(1, 1, 1));
+	fbxMesh.Draw(program[1]);
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
 	shader->useMatrix4fv(modelMatrix, "modelMatrix");
 	GLuint uniformIndex = glGetUniformLocation(program[1], "cameraPos");
 	glUniform3fv(uniformIndex, 1, glm::value_ptr(dynamic_cast<Player*>(player)->getEye()));
 	Renderer::setMaterial(program[1], material);
-	fbxMesh.Draw(program[1]);
 	player->getDrawingObject()->getMesh().drawMesh(player->getDrawingObject()->getMesh().getMeshID());
 	mvStack.pop();
 
@@ -308,7 +311,7 @@ void Scene::drawScene()
 	////boss
 	mvStack.push(mvStack.top());
 	modelMatrix = glm::mat4(1.0); //reset model matrix
-	modelMatrix = dynamic_cast<NPC*>(boss)->draw(modelMatrix, glm::vec3(1.75f, 1.75f, 1.75f));
+	modelMatrix = dynamic_cast<NPC*>(boss)->draw(modelMatrix, glm::vec3(5.0f, 5.0f, 1.75f));
 	mvStack.top() *= modelMatrix;
 	shader->useMatrix4fv(mvStack.top(), "modelview");
 	shader->useMatrix4fv(modelMatrix, "modelMatrix");
@@ -348,12 +351,12 @@ void Scene::updateScene()
 
 	if (currentKeys[SDL_SCANCODE_4])
 	{
-	//	this->initLevel1();
+		//	this->initLevel1();
 	}
 
 	if (currentKeys[SDL_SCANCODE_5])
 	{
-	//	this->initLevel2();
+		//	this->initLevel2();
 	}
 
 	if (currentKeys[SDL_SCANCODE_3])
@@ -364,6 +367,11 @@ void Scene::updateScene()
 	if (currentKeys[SDL_SCANCODE_F] == SDL_KEYDOWN && previousKeys[SDL_SCANCODE_F] == SDL_KEYUP) //this toggles fullscreen
 	{
 		Renderer::toggleFullScreen();
+	}
+
+	if (currentKeys[SDL_SCANCODE_ESCAPE]) //closes the game
+	{
+		exit(EXIT_FAILURE);
 	}
 
 	dynamic_cast<NPC*>(boss)->update();

@@ -37,5 +37,8 @@ private:
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
 	//Collider collision;
+
+	FBXLoader fbxMesh;
+
 };
 
