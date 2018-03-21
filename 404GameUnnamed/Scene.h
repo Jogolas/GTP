@@ -34,7 +34,7 @@ private:
 	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();
 	Camera* cam;
 	Mesh meshes[4];
-	Shader* shader;
+	Shader shader;
 	CollisionHandler cd;
 	AStar path;
 	CGraph graph;

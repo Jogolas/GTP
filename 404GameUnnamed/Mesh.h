@@ -11,6 +11,8 @@ struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
+	glm::vec3 Tangent;
+	glm::vec3 Bitangent;
 };
 
 struct Texture {
@@ -28,6 +30,7 @@ public:
 		this->Vertices = vertices;
 		this->Indices = indices;
 		this->Textures = textures;
+		setUpMesh();
 	}
 	GLuint createMesh(GLuint meshID, const char* filename);
 	//GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices);
@@ -38,11 +41,13 @@ public:
 	glm::mat4 meshRotation(glm::mat4 modelMatrix, GLfloat roation, glm::vec3 rotate);
 	void drawMesh(GLuint meshID);
 	void drawFBXMesh(GLuint shader);
-
+	void setUpMesh();
+	GLuint VAO;
 private:
 	GLuint indexCount;
 	GLuint meshIndex;
 	std::vector<Vertex> Vertices;
 	std::vector<unsigned int> Indices;
 	std::vector<Texture> Textures;
+	GLuint VBO, EBO;
 };
