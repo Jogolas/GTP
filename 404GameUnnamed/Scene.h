@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "Collider.h"
 #include "CollisionData.h"
+#include "AStar_pathing.h"
 
 class Scene
 {
@@ -17,6 +18,7 @@ public:
 	void updateScene();
 	void drawScene();
 	void collisions();
+	void AIPathing();
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
@@ -33,7 +35,9 @@ private:
 	Camera* cam;
 	Mesh meshes[4];
 	Shader* shader;
-	CollisionData cd;
+	CollisionHandler cd;
+	AStar path;
+	CGraph graph;
 	std::stack<glm::mat4> mvStack;
 	//Collision collision;
 	//Collider collision;

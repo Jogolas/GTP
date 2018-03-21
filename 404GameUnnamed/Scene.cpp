@@ -38,8 +38,34 @@ GLfloat attQuadratic = 0.0f;
 GLuint texture[4];
 GLuint UITexture[5];
 
+CGraph createGraph(AStar path)
+{
+	CGraph graph;
+
+	graph.addNode();
+	graph.addNode();
+	graph.addNode();
+	graph.addNode();
+
+	graph.addEdge(0, 1, 1);
+	graph.addEdge(1, 2, 1);
+	graph.addEdge(2, 3, 1);
+	graph.addEdge(3, 0, 1);
+
+	graph.GetNode(0)->debug_position = glm::vec3(20, 1, -18);
+	graph.GetNode(1)->debug_position = glm::vec3(-20, 1, -18);
+	graph.GetNode(2)->debug_position = glm::vec3(20, 1, 18);
+	graph.GetNode(3)->debug_position = glm::vec3(-20, 1, 18);
+
+	path.constructGraph(graph, graph.GetNode(0));
+
+	return graph;
+}
+
 Scene::Scene()
 {
+	graph = createGraph(path);
+
 	player = new Player(glm::vec3(5, 0, 8));
 	boss = new NPC(glm::vec3(0.0, 0.0 , 0.0), glm::vec3(1.75f, 1.75f, 1.75f));
 	//enemies[0] = new NPC();
@@ -332,6 +358,18 @@ void Scene::drawScene()
 		mvStack.pop();
 	}
 
+
+	////node locations
+	for (int i = 0; i < 4; i++) {
+		mvStack.push(mvStack.top());
+		mvStack.top() = glm::translate(mvStack.top(), graph.GetNode(i)->debug_position);
+		mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.25f, 0.25f, 0.25f));
+		Renderer::setMatrix(program[0], "modelview", glm::value_ptr(mvStack.top()));
+		Renderer::drawObj(meshes[1].getMeshID(), meshes[1].getIndexCount(), GL_TRIANGLES);
+		mvStack.pop();
+	}
+
+
 	shader->unbindShaderProgram();
 
 	mvStack.pop(); //initial matrix
@@ -339,17 +377,17 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	bool colHap = false;
-	for (int i = 0; i < 8; i++)
-		if (cd.CollisionAgainstBox(player->getColObject(), crates[i]->getColObject()))
-			colHap = true;
-
-	for (int i = 0; i < 8; i++)
-		if (colHap) {
-			cd.CollisionAgainstBox(player->getColObject(), crates[i]->getColObject());
-			player->setPosition(player->getColObject()->getPosition());
-		}
+	for (int i = 0; i < 8; i++) {
+		cd.boxCollision(player->getColObject(), crates[i]->getColObject());
+		player->setPosition(player->getColObject()->getPosition());
+	}
 }
+
+void Scene::AIPathing()
+{
+	path.Step();
+}
+
 
 void Scene::updateScene()
 {
@@ -382,7 +420,7 @@ void Scene::updateScene()
 
 	dynamic_cast<NPC*>(boss)->update();
 	collisions();
-	std::cout << player->getRotation() << std::endl;
+	std::cout << player->getPosition().x << ",		" <<  player->getPosition().z << std::endl;
 	//sets previous keyboard  state to new one.
 	previousKeys = SDL_GetKeyboardState(NULL);
 }

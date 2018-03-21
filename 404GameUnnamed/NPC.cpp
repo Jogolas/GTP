@@ -73,28 +73,5 @@ void NPC::returnToCenter()
 
 void NPC::closestNode(glm::vec3 tar, CGraph* nodes)
 {
-	glm::vec3 nearestNode;
-	glm::vec3 lastNode;
-	glm::vec3 distance;
 
-	for (int i = 0; i < nodes->GetNumNodes(); i++) {
-		distance = position - nodes->GetNode(i)->debug_position;
-		std::cout << "Node Index: " << i << " -	" << (float)glm::length(distance) << std::endl;
-
-		glm::vec3 tmp = position - lastNode;
-		if (glm::length(tmp) < glm::length(distance))
-			nearestNode = lastNode;
-		else {
-			nearestNode = nodes->GetNode(i)->debug_position;
-		}
-
-		lastNode = nodes->GetNode(i)->debug_position;
-	}
-
-
-	std::cout << "Nearest Node:	" << (float)glm::length(nearestNode) << std::endl;
-
-	if (glm::length(nearestNode) <= 2) {
-		nearestNode = glm::vec3(NULL);
-	}
 }

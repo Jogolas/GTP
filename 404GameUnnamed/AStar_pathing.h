@@ -6,6 +6,7 @@ class AStar
 {
 public:
 	AStar() {}
+	void constructGraph(CGraph graph, CGraph::CNode* target);
 	void reset();
 	void Step();
 	void Complete();
