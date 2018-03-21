@@ -10,14 +10,14 @@ class NPC : public AbstractAI
 {
 public: //methods
 	NPC();
-	NPC(glm::vec3 position);
+	NPC(glm::vec3 position, glm::vec3 scale);
 	~NPC() { delete this; }
 
 	void update();
 	void findPath(CGraph* node);
 	void returnToCenter();
 	void moveNPC();
-	glm::mat4 draw(glm::mat4 modelMatrix, glm::vec3 scale);
+	glm::mat4 draw(glm::mat4 modelMatrix);
 
 	GLfloat getHealth() { return health; }
 
@@ -28,7 +28,7 @@ public: //methods
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
 
-	Entity* getGameObject() { return npc; }
+	Collider* getColObject() { return colObj; }
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
@@ -37,7 +37,7 @@ private:
 	//methods
 	void closestNode(glm::vec3 tar, CGraph* nodes);
 
-	Entity* npc;
+	Collider* colObj;
 	Mesh mesh;
 
 	AIController* controller;
@@ -48,5 +48,6 @@ private:
 	//variables
 	GLfloat health;
 	glm::vec3 position;
+	glm::vec3 scale;
 	glm::vec3 veloctiy;
 };
