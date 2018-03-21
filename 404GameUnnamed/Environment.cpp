@@ -4,6 +4,7 @@
 Environment::Environment(glm::vec3 position, glm::vec3 scaled, GLfloat rotate, glm::vec3 rotateAxis)
 {
 	mesh = Mesh();
+	fbxMesh = FBXLoader();
 	box = AABB();
 	d_object = new D_Object();
 

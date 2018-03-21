@@ -1,5 +1,6 @@
 #pragma once
 #include "Mesh.h"
+#include "FBXLoader.h"
 #include "Entity.h"
 #include "AbstractAI.h"
 
@@ -25,4 +26,6 @@ public:
 
 	virtual Mesh getMesh() = 0;
 	virtual Mesh setMesh(Mesh mesh) = 0;
+	virtual FBXLoader getFBXMesh() = 0;
+	virtual FBXLoader setFBXMesh(FBXLoader fbxMesh) = 0;
 };

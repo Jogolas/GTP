@@ -98,7 +98,7 @@ namespace Renderer
 																					  //FBX loader and related methods
 	void loadFBX(const char* filename, std::vector<GLfloat> &verts, std::vector<GLfloat> &norms, std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices); //load in fbx model
 	void setFBXProperties(); //set the properties for an fbx model
-	void drawFBX(); //draw the fbx model
+	void drawFBXMesh(GLuint shader); //draw the fbx model
 
 
 					//based on methods in the RT3D obj loader class

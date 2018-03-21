@@ -59,19 +59,21 @@ void Mesh::drawMesh(GLuint meshID)
 	Renderer::drawObj(meshID, indexCount, GL_TRIANGLES);
 }
 
-void Mesh::drawFBXMesh(Mesh mesh, GLuint shader)
+void Mesh::drawFBXMesh(GLuint shader)
 {
+	//Renderer::drawFBXMesh(shader);
+
 	// bind appropriate textures
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	unsigned int normalNr = 1;
 	unsigned int heightNr = 1;
-	for (unsigned int i = 0; i < Texture.size(); i++)
+	for (unsigned int i = 0; i < Textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 										  // retrieve texture number (the N in diffuse_textureN)
 		std::string number;
-		std::string name = textures[i].type;
+		std::string name = Textures[i].type;
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
 		else if (name == "texture_specular")
@@ -82,14 +84,14 @@ void Mesh::drawFBXMesh(Mesh mesh, GLuint shader)
 			number = std::to_string(heightNr++); // transfer unsigned int to stream
 
 												 // now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+		glUniform1i(glGetUniformLocation(shader, (name + number).c_str()), i);
 		// and finally bind the texture
-		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, Textures[i].id);
 	}
 
 	// draw mesh
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(shader);
+	glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	// always good practice to set everything back to defaults once configured.

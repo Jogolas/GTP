@@ -25,6 +25,7 @@ private:
 	glm::vec3 rotateAxis;
 	Entity* collider;
 	Mesh mesh;
+	FBXLoader fbxMesh;
 	DrawableObject* d_object;
 	AABB box;
 };

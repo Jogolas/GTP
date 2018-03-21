@@ -25,6 +25,9 @@ public:
 	Mesh getMesh() { return mesh; }
 	Mesh setMesh(Mesh mesh) { return this->mesh = mesh; }
 
+	FBXLoader getFBXMesh() { return fbxMesh; }
+	FBXLoader setFBXMesh(FBXLoader fbxMesh) { return this->fbxMesh = fbxMesh; }
+
 private:
 	glm::vec3 position;
 	glm::vec3 scale;
@@ -32,4 +35,5 @@ private:
 	GLfloat fRotation;
 
 	Mesh mesh;
+	FBXLoader fbxMesh;
 };
