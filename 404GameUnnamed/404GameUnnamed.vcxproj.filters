@@ -156,6 +156,12 @@
     <ClCompile Include="AStar_pathing.cpp">
       <Filter>Source Files\Pathing</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAI.h">
@@ -272,6 +278,15 @@
     <ClInclude Include="AStar_pathing.h">
       <Filter>Header Files\Pathing</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="toonShader.frag">
@@ -292,10 +307,10 @@
     <None Include="phong-tex.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="toonReflection.vert">
+    <None Include="toonReflection.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="toonReflection.frag">
+    <None Include="toonReflection.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

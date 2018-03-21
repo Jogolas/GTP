@@ -1,8 +1,8 @@
 #pragma once
 #include "glm.hpp"
 #include "AbstractAIState.h"
-#include "Entity.h"
 #include <GL/glew.h>
+#include "Player.h"
 
 class AIController
 {
@@ -11,7 +11,7 @@ public:
 	AIController(AbstractAI* npc);
 	~AIController();
 
-	void findTarget(Entity* tar, GLuint l);
+	void findTarget(Player* tar, GLuint l);
 	void switchCurrentState(AbstractAIState* state);
 	void handleState();
 
@@ -23,8 +23,8 @@ public:
 
 	AbstractAI* getNPC() { return _npc; }
 
-	Entity* getTarget() { return target; }
-	Entity* setTarget(Entity* target) { return this->target = target; }
+	Player* getTarget() { return target; }
+	Player* setTarget(Player* target) { return this->target = target; }
 
 	glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d);
 
@@ -37,5 +37,5 @@ private:
 	
 	GLfloat rotation;
 
-	Entity* target;
+	Player* target;
 };

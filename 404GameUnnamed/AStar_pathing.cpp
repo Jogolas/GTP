@@ -10,9 +10,18 @@ bool smaller_weight(const node_t& l, const node_t& r)
 void AStar::reset()
 {
 	graphStep = GRAPHSTEP_BEGIN;
+
 	m_aiUnvisitedNodes.clear();
 	m_aiPathStack.clear();
 	m_currentNode = -1;
+
+
+}
+
+void AStar::constructGraph(CGraph graph, CGraph::CNode* target)
+{
+	m_Graph = graph;
+	m_targetNode = target;
 }
 
 void AStar::Step()

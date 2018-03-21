@@ -1,5 +1,6 @@
 #pragma once
 #include "DrawableObject.h"
+#include "Collider.h"
 #include "GL\glew.h"
 
 class Environment
@@ -16,15 +17,14 @@ public:
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
-	Entity* getGameObject() { return collider; }
+	Collider* getColObject() { return c_object; }
 
 private:
 	glm::vec3 position;
 	glm::vec3 scale;
 	GLfloat rotate;
 	glm::vec3 rotateAxis;
-	Entity* collider;
+	Collider* c_object;
 	Mesh mesh;
 	DrawableObject* d_object;
-	AABB box;
 };

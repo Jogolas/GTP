@@ -1,11 +1,11 @@
-#pragma once
-
-class CollisionReaction
-{
-public:
-	CollisionReaction();
-	~CollisionReaction();
-
-private:
-
-};
+//#pragma once
+//
+//class CollisionReaction
+//{
+//public:
+//	CollisionReaction();
+//	~CollisionReaction();
+//
+//private:
+//
+//};

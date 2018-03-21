@@ -2,6 +2,7 @@
 #include <gtc/matrix_transform.hpp>
 #include "GameObject.h"
 #include "D_Object.h"
+#include <cmath>
 
 #define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
 
@@ -11,24 +12,25 @@ Player::Player(glm::vec3 pos)
 	rotation = 0.0f;
 
 	d_object = new D_Object();
-	player = new GameObject();
-	player->init();
+	colObj = new Colliable(position, glm::vec3(1, 1, 1));
 	eye = glm::vec3(0.0f, 1.0f, 5.0f); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-
+Player::~Player()
+{
+	delete this;
+}
 
 void Player::update()
 {
-	player->update();
 	inputHandler();
 	at = position;
-	eye = moveForward(at, camRot, -5.0f);
-	collider();
+	eye = moveForward(at, rotation, -5.0f);
 
-	player->setPosition(position); //update the colliding object
+	colObj->setPosition(position);
+	colObj->setRotation(rotation);
 }
 
 
@@ -40,12 +42,6 @@ glm::mat4 Player::draw(glm::mat4 modelmatrix, glm::vec3 scale)
 	d_object->setVectorRotation(glm::vec3(0, -1, 0));
 
 	return modelmatrix = d_object->draw(modelmatrix);
-}
-
-void Player::collider()
-{
-	//code to collide
-
 }
 
 
@@ -107,24 +103,56 @@ void Player::inputHandler()
 
 void Player::mouseMotion(GLuint x, GLuint y)
 {
-	int tmp = x;
-	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
-	{
-		x = 0;
-		rotation = x + tmp;
+	int mouseMovedX = x - lastMouseX;
+	int mouseMovedY = y - lastMouseY;
+
+	float sensitivity = 0.5;
+
+	//// the angView.y call is to find out the yaw.
+	//// do not mistake for the y-axis.
+	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT)) {
+
+		//angView.p += mouseMovedY * sensitivity;
+		angView.y += mouseMovedX * sensitivity;
 	}
-	else if (mouse && SDL_BUTTON(SDL_BUTTON_RIGHT))
-	{
-		x = 0;
-		camRot = x;
-	}
+
+	angView.Normalize();
+	rotation = angView.y;
+
+	lastMouseX = x;
+	lastMouseY = y;
 }
 
-void Player::findRotation(glm::vec3 tar)
-{
-	glm::vec3 distance = tar - position;
 
-	if (glm::length(distance) >= 2) {
-		rotation = (float)atan2(distance.z, distance.x);
-	}
+//void Player::findRotation(glm::vec3 tar)
+//{
+//	glm::vec3 distance = tar - position;
+//	
+//	if (glm::length(distance) >= 2) {
+//		rotation = (float)atan2(distance.z, distance.x);
+//	}
+//}
+
+
+//// for mouse rotation
+glm::vec3 EAngle::ToVector() const
+{
+	glm::vec3 result;
+
+	result.x = cos(y) * cos(p);
+	result.y = sin(p);
+	result.z = sin(y) * cos(p);
+
+	return result;
+}
+
+void EAngle::Normalize()
+{
+	if (p > 89) p = 89;
+	if (p < -89) p = -89;
+
+	while (y < -180)
+		y += 360;
+	while (y > 180)
+		y -= 360;
 }
