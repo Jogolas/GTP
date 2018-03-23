@@ -255,33 +255,25 @@ void Scene::drawScene()
 //	mvStack.pop(); //initial matrix
 //}
 
-
 GLuint mouse;
-bool firstMouse = true;
-GLdouble lastX = 800 / 2.0f;
-GLdouble lastY = 600 / 2.0f;
+bool firstMouse;
+int lastX;
 
 void Scene::mouseMotion(int x, int y) 
 {
-
 	if (firstMouse) {
 		lastX = x;
-		lastY = y;
 		firstMouse = false;
 	}
 
-	float xoffset = x - lastX;
-	float yoffset = lastY - y;
+	int xoffset = x - lastX;
 
 	lastX = x;
-	lastY = y;
 
-	camera.ProcessMouseMovement(x, y);
+	camera.ProcessMouseMovement(xoffset, y);
 }
 
 int timer = 1000;
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
 
 void Scene::updateScene()
 {
@@ -291,12 +283,11 @@ void Scene::updateScene()
 
 	mouse = SDL_GetMouseState(&x, &y);
 
-	mouseMotion(x, y);
 
-	if (currentKeys[SDL_SCANCODE_W]) camera.ProcessKeyboard(FORWARD, 1.0);
-	if (currentKeys[SDL_SCANCODE_A]) camera.ProcessKeyboard(LEFT, 1.0);
-	if (currentKeys[SDL_SCANCODE_S]) camera.ProcessKeyboard(BACKWARD, 1.0);
-	if (currentKeys[SDL_SCANCODE_D]) camera.ProcessKeyboard(RIGHT, 1.0);
+	if (currentKeys[SDL_SCANCODE_W]) camera.ProcessKeyboard(FORWARD, 0.1f);
+	if (currentKeys[SDL_SCANCODE_A]) camera.ProcessKeyboard(LEFT, 0.1f);
+	if (currentKeys[SDL_SCANCODE_S]) camera.ProcessKeyboard(BACKWARD, 0.1f);
+	if (currentKeys[SDL_SCANCODE_D]) camera.ProcessKeyboard(RIGHT, 0.1f);
 
 	if (timer <= 0) {
 		std::cout << "x: " << camera.Position.x << ", " << "  y: " << camera.Position.y << "  z: " << camera.Position.z << std::endl;
@@ -304,4 +295,6 @@ void Scene::updateScene()
 	}
 	else timer -= 50;
 
+	if(mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
+		mouseMotion(x, y);
 }

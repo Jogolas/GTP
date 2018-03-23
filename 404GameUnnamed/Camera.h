@@ -20,7 +20,7 @@ enum Camera_Movement {
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+const float SENSITIVITY = 0.5f;
 const float ZOOM = 45.0f;
 
 
@@ -41,6 +41,8 @@ public:
 	float MovementSpeed;
 	float MouseSensitivity;
 	float Zoom;
+
+
 
 	//Constructor with vectors
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
@@ -87,16 +89,19 @@ public:
 	//Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true)
 	{
+
 		xoffset *= MouseSensitivity;
-		yoffset *= MouseSensitivity;
+		//yoffset *= MouseSensitivity;
 
 		angView.y += xoffset;
-		angView.p += yoffset;
+		//angView.p += yoffset;
 
-		// Make sure that when pitch is out of bounds, screen doesn't get flipped
+		//// Make sure that when pitch is out of bounds, screen doesn't get flipped
 		angView.Normalize();
 
-		//Update Front, Right and Up vectors using the updated Euler Angles
+		std::cout << angView.y << std::endl;
+
+		////Update Front, Right and Up vectors using the updated Euler Angles
 		updateCameraVectors();
 	}
 
