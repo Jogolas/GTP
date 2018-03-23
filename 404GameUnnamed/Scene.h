@@ -22,9 +22,9 @@ public:
 	void updateScene();
 	void drawScene();
 	void mouseMotion(GLuint x, GLuint y);
+
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
-
 
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 

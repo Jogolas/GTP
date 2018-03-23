@@ -91,10 +91,10 @@ public:
 	{
 
 		xoffset *= MouseSensitivity;
-		//yoffset *= MouseSensitivity;
+		yoffset *= MouseSensitivity;
 
 		angView.y += xoffset;
-		//angView.p += yoffset;
+		angView.p += yoffset;
 
 		//// Make sure that when pitch is out of bounds, screen doesn't get flipped
 		angView.Normalize();

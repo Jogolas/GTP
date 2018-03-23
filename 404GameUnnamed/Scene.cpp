@@ -254,17 +254,8 @@ void Scene::drawScene()
 
 GLuint mouse;
 bool firstMouse;
-int lastX;
+int lastX, lastY;
 
-//// moves the player either forwards or backwards.  
-//// First parameter takes the position of the player
-//// next is the angle to find where the player is facing
-//// followed by a direction of where the player should move
-//// anything above 0 will go forward, and less than 0 will move backwards.
-glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
-{
-	return glm::vec3(pos.x + d * std::sin(rotation * DEG_TO_RADIAN), pos.y, pos.z - d * std::cos(rotation * DEG_TO_RADIAN));
-}
 
 void Scene::mouseMotion(GLuint x, GLuint y) 
 {
@@ -273,13 +264,14 @@ void Scene::mouseMotion(GLuint x, GLuint y)
 		firstMouse = false;
 	}
 
-
 	int xoffset = x - lastX;
+	int yoffset = lastY - y;
 
 	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
-		camera.ProcessMouseMovement(xoffset, y);
+		camera.ProcessMouseMovement(xoffset, yoffset);
 
 	lastX = x;
+	lastY = y;
 }
 
 int timer = 1000;
