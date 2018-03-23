@@ -56,7 +56,7 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 	return *texID;	// return value of texure ID, redundant really
 }
 
-GLfloat rotating = 0.0f;
+GLfloat rotation = 0.0f;
 
 void Scene::drawScene()
 {
@@ -72,12 +72,9 @@ void Scene::drawScene()
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
-	rotating += 0.5f;
-
 	// world transformations
 	glm::mat4 model(1.0);
 	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotating), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.0f));
 
@@ -259,18 +256,30 @@ GLuint mouse;
 bool firstMouse;
 int lastX;
 
-void Scene::mouseMotion(int x, int y) 
+//// moves the player either forwards or backwards.  
+//// First parameter takes the position of the player
+//// next is the angle to find where the player is facing
+//// followed by a direction of where the player should move
+//// anything above 0 will go forward, and less than 0 will move backwards.
+glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
+{
+	return glm::vec3(pos.x + d * std::sin(rotation * DEG_TO_RADIAN), pos.y, pos.z - d * std::cos(rotation * DEG_TO_RADIAN));
+}
+
+void Scene::mouseMotion(GLuint x, GLuint y) 
 {
 	if (firstMouse) {
 		lastX = x;
 		firstMouse = false;
 	}
 
+
 	int xoffset = x - lastX;
 
-	lastX = x;
+	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
+		camera.ProcessMouseMovement(xoffset, y);
 
-	camera.ProcessMouseMovement(xoffset, y);
+	lastX = x;
 }
 
 int timer = 1000;
@@ -283,7 +292,6 @@ void Scene::updateScene()
 
 	mouse = SDL_GetMouseState(&x, &y);
 
-
 	if (currentKeys[SDL_SCANCODE_W]) camera.ProcessKeyboard(FORWARD, 0.1f);
 	if (currentKeys[SDL_SCANCODE_A]) camera.ProcessKeyboard(LEFT, 0.1f);
 	if (currentKeys[SDL_SCANCODE_S]) camera.ProcessKeyboard(BACKWARD, 0.1f);
@@ -295,6 +303,5 @@ void Scene::updateScene()
 	}
 	else timer -= 50;
 
-	if(mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
-		mouseMotion(x, y);
+	mouseMotion(x, y);
 }

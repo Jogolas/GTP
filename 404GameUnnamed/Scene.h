@@ -21,7 +21,7 @@ public:
 	Scene(bool active);
 	void updateScene();
 	void drawScene();
-	void mouseMotion(int x, int y);
+	void mouseMotion(GLuint x, GLuint y);
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 
