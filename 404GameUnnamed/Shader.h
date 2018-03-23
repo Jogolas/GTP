@@ -1,22 +1,52 @@
-#pragma once
-#include "GL/glew.h"
-#include "glm.hpp"
-#include "Renderer.h"
+#ifndef SHADER_H
+#define SHADER_H
 
+#include "glm.hpp"
+
+#include "GL/glew.h"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+
+//// this class was created with help of a tutorial from https://learnopengl.com/Getting-started/Shaders
+//// for info on how this class operates please refer to the tutorial.
 class Shader
 {
 public:
-	Shader() {} //does nothing
-	GLuint createShader(const char* vert, const char* frag);
-	GLuint createShader(const char* vert, const char* frag, Renderer::materialStruct material, Renderer::lightStruct light);
-	GLuint setAttenuation(GLuint program, GLfloat attconst, GLfloat attlinear, GLfloat attquadratic);
-	void bindShaderProgram(GLuint program);
-	void unbindShaderProgram();
-	void useMatrix4fv(glm::mat4 matrix, const char* uniform);
-	void useMatrix3fv(glm::mat3 matrix, const char* uniform);
+	// program ID
+	GLuint ID;
+
+	//constructor reads and builds the shader
+	Shader() {} // default constructor does nothing.
+	Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+
+	//use or activate the shader
+	void use();
+
+	// utility uniform functions
+
+	void setBool(const std::string &name, bool value) const;
+	void setInt(const std::string &name, int value) const;
+	void setFloat(const std::string &name, float value) const;
+
+	void setVec2(const std::string &name, const glm::vec2 &value) const;
+	void setVec2(const std::string &name, float x, float y) const;
+
+	void setVec3(const std::string &name, const glm::vec3 &value) const;
+	void setVec3(const std::string &name, float x, float y, float z) const;
+
+	void setVec4(const std::string &name, const glm::vec4 &value) const;
+	void setVec4(const std::string &name, float x, float y, float z, float w) const;
+
+	void setMat2(const std::string &name, const glm::mat2 &mat) const;
+	void setMat3(const std::string &name, const glm::mat3 &mat) const;
+	void setMat4(const std::string &name, const glm::mat4 &mat) const;
 
 private:
-	GLuint currentProgram;
+	// utility function for checking shader compilation or linking errors.
+	void checkCompileErrors(unsigned int shader, std::string type);
 };
 
-#pragma once
+#endif

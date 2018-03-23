@@ -1,48 +1,37 @@
-#pragma once
-#include "Camera.h"
+#ifndef SCENE_H
+#define SCENE_H
+
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
+
 #include "Shader.h"
-#include <stack>
-#include <list>
-#include "Environment.h"
+#include "Camera.h"
 #include "FBXLoader.h"
-#include "Collider.h"
-#include "CollisionData.h"
+
+#include "Environment.h"
+#include "Player.h"
+
 #include "AStar_pathing.h"
 
 class Scene
 {
 public:
-	Scene();
-	void initLevel1();
-	void initLevel2();
+	Scene() {}
+	Scene(bool active);
 	void updateScene();
 	void drawScene();
-	void collisions();
-	void AIPathing();
-
+	void mouseMotion(int x, int y);
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
-	GLuint meshID[4], skyProgram;
-	GLuint program[2];
-	GLuint skybox[5];
-	Player *player;
-	Environment *ground;
-	Environment *wall[4];
-	Environment *crates[8];
-	Environment *UI[1];
-	AbstractAI *boss;
-	//std::list<AbstractAI> *enemies = new std::list<AbstractAI>();
-	Camera* cam;
-	Mesh meshes[4];
-	Shader shader;
-	CollisionHandler cd;
-	AStar path;
-	CGraph graph;
-	std::stack<glm::mat4> mvStack;
-	//Collision collision;
-	//Collider collision;
 
-	FBXLoader fbxMesh;
 
+	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+
+	FBXLoader cubeObject, bossObject;
+	Shader lightingShader, lampShader;
+
+	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 };
 
+#endif

@@ -131,10 +131,10 @@
     <ClCompile Include="AStar_pathing.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D_Object.cpp" />
+    <ClCompile Include="EAngle.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
@@ -175,6 +175,7 @@
     <ClInclude Include="CollisionReaction.h" />
     <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="D_Object.h" />
+    <ClInclude Include="EAngle.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="FBXLoader.h" />
@@ -203,12 +204,10 @@
   <ItemGroup>
     <None Include="cubeMap.frag" />
     <None Include="cubeMap.vert" />
-    <None Include="phong-tex.frag" />
-    <None Include="phong-tex.vert" />
-    <None Include="toonReflection.frag" />
-    <None Include="toonReflection.vert" />
-    <None Include="toonShader.frag" />
-    <None Include="toonShader.vert" />
+    <None Include="phongShader.frag" />
+    <None Include="phongShader.vert" />
+    <None Include="simpleShader.frag" />
+    <None Include="simpleShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

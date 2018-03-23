@@ -1,11 +1,18 @@
-#pragma once
-#include "Renderer.h"
+#ifndef MESH_H
+#define MESH_H
+
 #include "glm.hpp"
+#include "Shader.h"
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
 
 struct Vertex {
 	glm::vec3 Position;
@@ -24,30 +31,27 @@ struct Texture {
 class Mesh
 {
 public:
+	std::vector<Vertex> Vertices;
+	std::vector<unsigned int> Indices;
+	std::vector<Texture> Textures;
+
 	Mesh() {}
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
 	{
 		this->Vertices = vertices;
 		this->Indices = indices;
 		this->Textures = textures;
+
 		setUpMesh();
 	}
-	GLuint createMesh(GLuint meshID, const char* filename);
-	//GLuint Mesh::createMesh(unsigned num_verts, GLfloat *verts, std::vector<GLfloat> norms, std::vector<GLfloat> tex_coords, std::vector<GLuint> indices);
-	GLuint getIndexCount() { return indexCount; }
-	GLuint getMeshID() { return meshIndex; }
-	glm::mat4 meshTranslation(glm::mat4 modelMatrix, glm::vec3 position);
-	glm::mat4 meshScaling(glm::mat4 modelMatrix, glm::vec3 scale);
-	glm::mat4 meshRotation(glm::mat4 modelMatrix, GLfloat roation, glm::vec3 rotate);
-	void drawMesh(GLuint meshID);
-	void drawFBXMesh(GLuint shader);
+
+	void draw(Shader shader);
 	void setUpMesh();
 	GLuint VAO;
+
 private:
-	GLuint indexCount;
-	GLuint meshIndex;
-	std::vector<Vertex> Vertices;
-	std::vector<unsigned int> Indices;
-	std::vector<Texture> Textures;
+
 	GLuint VBO, EBO;
 };
+
+#endif

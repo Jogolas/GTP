@@ -15,9 +15,6 @@ D_Object::~D_Object()
 
 glm::mat4 D_Object::draw(glm::mat4 modelMatrix)
 {
-	modelMatrix = mesh.meshTranslation(modelMatrix, position);
-	modelMatrix = mesh.meshRotation(modelMatrix, fRotation, vRot);
-	modelMatrix = mesh.meshScaling(modelMatrix, scale);
 
 	return modelMatrix;
 }

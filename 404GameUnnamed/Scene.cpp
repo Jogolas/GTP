@@ -1,147 +1,18 @@
 #include "Scene.h"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
 #include "NPC.h"
 #include "SDL_timer.h"
 
+#include <iostream>
+
 #define DEG_TO_RADIAN 0.017453293
 
-//FBXLoader fbxMesh("models/hero.fbx");
-
-Renderer::lightStruct light = {
-	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
-	{ 10.0f, 10.0f, 10.0f, 1.0f }  // position
-};
-
-Renderer::materialStruct tmaterial = {
-	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
-	{ 0.4f, 0.4f, 0.4f, 1.0f }, // diffuse
-	{ 0.2f, 0.2f, 0.2f, 1.0f }, // specular
-	2.0f  // shininess
-};
-
-Renderer::materialStruct material = {
-	{ 0.4f, 0.4f, 0.4f, 1.0f }, // ambient
-	{ 0.8f, 0.8f, 0.8f, 1.0f }, // diffuse
-	{ 0.8f, 0.8f, 0.8f, 1.0f }, // specular
-	1.0f  // shininess
-};
-
-glm::vec4 lightPos(0.0f, 10.0f, 0.0f, 1.0f); //light position
-
-GLfloat attConstant = 1.0f;
-GLfloat attLinear = 0.0f;
-GLfloat attQuadratic = 0.0f;
-GLuint texture[4];
-GLuint UITexture[5];
-
-CGraph createGraph(AStar path)
+Scene::Scene(bool active)
 {
-	CGraph graph;
+	lightingShader = Shader("simpleShader.vert", "simpleShader.frag");
+	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
 
-	graph.addNode();
-	graph.addNode();
-	graph.addNode();
-	graph.addNode();
-
-	graph.addEdge(0, 1, 1);
-	graph.addEdge(1, 2, 1);
-	graph.addEdge(2, 3, 1);
-	graph.addEdge(3, 0, 1);
-
-	graph.GetNode(0)->debug_position = glm::vec3(20, 1, -18);
-	graph.GetNode(1)->debug_position = glm::vec3(-20, 1, -18);
-	graph.GetNode(2)->debug_position = glm::vec3(20, 1, 18);
-	graph.GetNode(3)->debug_position = glm::vec3(-20, 1, 18);
-
-	path.constructGraph(graph, graph.GetNode(0));
-
-	return graph;
-}
-
-Scene::Scene()
-{
-	graph = createGraph(path);
-
-	player = new Player(glm::vec3(5, 0, 8));
-	boss = new NPC(glm::vec3(0.0, 0.0 , 0.0), glm::vec3(1.75f, 1.75f, 1.75f));
-	//enemies[0] = new NPC();
-	cam = new Camera();
-	shader = Shader();
-
-	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(75, 100, 75), 0, glm::vec3(0, 1, 0));
-	wall[0] = new Environment(glm::vec3(75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(0, -2, 75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(-75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(0, -2, -75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
-
-	crates[0] = new Environment(glm::vec3(45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[1] = new Environment(glm::vec3(45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[2] = new Environment(glm::vec3(-45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[3] = new Environment(glm::vec3(-45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-
-	crates[4] = new Environment(glm::vec3(0, -2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[5] = new Environment(glm::vec3(0, -2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[6] = new Environment(glm::vec3(-36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[7] = new Environment(glm::vec3(36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-
-	UI[0] = new Environment(glm::vec3(0, 2, -50), glm::vec3(2, 0.5, 0), 0, glm::vec3(0, 1, 0)); //ui box for the icon tray
-
-	program[0] = shader.createShader("phong-tex.vert", "phong-tex.frag", material, light);
-	shader.setAttenuation(program[0], attConstant, attLinear, attQuadratic);
-
-	////toon tex shader program
-	program[1] = shader.createShader("toonReflection.vert", "toonReflection.frag", material, light);
-	shader.setAttenuation(program[0], attConstant, attLinear, attQuadratic);
-	GLuint uniformIndex = glGetUniformLocation(program[1], "textureUnit1");
-	glUniform1i(uniformIndex, 1);
-	uniformIndex = glGetUniformLocation(program[1], "textureUnit0");
-	glUniform1i(uniformIndex, 0);
-	////skybox program
-	skyProgram = Renderer::initiliaseShader("cubeMap.vert", "cubeMap.frag");
-
-	const char *cubeTexFiles[6] = {
-		"dungeon-skybox/back.bmp",
-		"dungeon-skybox/front.bmp",
-		"dungeon-skybox/right.bmp",
-		"dungeon-skybox/left.bmp",
-		"dungeon-skybox/up.bmp",
-		"dungeon-skybox/down.bmp"
-	};
-	loadCubeMap(cubeTexFiles, &skybox[0]);
-
-	texture[0] = Renderer::bitMapLoader("sky.bmp");
-	texture[1] = Renderer::bitMapLoader("studdedmetal.bmp");
-	texture[2] = Renderer::bitMapLoader("boxTexture.bmp");
-	texture[3] = Renderer::bitMapLoader("ball.bmp");
-
-	//OBJ models
-	//meshes[0].createMesh(meshID[0], "BossModel.obj");
-	meshes[0].createMesh(meshID[1], "cube.obj");
-	meshes[1].createMesh(meshID[1], "cube.obj");
-	//meshes[2].createMesh(meshID[2], "HeroMan.obj");
-	//meshes[3].createMesh(meshID[3], "bossAbility.obj");
-	meshes[3].createMesh(meshID[1], "cube.obj");
-
-	//FBX models
-	fbxMesh = FBXLoader("models/nanosuit.obj");
-
-	dynamic_cast<NPC*>(boss)->getDrawingObject()->setMesh(meshes[0]);
-	//dynamic_cast<NPC*>(enemies[0])->getDrawingObject()->setMesh(meshes[0]);
-	ground->getDrawingObject()->setMesh(meshes[1]);
-	//player->getDrawingObject()->setMesh(meshes[0]);
-	player->getDrawingObject()->setFBXMesh(fbxMesh);
-
-	for (GLuint i = 0; i < 4; i++) wall[i]->getDrawingObject()->setMesh(meshes[1]);
-	for (GLuint i = 0; i < 8; i++) crates[i]->getDrawingObject()->setMesh(meshes[1]);
-
-	UI[0]->getDrawingObject()->setMesh(meshes[1]);
-
-	UITexture[0] = Renderer::bitMapLoader("iconTray.bmp");
-
-	//this->initLevel1();
+	bossObject = FBXLoader("models/hero.fbx");
+	cubeObject = FBXLoader("cube.obj");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -185,57 +56,33 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 	return *texID;	// return value of texure ID, redundant really
 }
 
-void Scene::initLevel1()
-{
-	/*ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
-	wall[0] = new Environment(glm::vec3(50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(0, -2, 50), glm::vec3(50, 5, 2), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(-50, -2, 0), glm::vec3(2, 5, 50), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(0, -2, -50), glm::vec3(50, 5, 2), 0, glm::vec3(0, 1, 0));
-
-	meshes[0].createMesh(meshID[1], "cube.obj");
-	ground->getDrawingObject()->setMesh(meshes[0]);
-	for (GLuint i = 0; i < 4; i++)
-	{
-		wall[i]->getDrawingObject()->setMesh(meshes[0]);
-	}*/
-}
-
-void Scene::initLevel2()
-{
-	/*ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(50.0, 100, 50.0), 0, glm::vec3(0, 1, 0));
-	wall[0] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(NULL, NULL, NULL), glm::vec3(NULL, NULL, NULL), 0, glm::vec3(0, 1, 0));
-
-	meshes[0].createMesh(meshID[1], "cube.obj");
-	ground->getDrawingObject()->setMesh(meshes[0]);
-	for (GLuint i = 0; i < 4; i++)
-	{
-		wall[i]->getDrawingObject()->setMesh(meshes[0]);
-	}*/
-}
+GLfloat rotating = 0.0f;
 
 void Scene::drawScene()
 {
-	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// be sure to activate shader when setting uniforms and drawing objects
+	lightingShader.use();
+	lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+	lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
-	shader.bindShaderProgram(program[0]);
+	// view and projection transformations
+	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 1.0f, 100.0f);
+	glm::mat4 view = camera.GetViewMatrix();
 
-	glm::mat4 projection = glm::perspective(float(60.0f * DEG_TO_RADIAN), 800.0f / 600.0f, 0.1f, 150.0f);
+	lightingShader.setMat4("projection", projection);
+	lightingShader.setMat4("view", view);
 
-	glm::mat4 modelMatrix(1.0);
-	glm::mat4 camView = cam->draw(modelMatrix, player);
-	shader.useMatrix4fv(projection, "projection");
+	rotating += 0.5f;
 
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.75f, 0.0f));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.useMatrix4fv(modelMatrix, "modelMatrix");
-	fbxMesh.Draw(program[0]);
+	// world transformations
+	glm::mat4 model(1.0);
+	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(rotating), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(1.0f));
 
-	
+	lightingShader.setMat4("model", model);
+	bossObject.Draw(lightingShader);
 }
 
 //void drawScenes()
@@ -408,57 +255,53 @@ void Scene::drawScene()
 //	mvStack.pop(); //initial matrix
 //}
 
-void Scene::collisions()
+
+GLuint mouse;
+bool firstMouse = true;
+GLdouble lastX = 800 / 2.0f;
+GLdouble lastY = 600 / 2.0f;
+
+void Scene::mouseMotion(int x, int y) 
 {
-	for (int i = 0; i < 8; i++) {
-		cd.boxCollision(player->getColObject(), crates[i]->getColObject());
-		player->setPosition(player->getColObject()->getPosition());
+
+	if (firstMouse) {
+		lastX = x;
+		lastY = y;
+		firstMouse = false;
 	}
+
+	float xoffset = x - lastX;
+	float yoffset = lastY - y;
+
+	lastX = x;
+	lastY = y;
+
+	camera.ProcessMouseMovement(x, y);
 }
 
-void Scene::AIPathing()
-{
-	path.Step();
-}
-
+int timer = 1000;
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 void Scene::updateScene()
 {
 	const Uint8* currentKeys = SDL_GetKeyboardState(NULL);
-	const Uint8* previousKeys = SDL_GetKeyboardState(NULL);
-	player->update();
 
-	if (currentKeys[SDL_SCANCODE_1])
-		dynamic_cast<NPC*>(boss)->getController()->setTarget(player);
+	int x, y;
 
-	if (currentKeys[SDL_SCANCODE_4])
-	{
-		//	this->initLevel1();
+	mouse = SDL_GetMouseState(&x, &y);
+
+	mouseMotion(x, y);
+
+	if (currentKeys[SDL_SCANCODE_W]) camera.ProcessKeyboard(FORWARD, 1.0);
+	if (currentKeys[SDL_SCANCODE_A]) camera.ProcessKeyboard(LEFT, 1.0);
+	if (currentKeys[SDL_SCANCODE_S]) camera.ProcessKeyboard(BACKWARD, 1.0);
+	if (currentKeys[SDL_SCANCODE_D]) camera.ProcessKeyboard(RIGHT, 1.0);
+
+	if (timer <= 0) {
+		std::cout << "x: " << camera.Position.x << ", " << "  y: " << camera.Position.y << "  z: " << camera.Position.z << std::endl;
+		timer = 1000;
 	}
+	else timer -= 50;
 
-	if (currentKeys[SDL_SCANCODE_5])
-	{
-		//	this->initLevel2();
-	}
-
-	if (currentKeys[SDL_SCANCODE_3])
-	{
-		//enemies->insert(enemies);
-	}
-
-	if (currentKeys[SDL_SCANCODE_F] == SDL_KEYDOWN && previousKeys[SDL_SCANCODE_F] == SDL_KEYUP) //this toggles fullscreen
-	{
-		Renderer::toggleFullScreen();
-	}
-
-	if (currentKeys[SDL_SCANCODE_ESCAPE]) //closes the game
-	{
-		exit(EXIT_FAILURE);
-	}
-
-	dynamic_cast<NPC*>(boss)->update();
-	collisions();
-	//std::cout << player->getPosition().x << ",		" <<  player->getPosition().z << std::endl;
-	//sets previous keyboard  state to new one.
-	previousKeys = SDL_GetKeyboardState(NULL);
 }

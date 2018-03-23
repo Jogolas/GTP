@@ -1,6 +1,4 @@
 #include "Player.h"
-#include <gtc/matrix_transform.hpp>
-#include "GameObject.h"
 #include "D_Object.h"
 #include <cmath>
 
@@ -121,38 +119,4 @@ void Player::mouseMotion(GLuint x, GLuint y)
 
 	lastMouseX = x;
 	lastMouseY = y;
-}
-
-
-//void Player::findRotation(glm::vec3 tar)
-//{
-//	glm::vec3 distance = tar - position;
-//	
-//	if (glm::length(distance) >= 2) {
-//		rotation = (float)atan2(distance.z, distance.x);
-//	}
-//}
-
-
-//// for mouse rotation
-glm::vec3 EAngle::ToVector() const
-{
-	glm::vec3 result;
-
-	result.x = cos(y) * cos(p);
-	result.y = sin(p);
-	result.z = sin(y) * cos(p);
-
-	return result;
-}
-
-void EAngle::Normalize()
-{
-	if (p > 89) p = 89;
-	if (p < -89) p = -89;
-
-	while (y < -180)
-		y += 360;
-	while (y > 180)
-		y -= 360;
 }
