@@ -26,12 +26,8 @@ NPC::NPC(glm::vec3 position, glm::vec3 scale)
 
 glm::mat4 NPC::draw(glm::mat4 modelMatrix)
 {
-	GLdouble rot = abs(controller->getRotation() * 57.2958);
-	d_object->setScale(scale);
-	d_object->setFloatRotation(rot);
-	d_object->setVectorRotation(glm::vec3(0, -1, 0));
 
-	return modelMatrix = d_object->draw(modelMatrix);
+	return modelMatrix;
 }
 
 
@@ -41,8 +37,6 @@ void NPC::update()
 
 	colObj->setPosition(position);
 	colObj->setRotation(abs(controller->getRotation() * 57.2958));
-
-	d_object->setPosition(position);
 }
 
 void NPC::findPath(CGraph* tarNode)

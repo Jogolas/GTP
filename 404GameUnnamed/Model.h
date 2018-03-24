@@ -1,5 +1,5 @@
-#ifndef FBXLOADER_H
-#define FBXLOADER_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include "Mesh.h"
 #include "Shader.h"
@@ -22,7 +22,7 @@
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
-class FBXLoader
+class Model
 {
 public:
 	std::vector<Texture> textures_loaded;
@@ -30,9 +30,9 @@ public:
 	std::string directory;
 	bool gammaCorrection;
 
-	FBXLoader() {}
+	Model() {}
 	// constructor, expects a filepath to a 3D model
-	FBXLoader(std::string const &path, bool gamma = false) : gammaCorrection(gamma)
+	Model(std::string const &path, bool gamma = false) : gammaCorrection(gamma)
 	{	
 		loadModel(path);
 	}

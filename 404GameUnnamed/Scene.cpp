@@ -8,11 +8,29 @@
 
 Scene::Scene(bool active)
 {
+	player = new Player(glm::vec3(0.0f, 1.0f, 5.0f));
+	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(75, 100, 75), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(0, -2, 75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(-75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(0, -2, -75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
+
+	crates[0] = new Environment(glm::vec3(45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[1] = new Environment(glm::vec3(45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[2] = new Environment(glm::vec3(-45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[3] = new Environment(glm::vec3(-45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+
+	crates[4] = new Environment(glm::vec3(0, -2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(0, -2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+
+
 	lightingShader = Shader("simpleShader.vert", "simpleShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
 
-	bossObject = FBXLoader("models/hero.fbx");
-	cubeObject = FBXLoader("cube.obj");
+	bossObject = Model("models/TRex.fbx");
+	cubeObject = Model("cube.obj");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -66,20 +84,36 @@ void Scene::drawScene()
 	lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	// view and projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 1.0f, 100.0f);
-	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 800.0f / 600.0f, 1.0f, 500.0f);
+	glm::mat4 view = player->cam.GetViewMatrix();
 
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
 	// world transformations
-	glm::mat4 model(1.0);
-	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.0f));
+	glm::mat4 model = player->draw();
 
 	lightingShader.setMat4("model", model);
 	bossObject.Draw(lightingShader);
+
+
+	//ground
+	model = glm::mat4(1.0);
+	model = ground->draw();
+
+	lightingShader.setMat4("model", model);
+	cubeObject.Draw(lightingShader);
+
+	//float rotation = 0.0f;
+	//walls
+	for (int i = 0; i < 4; i++) {
+		model = glm::mat4(1.0);
+		model = wall[i]->draw();
+		//model = glm::rotate(model, glm::radians(rotation), glm::vec3(0, 1, 0));
+		lightingShader.setMat4("model", model);
+		cubeObject.Draw(lightingShader);
+		//rotation += 90.0f;
+	}
 }
 
 //void drawScenes()
@@ -252,48 +286,12 @@ void Scene::drawScene()
 //	mvStack.pop(); //initial matrix
 //}
 
-GLuint mouse;
-bool firstMouse;
-int lastX, lastY;
-
-
-void Scene::mouseMotion(GLuint x, GLuint y) 
-{
-	if (firstMouse) {
-		lastX = x;
-		firstMouse = false;
-	}
-
-	int xoffset = x - lastX;
-	int yoffset = lastY - y;
-
-	if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
-		camera.ProcessMouseMovement(xoffset, yoffset);
-
-	lastX = x;
-	lastY = y;
-}
 
 int timer = 1000;
 
 void Scene::updateScene()
 {
-	const Uint8* currentKeys = SDL_GetKeyboardState(NULL);
-
-	int x, y;
-
-	mouse = SDL_GetMouseState(&x, &y);
-
-	if (currentKeys[SDL_SCANCODE_W]) camera.ProcessKeyboard(FORWARD, 0.1f);
-	if (currentKeys[SDL_SCANCODE_A]) camera.ProcessKeyboard(LEFT, 0.1f);
-	if (currentKeys[SDL_SCANCODE_S]) camera.ProcessKeyboard(BACKWARD, 0.1f);
-	if (currentKeys[SDL_SCANCODE_D]) camera.ProcessKeyboard(RIGHT, 0.1f);
-
-	if (timer <= 0) {
-		std::cout << "x: " << camera.Position.x << ", " << "  y: " << camera.Position.y << "  z: " << camera.Position.z << std::endl;
-		timer = 1000;
-	}
-	else timer -= 50;
-
-	mouseMotion(x, y);
+	player->update();
+	mouse.MouseMotion(player);
+	std::cout << player->getPosition().x << "-------------" << std::endl;;
 }

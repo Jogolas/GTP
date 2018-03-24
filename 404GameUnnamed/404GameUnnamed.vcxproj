@@ -136,7 +136,7 @@
     <ClCompile Include="D_Object.cpp" />
     <ClCompile Include="EAngle.cpp" />
     <ClCompile Include="Environment.cpp" />
-    <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GObject.cpp" />
@@ -178,7 +178,7 @@
     <ClInclude Include="EAngle.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
-    <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="FrictionForce.h" />
     <ClInclude Include="GameObject.h" />

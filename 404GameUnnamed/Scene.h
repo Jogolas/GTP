@@ -6,11 +6,12 @@
 #include "gtc/type_ptr.hpp"
 
 #include "Shader.h"
-#include "Camera.h"
-#include "FBXLoader.h"
+#include "Model.h"
 
 #include "Environment.h"
 #include "Player.h"
+
+#include "InputManager.h"
 
 #include "AStar_pathing.h"
 
@@ -21,17 +22,20 @@ public:
 	Scene(bool active);
 	void updateScene();
 	void drawScene();
-	void mouseMotion(GLuint x, GLuint y);
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 
-	FBXLoader cubeObject, bossObject;
+	Model cubeObject, bossObject, wallmodel;
 	Shader lightingShader, lampShader;
 
-	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	Player* player;
+	Environment* ground;
+	Environment* wall[4];
+	Environment* crates[8];
+	MouseHandler mouse;
 };
 
 #endif

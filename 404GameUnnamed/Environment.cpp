@@ -20,12 +20,12 @@ void Environment::update()
 }
 
 
-glm::mat4 Environment::draw(glm::mat4 modelMatrix)
+glm::mat4 Environment::draw()
 {
-	d_object->setPosition(this->position);
-	d_object->setScale(this->scale);
-	d_object->setFloatRotation(this->rotate);
-	d_object->setVectorRotation(this->rotateAxis);
+	glm::mat4 model(1.0);
 
-	return modelMatrix = d_object->draw(modelMatrix);
+	model = glm::translate(model , position);
+	model = glm::scale(model, scale);
+
+	return model;
 }

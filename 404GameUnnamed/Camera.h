@@ -20,7 +20,7 @@ enum Camera_Movement {
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.5f;
+const float SENSITIVITY = 0.3f;
 const float ZOOM = 45.0f;
 
 
@@ -46,7 +46,7 @@ public:
 
 	//Constructor with vectors
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
-		: Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+		: Front(glm::vec3(0.0f, 0.0f, 1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 	{
 		Position = position;
 		WorldUp = up;
@@ -91,15 +91,13 @@ public:
 	{
 
 		xoffset *= MouseSensitivity;
-		yoffset *= MouseSensitivity;
+		//yoffset *= MouseSensitivity;
 
 		angView.y += xoffset;
-		angView.p += yoffset;
+		//angView.p += yoffset;
 
 		//// Make sure that when pitch is out of bounds, screen doesn't get flipped
 		angView.Normalize();
-
-		std::cout << angView.y << std::endl;
 
 		////Update Front, Right and Up vectors using the updated Euler Angles
 		updateCameraVectors();

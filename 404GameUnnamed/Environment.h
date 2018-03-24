@@ -10,7 +10,7 @@ public:
 	Environment(glm::vec3 position, glm::vec3 scaled, GLfloat rotate, glm::vec3 rotateAxis);
 	void update();
 
-	glm::mat4 draw(glm::mat4 modelMatrix);
+	glm::mat4 draw();
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 position) { return this->position = position; }
@@ -26,6 +26,6 @@ private:
 	glm::vec3 rotateAxis;
 	Collider* c_object;
 	Mesh mesh;
-	FBXLoader fbxMesh;
+	Model fbxMesh;
 	DrawableObject* d_object;
 };

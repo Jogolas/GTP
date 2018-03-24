@@ -1,4 +1,4 @@
-#include "FBXLoader.h"
+#include "Model.h"
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {
@@ -43,13 +43,13 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
 	return textureID;
 }
 
-void FBXLoader::Draw(Shader shader)
+void Model::Draw(Shader shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].draw(shader);
 }
 
-void FBXLoader::loadModel(std::string const &path)
+void Model::loadModel(std::string const &path)
 {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -70,7 +70,7 @@ void FBXLoader::loadModel(std::string const &path)
 }
 	
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-void FBXLoader::processNode(aiNode *node, const aiScene *scene)
+void Model::processNode(aiNode *node, const aiScene *scene)
 {
 	// process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -89,7 +89,7 @@ void FBXLoader::processNode(aiNode *node, const aiScene *scene)
 }
 
 
-Mesh FBXLoader::processMesh(aiMesh *mesh, const aiScene *scene)
+Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
 	// data to fill
 	std::vector<Vertex> vertices;
@@ -178,7 +178,7 @@ Mesh FBXLoader::processMesh(aiMesh *mesh, const aiScene *scene)
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // required info is returned as a Texture struct.
-std::vector<Texture> FBXLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

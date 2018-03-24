@@ -1,7 +1,29 @@
-//still deciding how to set this up...
+#pragma once
+#include "Camera.h"
+#include "SDL.h"
 
-//handles player inputs
-class InputManager
+struct MouseHandler
 {
+	void getMousePosition()
+	{
+		mouse = SDL_GetMouseState(&x, &y);
+	}
 
+	void MouseMotion(Player* player)
+	{
+		getMousePosition();
+
+		int xoffset = x - lastMouseX;
+		int yoffset = lastMouseY - y;
+
+		if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
+			player->cam.ProcessMouseMovement(xoffset, y);
+
+		lastMouseX = x;
+		lastMouseY = y;
+	}
+
+	unsigned int mouse;
+	int x, y;
+	int lastMouseX, lastMouseY;
 };
