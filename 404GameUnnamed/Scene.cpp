@@ -299,8 +299,14 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
+	cd.planeCollision(player->getColObject(), ground->getColObject());
+
+	//player wall/box collisions
 	for (int i = 0; i < 8; i++) {
-		cd.boxCollision(player->getColObject(), crates[i]->getColObject());
+
+		if (i < 4) cd.playerBoxCollision(player->getColObject(), wall[i]->getColObject());
+
+		cd.playerBoxCollision(player->getColObject(), crates[i]->getColObject());
 		player->setPosition(player->getColObject()->getPosition());
 	}
 }

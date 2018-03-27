@@ -177,14 +177,8 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 	glm::vec3 vEnd = source->getPosition() + glm::vec3(0, 1, 0);
 
 	glm::vec3 testIntersection;
-	if (lineAABBIntersection(plane->getAABB() + plane->getPosition(), vBegin, vEnd, testIntersection, 0)) {
-		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z));
-		return true;
-	}
-	else {
-		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y - 0.35f, source->getPosition().z)); //gravity
-		return false;
-	}
+	if (lineAABBIntersection(plane->getAABB() + plane->getPosition(), vBegin, vEnd, testIntersection, 0)) return true;
+	else return false;
 }
 //// With proper collision reaction this could perform much better, so if you are still using physics and forces in the game,
 //// clean up that brute forced code with a proper reaction.
@@ -193,7 +187,6 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 //// the collision is detected through a line-box collision.
 bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 {
-	////this is another way of brute forcing..., but less messy
 	if (AABBIntersection(source->getAABB() + source->getPosition(), target->getAABB() + target->getPosition())) {
 
 		return true;

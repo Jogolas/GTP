@@ -37,11 +37,15 @@ glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d, Collider* source)
 
 void CollisionHandler::planeCollision(Collider* source, Collider* target)
 {
-	col.CollisionAgainstPlane(source, target);
+	if (col.CollisionAgainstPlane(source, target)) 	
+		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z));
+	else 
+		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y - 0.35f, source->getPosition().z)); //gravity
 }
 
 void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
 {
+	////this is another way of brute forcing..., but less messy
 	if (col.CollisionAgainstBox(source, target)) {
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
