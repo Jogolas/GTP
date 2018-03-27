@@ -49,6 +49,13 @@ void Model::Draw(Shader shader)
 		meshes[i].draw(shader);
 }
 
+// function to draw mesh only, aka without texture.
+void Model::DrawMesh(Shader shader)
+{
+	for (unsigned int i = 0; i < meshes.size(); i++)
+		meshes[i].drawMesh(shader);
+}
+
 void Model::loadModel(std::string const &path)
 {
 	Assimp::Importer importer;

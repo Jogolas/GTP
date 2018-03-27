@@ -202,7 +202,7 @@ bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 	glm::vec3 testIntersection;
 
 	////this is another way of brute forcing..., but less messy
-	if (lineAABBIntersection(target->getAABB() + target->getPosition(), vBegin, vEnd, testIntersection, 0)) {
+	if (AABBIntersection(source->getAABB(), target->getAABB())) {
 
 		if (source->getRotation() > -90 && source->getRotation() < 90)
 			source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z + 0.3));

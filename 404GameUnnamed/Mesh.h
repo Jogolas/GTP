@@ -46,6 +46,7 @@ public:
 	}
 
 	void draw(Shader shader);
+	void drawMesh(Shader shader);
 	void setUpMesh();
 	GLuint VAO;
 

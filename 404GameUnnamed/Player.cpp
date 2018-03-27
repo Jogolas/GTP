@@ -36,7 +36,7 @@ glm::mat4 Player::draw()
 
 	model = glm::translate(model, position);
 	//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
-	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0, 1, 0));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0, 1, 0));
 	model = glm::scale(model, glm::vec3(0.25f));
 
 

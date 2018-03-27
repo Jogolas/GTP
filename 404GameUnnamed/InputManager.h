@@ -17,7 +17,7 @@ struct MouseHandler
 		int yoffset = lastMouseY - y;
 
 		if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
-			player->cam.ProcessMouseMovement(xoffset, y);
+			player->cam.ProcessMouseMovement(xoffset, yoffset);
 
 		lastMouseX = x;
 		lastMouseY = y;

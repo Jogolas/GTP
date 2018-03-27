@@ -23,8 +23,11 @@ public:
 	void updateScene();
 	void drawScene();
 
+	void collisions();
+
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
+	GLuint texture;
 
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 
@@ -32,10 +35,13 @@ private:
 	Shader lightingShader, lampShader;
 
 	Player* player;
+
 	Environment* ground;
 	Environment* wall[4];
 	Environment* crates[8];
+
 	MouseHandler mouse;
+	CollisionHandler cd;
 };
 
 #endif

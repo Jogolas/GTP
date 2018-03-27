@@ -8,29 +8,30 @@
 
 Scene::Scene(bool active)
 {
-	player = new Player(glm::vec3(0.0f, 1.0f, 5.0f));
-	ground = new Environment(glm::vec3(0, -105, 0), glm::vec3(75, 100, 75), 0, glm::vec3(0, 1, 0));
-	wall[0] = new Environment(glm::vec3(75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(0, -2, 75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(-75, -2, 0), glm::vec3(2, 5, 75), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(0, -2, -75), glm::vec3(75, 5, 2), 0, glm::vec3(0, 1, 0));
+	player = new Player(glm::vec3(0.0f, -1.0f, 5.0f));
+	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(75, 74, 0), glm::vec3(2, 75, 75), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(0, 74, 75), glm::vec3(75, 75, 2), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(-75, 74, 0), glm::vec3(2, 75, 75), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(0, 74, -75), glm::vec3(75, 75, 2), 0, glm::vec3(0, 1, 0));
 
-	crates[0] = new Environment(glm::vec3(45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[1] = new Environment(glm::vec3(45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[2] = new Environment(glm::vec3(-45, -2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[3] = new Environment(glm::vec3(-45, -2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[0] = new Environment(glm::vec3(45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[1] = new Environment(glm::vec3(45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[2] = new Environment(glm::vec3(-45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[3] = new Environment(glm::vec3(-45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 
-	crates[4] = new Environment(glm::vec3(0, -2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[5] = new Environment(glm::vec3(0, -2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[6] = new Environment(glm::vec3(-36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[7] = new Environment(glm::vec3(36, -2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-
+	crates[4] = new Environment(glm::vec3(0, 3, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(0, 3, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-36, 3, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(36, 3, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 
 	lightingShader = Shader("simpleShader.vert", "simpleShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
 
-	bossObject = Model("models/TRex.fbx");
-	cubeObject = Model("cube.obj");
+	bossObject = Model("models/BossModel.obj");
+	cubeObject = Model("models/TexturedCube.obj");
+
+	texture = Renderer::pngLoader("boxTexture.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -98,21 +99,30 @@ void Scene::drawScene()
 
 
 	//ground
-	model = glm::mat4(1.0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	model = glm::mat4(1.0); // reset model matrix
 	model = ground->draw();
 
 	lightingShader.setMat4("model", model);
-	cubeObject.Draw(lightingShader);
+	cubeObject.DrawMesh(lightingShader);
 
-	//float rotation = 0.0f;
+
 	//walls
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	for (int i = 0; i < 4; i++) {
-		model = glm::mat4(1.0);
+		model = glm::mat4(1.0); // reset model matrix
 		model = wall[i]->draw();
-		//model = glm::rotate(model, glm::radians(rotation), glm::vec3(0, 1, 0));
 		lightingShader.setMat4("model", model);
-		cubeObject.Draw(lightingShader);
-		//rotation += 90.0f;
+		cubeObject.DrawMesh(lightingShader);
+	}
+
+	for (int i = 0; i < 8; i++) {
+		model = glm::mat4(1.0); // reset model matrix
+		model = wall[i]->draw();
+		lightingShader.setMat4("model", model);
+		cubeObject.DrawMesh(lightingShader);
 	}
 }
 
@@ -287,11 +297,15 @@ void Scene::drawScene()
 //}
 
 
-int timer = 1000;
+void Scene::collisions()
+{
+	for(int i = 0 ; i < 8; i++)
+		cd.boxCollision(player->getColObject(), crates[i]->getColObject());
+}
 
 void Scene::updateScene()
 {
 	player->update();
+	collisions();
 	mouse.MouseMotion(player);
-	std::cout << player->getPosition().x << "-------------" << std::endl;;
 }

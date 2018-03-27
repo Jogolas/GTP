@@ -38,6 +38,7 @@ public:
 	}
 
 	void Draw(Shader shader);
+	void DrawMesh(Shader shader);
 
 
 private:
