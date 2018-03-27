@@ -28,5 +28,6 @@ struct CollisionHandler
 {
 	CollisionData col;
 	void planeCollision(Collider* source, Collider* target);
-	void boxCollision(Collider* source, Collider* target);
+	void playerBoxCollision(Collider* source, Collider* target);
+	void npcBoxCollision(Collider* source, Collider* target);
 };

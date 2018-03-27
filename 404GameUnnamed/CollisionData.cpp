@@ -186,7 +186,6 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 		return false;
 	}
 }
-
 //// With proper collision reaction this could perform much better, so if you are still using physics and forces in the game,
 //// clean up that brute forced code with a proper reaction.
 //// also another area to clean up is the rotations, this is set up with the idea of the player facing the wall.
@@ -194,26 +193,9 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 //// the collision is detected through a line-box collision.
 bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 {
-
-	////draws the line using the player rotation, however the distance of the line is not implemented.
-	glm::vec3 vBegin = source->getPosition() + glm::vec3(0, 0, 0);
-	glm::vec3 vEnd = source->getPosition() + glm::vec3(std::sin(source->getRotation() * DEG_TO_RADIAN), 0, std::cos(source->getRotation() * DEG_TO_RADIAN));
-
-	glm::vec3 testIntersection;
-
 	////this is another way of brute forcing..., but less messy
-	if (AABBIntersection(source->getAABB(), target->getAABB())) {
+	if (AABBIntersection(source->getAABB() + source->getPosition(), target->getAABB() + target->getPosition())) {
 
-		if (source->getRotation() > -90 && source->getRotation() < 90)
-			source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z + 0.3));
-		if (source->getRotation() < -90  && source->getRotation() >= -180 || source->getRotation() > 90 && source->getRotation() <= 180)
-			source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z - 0.3));
-		if (source->getRotation() > -180 && source->getRotation() < 0)
-			source->setPosition(glm::vec3(source->getPosition().x + 0.3, source->getPosition().y, source->getPosition().z));
-		if (source->getRotation() < 180 && source->getRotation() > 0)
-			source->setPosition(glm::vec3(source->getPosition().x - 0.3, source->getPosition().y, source->getPosition().z));
-
-		collisionDetected = true;
 		return true;
 	}
 

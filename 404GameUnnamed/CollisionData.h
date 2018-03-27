@@ -26,5 +26,4 @@ public:
 	bool CollisionAgainstBox(Collider* source, Collider* target);
 	bool AABBIntersection(const AABB& source, const AABB& target);
 
-	bool collisionDetected = false;
 };

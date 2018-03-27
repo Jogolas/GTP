@@ -27,6 +27,7 @@ void Player::update()
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
 
+	std::cout << rotation << std::endl;
 }
 
 

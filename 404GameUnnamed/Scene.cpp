@@ -20,10 +20,10 @@ Scene::Scene(bool active)
 	crates[2] = new Environment(glm::vec3(-45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 	crates[3] = new Environment(glm::vec3(-45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 
-	crates[4] = new Environment(glm::vec3(0, 3, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[5] = new Environment(glm::vec3(0, 3, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[6] = new Environment(glm::vec3(-36, 3, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[7] = new Environment(glm::vec3(36, 3, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[4] = new Environment(glm::vec3(0, 2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(0, 2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-36, 2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(36, 2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 
 	lightingShader = Shader("simpleShader.vert", "simpleShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
@@ -120,7 +120,7 @@ void Scene::drawScene()
 
 	for (int i = 0; i < 8; i++) {
 		model = glm::mat4(1.0); // reset model matrix
-		model = wall[i]->draw();
+		model = crates[i]->draw();
 		lightingShader.setMat4("model", model);
 		cubeObject.DrawMesh(lightingShader);
 	}
@@ -299,8 +299,10 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	for(int i = 0 ; i < 8; i++)
+	for (int i = 0; i < 8; i++) {
 		cd.boxCollision(player->getColObject(), crates[i]->getColObject());
+		player->setPosition(player->getColObject()->getPosition());
+	}
 }
 
 void Scene::updateScene()
@@ -308,4 +310,6 @@ void Scene::updateScene()
 	player->update();
 	collisions();
 	mouse.MouseMotion(player);
+
+
 }
