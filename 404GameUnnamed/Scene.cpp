@@ -77,13 +77,30 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 
 GLfloat rotation = 0.0f;
 
+void Scene::setupMaterial(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+{
+	shader.setVec3("material.ambient", ambient.x, ambient.y, ambient.z);
+	shader.setVec3("material.diffuse", diffuse.x, diffuse.y, diffuse.z);
+	shader.setVec3("material.specular", specular.x, specular.y, specular.z);
+	shader.setFloat("material.shininess", shininess);
+}
+
+void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+{
+	shader.setVec3("light.ambient", ambient);
+	shader.setVec3("light.diffuse", diffuse);
+	shader.setVec3("light.specular", specular);
+}
+
 void Scene::drawScene()
 {
 	// be sure to activate shader when setting uniforms and drawing objects
 	lightingShader.use();
-	lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-	lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	lightingShader.setVec3("lightPos", lightPos);
+	setupMaterial(lightingShader, orange, orange, glm::vec3(0.5f), 32.0f);
+
+	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+	lightingShader.setVec3("light.position", lightPos);
+
 	lightingShader.setVec3("viewPos", player->cam.Position);
 
 	// view and projection transformations
@@ -94,6 +111,9 @@ void Scene::drawScene()
 	lightingShader.setMat4("view", view);
 
 	// world transformations
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
 	glm::mat4 model = player->draw();
 
 	lightingShader.setMat4("model", model);
@@ -101,11 +121,8 @@ void Scene::drawScene()
 
 
 	//ground
+	setupMaterial(lightingShader, grey, grey, glm::vec3(0.5f), 32.0f);
 
-	lightingShader.setVec3("objectColor", 0.5f, 0.5f, 0.5f);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
 	model = glm::mat4(1.0); // reset model matrix
 	model = ground->draw();
 
@@ -114,7 +131,7 @@ void Scene::drawScene()
 
 
 	//walls
-	lightingShader.setVec3("objectColor", 1.0f, 0.5f, 1.0f);
+	setupMaterial(lightingShader, pink, pink, glm::vec3(0.5f), 32.0f);
 
 	for (int i = 0; i < 4; i++) {
 		model = glm::mat4(1.0); // reset model matrix
@@ -123,7 +140,7 @@ void Scene::drawScene()
 		cubeObject.DrawMesh(lightingShader);
 	}
 
-	lightingShader.setVec3("objectColor", 0.5f, 1.0f, 1.0f);
+	setupMaterial(lightingShader, cyan, cyan, glm::vec3(0.5f), 32.0f);
 
 	for (int i = 0; i < 8; i++) {
 		model = glm::mat4(1.0); // reset model matrix
