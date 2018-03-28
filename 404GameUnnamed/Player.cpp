@@ -17,17 +17,20 @@ Player::Player(glm::vec3 pos)
 
 void Player::update()
 {
+	float camRot = cam.angView.y;
+	rotation = camRot;
+
 	inputHandler();
 
-	rotation = cam.angView.y;
+	auto camoffset = moveToSide(position, rotation, -5.0);
 
 	at = glm::vec3(position.x, position.y + 1, position.z);
-	cam.Position = moveToSide(at, rotation, -5.0);
+
+	cam.Position = moveToSide(at, camRot, -5.0);
+
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
-
-	std::cout << rotation << std::endl;
 }
 
 
@@ -38,7 +41,7 @@ glm::mat4 Player::draw()
 	model = glm::translate(model, position);
 	//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0, 1, 0));
-	model = glm::scale(model, glm::vec3(0.25f));
+	model = glm::scale(model, glm::vec3(0.5f));
 
 
 	//d_object->resetMatrix();
@@ -57,7 +60,7 @@ glm::mat4 Player::draw()
 //// anything above 0 will go forward, and less than 0 will move backwards.
 glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::sin(glm::radians(rotation)), pos.y, pos.z - d*std::cos(glm::radians(rotation)));
+	return glm::vec3(pos.x + d*std::sin(glm::radians(angle)), pos.y, pos.z - d*std::cos(glm::radians(angle)));
 }
 
 //// moves the player either left or right.  
@@ -67,7 +70,7 @@ glm::vec3 Player::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
 //// anything above 0 will go right, and less than 0 will move left.
 glm::vec3 Player::moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
-	return glm::vec3(pos.x + d*std::cos(glm::radians(rotation)), pos.y, pos.z + d*std::sin(glm::radians(rotation)));
+	return glm::vec3(pos.x + d*std::cos(glm::radians(angle)), pos.y, pos.z + d*std::sin(glm::radians(angle)));
 }
 
 ////handles keys being pressed.
@@ -78,10 +81,5 @@ void Player::inputHandler()
 	if (keys[SDL_SCANCODE_W]) position = moveToSide(position, rotation, 0.3f);
 	if (keys[SDL_SCANCODE_S]) position = moveToSide(position, rotation, -0.3f);
 	if (keys[SDL_SCANCODE_A]) position = moveForward(position, rotation, 0.3f);
-	if (keys[SDL_SCANCODE_D]) position = moveForward(position, rotation, -0.3f);
-
-	if (keys[SDL_SCANCODE_E]) at.y += 0.1f;
-	if (keys[SDL_SCANCODE_R]) at.y -= 0.1f;
-
-
+	if (keys[SDL_SCANCODE_D]) position = moveForward(position, rotation,  -0.3f);
 }

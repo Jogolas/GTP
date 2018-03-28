@@ -8,7 +8,7 @@
 
 Scene::Scene(bool active)
 {
-	player = new Player(glm::vec3(0.0f, -1.0f, 5.0f));
+	player = new Player(glm::vec3(0.0f, 0.0f, 5.0f));
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
 	wall[0] = new Environment(glm::vec3(75, 74, 0), glm::vec3(2, 75, 75), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(0, 74, 75), glm::vec3(75, 75, 2), 0, glm::vec3(0, 1, 0));
@@ -109,8 +109,6 @@ void Scene::drawScene()
 
 
 	//walls
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
 	for (int i = 0; i < 4; i++) {
 		model = glm::mat4(1.0); // reset model matrix
 		model = wall[i]->draw();
@@ -124,6 +122,8 @@ void Scene::drawScene()
 		lightingShader.setMat4("model", model);
 		cubeObject.DrawMesh(lightingShader);
 	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //void drawScenes()

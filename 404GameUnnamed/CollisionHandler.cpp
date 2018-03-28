@@ -1,5 +1,6 @@
 #include "CollisionHandler.h"
 
+#include <iostream>
 
 Colliable::Colliable()
 {
@@ -39,7 +40,7 @@ void CollisionHandler::planeCollision(Collider* source, Collider* target)
 {
 	if (col.CollisionAgainstPlane(source, target)) 	
 		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y, source->getPosition().z));
-	else 
+	else if (!col.CollisionAgainstPlane(source, target))
 		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y - 0.35f, source->getPosition().z)); //gravity
 }
 
@@ -50,10 +51,11 @@ void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-		if (keys[SDL_SCANCODE_W]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), -0.31f, source));
-		if (keys[SDL_SCANCODE_A]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), -0.31f, source));
-		if (keys[SDL_SCANCODE_S]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), 0.31f, source));
-		if (keys[SDL_SCANCODE_D]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), 0.31f, source));
+		if (keys[SDL_SCANCODE_W]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), -0.301, source));
+		if (keys[SDL_SCANCODE_A]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), -0.301, source));
+		if (keys[SDL_SCANCODE_S]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), 0.301, source));
+		if (keys[SDL_SCANCODE_D]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), 0.301, source));
+
 	}
 }
 

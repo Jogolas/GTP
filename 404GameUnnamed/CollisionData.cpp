@@ -174,23 +174,32 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 	GLfloat fFraction = 1;
 
 	glm::vec3 vBegin = source->getPosition() + glm::vec3(0, 0, 0);
-	glm::vec3 vEnd = source->getPosition() + glm::vec3(0, 1, 0);
+	glm::vec3 vEnd = source->getPosition() + glm::vec3(0, -1, 0);
 
 	glm::vec3 testIntersection;
 	if (lineAABBIntersection(plane->getAABB() + plane->getPosition(), vBegin, vEnd, testIntersection, 0)) return true;
 	else return false;
 }
-//// With proper collision reaction this could perform much better, so if you are still using physics and forces in the game,
-//// clean up that brute forced code with a proper reaction.
-//// also another area to clean up is the rotations, this is set up with the idea of the player facing the wall.
-//// so if the player is not facing a wall and walking sideways they can clip through it.
-//// the collision is detected through a line-box collision.
+
+
 bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 {
-	if (AABBIntersection(source->getAABB() + source->getPosition(), target->getAABB() + target->getPosition())) {
+	//const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	//glm::vec3 vBegin = source->getPosition() + glm::vec3(0, 0, 0);
+	//glm::vec3 vEnd;
+	//
+	//if (keys[SDL_SCANCODE_W]) vEnd = moveToSide(source->getPosition(), source->getRotation(), 0.5, source);
+	//if (keys[SDL_SCANCODE_A]) vEnd = moveForward(source->getPosition(), source->getRotation(), 0.5, source);
+	//if (keys[SDL_SCANCODE_S]) vEnd = moveToSide(source->getPosition(), source->getRotation(),-0.5, source);
+	//if (keys[SDL_SCANCODE_D]) vEnd = moveForward(source->getPosition(), source->getRotation(), -0.5, source);
+
+	//glm::vec3 testIntersection;
+
+	//if (lineAABBIntersection(target->getAABB() + target->getPosition(), vBegin, vEnd, testIntersection, 0)) return true;
+
+	if (AABBIntersection(source->getAABB() + source->getPosition(), target->getAABB() + target->getPosition())) 
 		return true;
-	}
-
+	 
 	return false;
 }

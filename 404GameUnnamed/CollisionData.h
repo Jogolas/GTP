@@ -26,4 +26,14 @@ public:
 	bool CollisionAgainstBox(Collider* source, Collider* target);
 	bool AABBIntersection(const AABB& source, const AABB& target);
 
+
+	glm::vec3 moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d, Collider* source)
+	{
+		return glm::vec3(pos.x + d * std::cos(glm::radians(source->getRotation())), pos.y, pos.z + d * std::sin(glm::radians(source->getRotation())));
+	}
+
+	glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d, Collider* source)
+	{
+		return glm::vec3(pos.x + d * std::sin(glm::radians(source->getRotation())), pos.y, pos.z - d * std::cos(glm::radians(source->getRotation())));
+	}
 };
