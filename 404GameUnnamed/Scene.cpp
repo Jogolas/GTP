@@ -82,6 +82,11 @@ GLfloat rotation = 0.0f;
 void Scene::setupMaterial(Shader shader, float shininess)
 {
 	// the integer value indicates the texture location
+	// before appling the type of map to the object, first use the glActiveTexture() function for each type you wish to use
+	// and then bind the active texture to the appropriate texture.
+	// GLTEXTURE0 will map the diffuse
+	// GLTEXTURE1 will map the specular (if any exist for the texture)
+	// GLTEXTURE2 will map the emission (if any exist for the texture)
 	shader.setInt("material.diffuse", 0);
 	shader.setInt("material.specular", 1);
 	shader.setInt("material.emission", 2);
