@@ -31,7 +31,9 @@ Scene::Scene(bool active)
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
 
-	texture = Renderer::pngLoader("boxTexture.png");
+	diffuseMap = Renderer::pngLoader("boxImage.png");
+	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
+	emissionMap = Renderer::pngLoader("boxImageEmission.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -77,11 +79,12 @@ GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
 
 GLfloat rotation = 0.0f;
 
-void Scene::setupMaterial(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+void Scene::setupMaterial(Shader shader, float shininess)
 {
-	shader.setVec3("material.ambient", ambient.x, ambient.y, ambient.z);
-	shader.setVec3("material.diffuse", diffuse.x, diffuse.y, diffuse.z);
-	shader.setVec3("material.specular", specular.x, specular.y, specular.z);
+	// the integer value indicates the texture location
+	shader.setInt("material.diffuse", 0);
+	shader.setInt("material.specular", 1);
+	shader.setInt("material.emission", 2);
 	shader.setFloat("material.shininess", shininess);
 }
 
@@ -96,7 +99,7 @@ void Scene::drawScene()
 {
 	// be sure to activate shader when setting uniforms and drawing objects
 	lightingShader.use();
-	setupMaterial(lightingShader, orange, orange, glm::vec3(0.5f), 32.0f);
+	setupMaterial(lightingShader, 32.0f);
 
 	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
 	lightingShader.setVec3("light.position", lightPos);
@@ -110,10 +113,17 @@ void Scene::drawScene()
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
-	// world transformations
+	// binding diffuse material
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, diffuseMap);
 
+	// binding specular material
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+
+	lightingShader.setVec3("objectColor", orange);
+
+	//player
 	glm::mat4 model = player->draw();
 
 	lightingShader.setMat4("model", model);
@@ -121,7 +131,7 @@ void Scene::drawScene()
 
 
 	//ground
-	setupMaterial(lightingShader, grey, grey, glm::vec3(0.5f), 32.0f);
+	setupMaterial(lightingShader, 32.0f);
 
 	model = glm::mat4(1.0); // reset model matrix
 	model = ground->draw();
@@ -131,7 +141,7 @@ void Scene::drawScene()
 
 
 	//walls
-	setupMaterial(lightingShader, pink, pink, glm::vec3(0.5f), 32.0f);
+	setupMaterial(lightingShader, 32.0f);
 
 	for (int i = 0; i < 4; i++) {
 		model = glm::mat4(1.0); // reset model matrix
@@ -140,7 +150,10 @@ void Scene::drawScene()
 		cubeObject.DrawMesh(lightingShader);
 	}
 
-	setupMaterial(lightingShader, cyan, cyan, glm::vec3(0.5f), 32.0f);
+
+	//crates
+	setupMaterial(lightingShader, 32.0f);
+
 
 	for (int i = 0; i < 8; i++) {
 		model = glm::mat4(1.0); // reset model matrix
@@ -172,4 +185,11 @@ void Scene::updateScene()
 	player->update();
 	collisions();
 	mouse.MouseMotion(player);
+
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
+	if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
+	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
+	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 }

@@ -24,12 +24,12 @@ public:
 	void drawScene();
 
 	void collisions();
-	void setupMaterial(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
+	void setupMaterial(Shader shader, float shininess);
 	void setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
-	GLuint texture;
+	GLuint diffuseMap, specularMap, emissionMap;
 
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 

@@ -310,5 +310,11 @@
     <None Include="phongShader.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="EmissionMap.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="EmissionMap.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -204,6 +204,8 @@
   <ItemGroup>
     <None Include="cubeMap.frag" />
     <None Include="cubeMap.vert" />
+    <None Include="EmissionMap.frag" />
+    <None Include="EmissionMap.vert" />
     <None Include="phongShader.frag" />
     <None Include="phongShader.vert" />
     <None Include="simpleShader.frag" />
