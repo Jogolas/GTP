@@ -4,16 +4,15 @@
 
 #include <iostream>
 
-#define DEG_TO_RADIAN 0.017453293
 
 Scene::Scene(bool active)
 {
 	player = new Player(glm::vec3(0.0f, 0.0f, 5.0f));
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
-	wall[0] = new Environment(glm::vec3(75, 74, 0), glm::vec3(2, 75, 75), 0, glm::vec3(0, 1, 0));
-	wall[1] = new Environment(glm::vec3(0, 74, 75), glm::vec3(75, 75, 2), 0, glm::vec3(0, 1, 0));
-	wall[2] = new Environment(glm::vec3(-75, 74, 0), glm::vec3(2, 75, 75), 0, glm::vec3(0, 1, 0));
-	wall[3] = new Environment(glm::vec3(0, 74, -75), glm::vec3(75, 75, 2), 0, glm::vec3(0, 1, 0));
+	wall[0] = new Environment(glm::vec3(75, 49, 0), glm::vec3(2, 50, 75), 0, glm::vec3(0, 1, 0));
+	wall[1] = new Environment(glm::vec3(0, 49, 75), glm::vec3(75, 50, 2), 0, glm::vec3(0, 1, 0));
+	wall[2] = new Environment(glm::vec3(-75, 49, 0), glm::vec3(2, 50, 75), 0, glm::vec3(0, 1, 0));
+	wall[3] = new Environment(glm::vec3(0, 49, -75), glm::vec3(75, 50, 2), 0, glm::vec3(0, 1, 0));
 
 	crates[0] = new Environment(glm::vec3(45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
 	crates[1] = new Environment(glm::vec3(45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
@@ -98,6 +97,10 @@ void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm:
 	shader.setVec3("light.ambient", ambient);
 	shader.setVec3("light.diffuse", diffuse);
 	shader.setVec3("light.specular", specular);
+
+	shader.setFloat("light.constant", 1.0);
+	shader.setFloat("light.linear", 0.007);
+	shader.setFloat("light.quadratic", 0.0002);
 }
 
 void Scene::drawScene()
@@ -107,7 +110,8 @@ void Scene::drawScene()
 	setupMaterial(lightingShader, 32.0f);
 
 	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	lightingShader.setVec3("light.position", lightPos);
+	lightingShader.setVec4("light.position", lightPos);;
+
 
 	lightingShader.setVec3("viewPos", player->cam.Position);
 
@@ -138,7 +142,6 @@ void Scene::drawScene()
 	//ground
 	setupMaterial(lightingShader, 32.0f);
 
-	model = glm::mat4(1.0); // reset model matrix
 	model = ground->draw();
 
 	lightingShader.setMat4("model", model);
@@ -149,7 +152,6 @@ void Scene::drawScene()
 	setupMaterial(lightingShader, 32.0f);
 
 	for (int i = 0; i < 4; i++) {
-		model = glm::mat4(1.0); // reset model matrix
 		model = wall[i]->draw();
 		lightingShader.setMat4("model", model);
 		cubeObject.DrawMesh(lightingShader);
@@ -157,17 +159,29 @@ void Scene::drawScene()
 
 
 	//crates
+
 	setupMaterial(lightingShader, 32.0f);
 
 
 	for (int i = 0; i < 8; i++) {
-		model = glm::mat4(1.0); // reset model matrix
 		model = crates[i]->draw();
 		lightingShader.setMat4("model", model);
 		cubeObject.DrawMesh(lightingShader);
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	lampShader.use();
+	lampShader.setMat4("projection", projection);
+	lampShader.setMat4("view", view);
+
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(lightPos));
+	model = glm::scale(model, glm::vec3(0.2f));
+
+	lampShader.setMat4("model", model);
+	cubeObject.DrawMesh(lampShader);
 }
 
 
@@ -185,8 +199,10 @@ void Scene::collisions()
 	}
 }
 
+
 void Scene::updateScene()
 {
+
 	player->update();
 	collisions();
 	mouse.MouseMotion(player);
@@ -197,4 +213,6 @@ void Scene::updateScene()
 	if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
 	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
+	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
+	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 }

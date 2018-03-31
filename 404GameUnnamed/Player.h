@@ -48,6 +48,7 @@ private:
 	const Uint8 *keys;
 	GLuint mouse;
 
+
 	GLuint lastMouseX;
 	GLuint lastMouseY;
 };

@@ -3,14 +3,21 @@
 struct Material {
 	sampler2D diffuse;
 	sampler2D specular;
+	sampler2D emission;
 	float shininess;
 };
 
 struct Light {
-	vec3 position;
+	vec4 position;
+	vec3 direction;
+
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 out vec4 FragColor;
@@ -42,7 +49,11 @@ void main()
 
 	// Setting up Diffuse Light
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir;
+	if(light.position.w == 1.0) // if the w component exists, then we know the light is not directional
+		lightDir = normalize(light.position.xyz - FragPos);
+	else if(light.position.w == 0.0) // if the w component does not exist, then the light is directional.
+		lightDir = normalize(-light.position.xyz);
 	
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
@@ -54,7 +65,22 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
+	// setting up emission
+	vec3 emission = texture(material.emission, TexCoords).rgb;
 
-	vec3 result = ambient + diffuse + specular;
+	// Setting Attenuation
+	float distance;
+	float attenuation = 1.0f;
+	if(light.position.w == 1.0) { // check if point light
+		distance = length(light.position.xyz - FragPos);
+		attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+	}
+
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
+
+
+	vec3 result = ambient + diffuse + specular + emission;
 	FragColor = vec4(result, 1.0);
 }

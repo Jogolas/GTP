@@ -143,7 +143,6 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GravityForce.cpp" />
     <ClCompile Include="IdleState.cpp" />
-    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -210,6 +209,8 @@
     <None Include="phongShader.vert" />
     <None Include="simpleShader.frag" />
     <None Include="simpleShader.vert" />
+    <None Include="Spotlight.frag" />
+    <None Include="Spotlight.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
