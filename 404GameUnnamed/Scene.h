@@ -45,6 +45,8 @@ private:
 
 	Player* player;
 
+	AbstractAI* boss;
+
 	Environment* ground;
 	Environment* wall[4];
 	Environment* crates[8];

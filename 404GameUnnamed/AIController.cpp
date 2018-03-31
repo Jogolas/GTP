@@ -1,21 +1,10 @@
 #include "AIController.h"
 #include "IdleState.h"
 #include "AttackState.h"
-#include "NPC.h"
-
-#define DEG_TO_RADIAN 0.017453293 //defined in .cpp to prevent redefinition.
-
-AIController::AIController()
-{
-	idle = new IdleState();
-	attack = new AttackState();
-
-	current = idle;
-}
 
 AIController::AIController(AbstractAI* npc)
 {
-	_npc = npc;
+	this->npc = npc;
 
 	idle = new IdleState();
 	attack = new AttackState();
@@ -23,38 +12,36 @@ AIController::AIController(AbstractAI* npc)
 	current = idle;
 }
 
-
-AIController::~AIController()
+void AIController::moveNPC()
 {
-	delete this;
+	if (moving) {
+		glm::vec3 velocity = moveNPCForward(npc->getPosition(), npc->getRotation(), 0.1f);
+		npc->setPosition(velocity);
+	}
+}
+
+void AIController::setTarget(Player* target)
+{
+	if (target != nullptr) {
+		auto distance = target->getPosition() - npc->getPosition();
+
+		npc->setRotation((float)atan2(distance.z, distance.x) + glm::radians(90.0f));			
+	}
+}
+
+void AIController::switchState()
+{
+	if (attacked) current = attack;
+	else current = idle;
 }
 
 void AIController::handleState()
 {
-	if (current == idle) {
-		current->handle(this);
-	}
-	if (current == attack) {
-		current->handle(this);
-	}
+	if (current == idle) current->handle(npc);
+	if (current == attack) current->handle(npc);
 }
 
-void AIController::switchCurrentState(AbstractAIState* state)
+glm::vec3 AIController::moveNPCForward(glm::vec3 position, float angle, float d)
 {
-	current = state;
-}
-
-
-glm::vec3 AIController::moveForward(glm::vec3 pos, GLfloat angle, GLfloat d)
-{
-	return glm::vec3(pos.x + (d * std::sin(angle)), pos.y, pos.z - (d*std::cos(angle)));
-}
-
-void AIController::findTarget(Player* tar, GLuint l)
-{
-	glm::vec3 distance = tar->getPosition() - dynamic_cast<NPC*>(_npc)->getPosition();
-
-	if (glm::length(distance) >= l) {
-		rotation = (float)atan2(distance.z, distance.x) + (90 * DEG_TO_RADIAN);
-	}
+	return glm::vec3(position.x + (d * std::sin(angle)), position.y, position.z - (d * std::cos(angle)));
 }

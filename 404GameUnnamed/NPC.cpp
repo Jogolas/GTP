@@ -1,5 +1,4 @@
 #include "NPC.h"
-#include "GameObject.h"
 #include "D_Object.h"
 
 NPC::NPC()
@@ -7,65 +6,41 @@ NPC::NPC()
 	health = 100.0;
 
 	d_object = new D_Object();
-	controller = new AIController(this);
 	colObj = new Colliable();
-	spell = new AISpellDecorator(new Element(new Burning(this), "Fire Blast", 100.0f));
 }
 
-NPC::NPC(glm::vec3 position, glm::vec3 scale)
+NPC::NPC(glm::vec3 position, glm::vec3 scale, float health)
 {
 	d_object = new D_Object();
 	colObj = new Colliable(position, scale);
 
+	controller = AIController(this);
+
+	this->health = health;
 	this->position = position;
 	this->scale = scale;
-
-	controller = new AIController(this);
-	spell = new AISpellDecorator(new Element(new Burning(this), "Fire Blast", 100.0f));
 }
 
-glm::mat4 NPC::draw(glm::mat4 modelMatrix)
+glm::mat4 NPC::draw()
 {
+	glm::mat4 model(1.0);
 
-	return modelMatrix;
+	model = glm::translate(model, position);
+	model = glm::scale(model, scale);
+	model = glm::rotate(model, rotation, glm::vec3(0, -1, 0));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+
+	return model;
 }
 
 
-void NPC::update()
+void NPC::update(Player* p)
 {
-	controller->handleState();
+	if (controller.moving) controller.moveNPC();
+	if (controller.attacked) controller.setTarget(p);
+
+	controller.handleState();
 
 	colObj->setPosition(position);
-	colObj->setRotation(abs(controller->getRotation() * 57.2958));
-}
-
-void NPC::findPath(CGraph* tarNode)
-{
-
-}
-
-void NPC::moveNPC()
-{
-	position = controller->moveForward(position, controller->getRotation(), 0.1f);
-}
-
-void NPC::returnToCenter()
-{
-	if (controller->getState() == controller->getIdleState()) {
-		glm::vec3 center = glm::vec3(0, 0, 0);
-		glm::vec3 distance = center - position;
-
-		if (length(distance) > 2) { //// using a hack to return the npc to center of the scene
-			Player* tar = new Player(glm::vec3(0, 0, 0));
-			tar->setPosition(center);
-			controller->findTarget(tar, 2);
-
-			delete tar; //delete to free up memory
-		}
-	}
-}
-
-void NPC::closestNode(glm::vec3 tar, CGraph* nodes)
-{
-
+	colObj->setRotation(rotation);
 }

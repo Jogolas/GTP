@@ -5,6 +5,9 @@ class AbstractAI
 {
 public:
 	virtual ~AbstractAI() {}
-	virtual void returnToCenter() = 0;
 	virtual glm::vec3 getPosition() = 0;
+	virtual glm::vec3 setPosition(glm::vec3 pos) = 0;
+
+	virtual float getRotation() = 0;
+	virtual float setRotation(float rot) = 0;
 };

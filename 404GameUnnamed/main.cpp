@@ -8,77 +8,27 @@
 #include <stack>
 #include "Scene.h"
 
-Scene scene;
-
-
-// cube vertices
-float vertices[] = {
-	-0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f, -0.5f,  0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-
-	-0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-};
-
 
 void init()
 {
-	scene = Scene(true);
-
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void update()
+void update(Scene* game)
 {
-	scene.updateScene();
+	game->updateScene();
 }
 
 
-void draw(SDL_Window * window)
+void draw(SDL_Window * window, Scene* game)
 {
 	// clear the screen
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	scene.drawScene();
+	game->drawScene();
 
 	SDL_GL_SwapWindow(window); // swap buffers
 }
@@ -97,6 +47,7 @@ int main(int argc, char *argv[])
 	}
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
+	Scene* scene = new Scene(true);
 	init();
 
 	bool running = true;
@@ -106,8 +57,8 @@ int main(int argc, char *argv[])
 			if (sdlEvent.type == SDL_QUIT) running = false;
 		}
 
-		update();
-		draw(hWindow);
+		update(scene);
+		draw(hWindow, scene);
 		Renderer::setFullScreen(hWindow);
 	}
 

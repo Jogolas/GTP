@@ -1,14 +1,15 @@
 #pragma once
 #include "AbstractAIState.h"
-#include "AISpellDecorator.h"
 
 class AttackState : public AbstractAIState
 {
 public:
-	AttackState();
+	AttackState() {}
 	virtual ~AttackState() {}
-	void handle(AIController* a);
+	void handle(AbstractAI* npc);
 
-private:
-	AbstractAI* npc;
+public:
+	bool chasing = false;
+	bool fireProjectile = true;
+	float timer = 500;
 };

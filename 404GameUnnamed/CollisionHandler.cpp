@@ -26,12 +26,12 @@ Colliable::Colliable(glm::vec3 position, glm::vec3 scale)
 	box.vecMax = glm::vec3(scale);
 }
 
-glm::vec3 moveToSide(glm::vec3 pos, GLfloat angle, GLfloat d, Collider* source)
+glm::vec3 moveToSide(glm::vec3 pos, GLfloat d, Collider* source)
 {
 	return glm::vec3(pos.x + d * std::cos(glm::radians(source->getRotation())), pos.y, pos.z + d * std::sin(glm::radians(source->getRotation())));
 }
 
-glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d, Collider* source)
+glm::vec3 moveForward(glm::vec3 pos, GLfloat d, Collider* source)
 {
 	return glm::vec3(pos.x + d * std::sin(glm::radians(source->getRotation())), pos.y, pos.z - d * std::cos(glm::radians(source->getRotation())));
 }
@@ -51,10 +51,10 @@ void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-		if (keys[SDL_SCANCODE_W]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), -0.301, source));
-		if (keys[SDL_SCANCODE_A]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), -0.301, source));
-		if (keys[SDL_SCANCODE_S]) source->setPosition(moveToSide(source->getPosition(), source->getRotation(), 0.301, source));
-		if (keys[SDL_SCANCODE_D]) source->setPosition(moveForward(source->getPosition(), source->getRotation(), 0.301, source));
+		if (keys[SDL_SCANCODE_W]) source->setPosition(moveToSide(source->getPosition(), -0.301, source));
+		if (keys[SDL_SCANCODE_A]) source->setPosition(moveForward(source->getPosition(), -0.301, source));
+		if (keys[SDL_SCANCODE_S]) source->setPosition(moveToSide(source->getPosition(), 0.301, source));
+		if (keys[SDL_SCANCODE_D]) source->setPosition(moveForward(source->getPosition(), 0.301, source));
 
 	}
 }
@@ -64,5 +64,9 @@ void CollisionHandler::npcBoxCollision(Collider* source, Collider* target)
 	if (col.CollisionAgainstBox(source, target)) {
 
 		// need to handle npc collision in here.
+
+
+		source->setPosition(moveForward(source->getPosition(), -0.1f, source));
+		source->setPosition(moveToSide(source->getPosition(), -0.1f, source));
 	}
 }

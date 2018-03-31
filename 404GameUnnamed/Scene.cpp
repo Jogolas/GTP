@@ -1,13 +1,14 @@
 #include "Scene.h"
 #include "NPC.h"
 #include "SDL_timer.h"
-
 #include <iostream>
 
 
 Scene::Scene(bool active)
 {
 	player = new Player(glm::vec3(0.0f, 0.0f, 5.0f));
+	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
+
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
 	wall[0] = new Environment(glm::vec3(75, 49, 0), glm::vec3(2, 50, 75), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(0, 49, 75), glm::vec3(75, 50, 2), 0, glm::vec3(0, 1, 0));
@@ -107,7 +108,7 @@ void Scene::drawScene()
 {
 	// be sure to activate shader when setting uniforms and drawing objects
 	lightingShader.use();
-	setupMaterial(lightingShader, 32.0f);
+	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
 
 	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
 	lightingShader.setVec4("light.position", lightPos);;
@@ -130,27 +131,27 @@ void Scene::drawScene()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, specularMap);
 
-	lightingShader.setVec3("objectColor", orange);
-
 	//player
 	glm::mat4 model = player->draw();
-
 	lightingShader.setMat4("model", model);
 	bossObject.DrawMesh(lightingShader);
 
 
+	//boss
+	if (boss != nullptr) {
+		model = dynamic_cast<NPC*>(boss)->draw();
+		lightingShader.setMat4("model", model);
+		bossObject.DrawMesh(lightingShader);
+	}
+
+
 	//ground
-	setupMaterial(lightingShader, 32.0f);
-
 	model = ground->draw();
-
 	lightingShader.setMat4("model", model);
 	cubeObject.DrawMesh(lightingShader);
 
 
 	//walls
-	setupMaterial(lightingShader, 32.0f);
-
 	for (int i = 0; i < 4; i++) {
 		model = wall[i]->draw();
 		lightingShader.setMat4("model", model);
@@ -159,10 +160,6 @@ void Scene::drawScene()
 
 
 	//crates
-
-	setupMaterial(lightingShader, 32.0f);
-
-
 	for (int i = 0; i < 8; i++) {
 		model = crates[i]->draw();
 		lightingShader.setMat4("model", model);
@@ -171,7 +168,7 @@ void Scene::drawScene()
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-
+	//light position
 	lampShader.use();
 	lampShader.setMat4("projection", projection);
 	lampShader.setMat4("view", view);
@@ -196,13 +193,15 @@ void Scene::collisions()
 
 		cd.playerBoxCollision(player->getColObject(), crates[i]->getColObject());
 		player->setPosition(player->getColObject()->getPosition());
+		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->getColObject(), crates[i]->getColObject());
+		boss->setPosition(dynamic_cast<NPC*>(boss)->getColObject()->getPosition());
 	}
 }
 
 
 void Scene::updateScene()
 {
-
+	dynamic_cast<NPC*>(boss)->update(player);
 	player->update();
 	collisions();
 	mouse.MouseMotion(player);
@@ -215,4 +214,6 @@ void Scene::updateScene()
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
+
+
 }

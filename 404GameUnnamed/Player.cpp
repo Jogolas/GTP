@@ -18,7 +18,6 @@ Player::Player(glm::vec3 pos)
 void Player::update()
 {
 
-
 	float camRot = cam.angView.y;
 	rotation = camRot;
 

@@ -1,15 +1,15 @@
 #include "IdleState.h"
 #include "NPC.h"
-#include <SDL.h>
-#include "AIController.h"
+#include "Player.h"
 
 
-void IdleState::handle(AIController* a)
+void IdleState::handle(AbstractAI* npc)
 {
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
-
-	a->getNPC()->returnToCenter();
-	if (keys[SDL_SCANCODE_1]) {
-		a->switchCurrentState(a->getAttackState());
+	if (timer >= 0) timer--;
+	else {
+		dynamic_cast<NPC*>(npc)->controller.attacked = true;
+		std::cout << "Boss was attacked" << std::endl;
 	}
+
+	dynamic_cast<NPC*>(npc)->controller.switchState();
 }
