@@ -19,6 +19,8 @@ NPC::NPC(glm::vec3 position, glm::vec3 scale, float health)
 	this->health = health;
 	this->position = position;
 	this->scale = scale;
+
+	fastSpell = new AISpellDecorator(new SpellType("Fast Spell", 20), this);
 }
 
 glm::mat4 NPC::draw()
@@ -36,8 +38,12 @@ glm::mat4 NPC::draw()
 
 void NPC::update(Player* p)
 {
-	if (controller.moving) controller.moveNPC();
-	if (controller.attacked) controller.setTarget(p);
+	if (controller.moving) {
+		controller.moveNPC();
+		dynamic_cast<AISpellDecorator*>(fastSpell)->abilityFired = false;
+	}
+	else dynamic_cast<AISpellDecorator*>(fastSpell)->abilityFired = true;
+	controller.setTarget(p);
 
 	controller.handleState();
 

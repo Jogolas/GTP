@@ -29,6 +29,7 @@ void Player::update()
 
 	cam.Position = moveToSide(at, camRot, -5.0);
 
+	health = 1000.0f;
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);

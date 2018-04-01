@@ -6,6 +6,7 @@
 #include "CollisionHandler.h"
 #include "AIController.h"
 #include "AbstractAI.h"
+#include "AISpellDecorator.h"
 
 
 class NPC : public AbstractAI
@@ -31,6 +32,8 @@ public: //methods
 
 	Collider* getColObject() { return colObj; }
 
+	AbstractAISpell* getSpell() { return fastSpell; }
+
 	DrawableObject* getDrawingObject() { return d_object; }
 
 public:
@@ -44,6 +47,8 @@ private:
 	Mesh mesh;
 
 	DrawableObject* d_object;
+
+	AbstractAISpell* fastSpell;
 
 	glm::vec3 position;
 	glm::vec3 scale;

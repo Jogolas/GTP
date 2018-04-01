@@ -25,7 +25,10 @@ void AIController::setTarget(Player* target)
 	if (target != nullptr) {
 		auto distance = target->getPosition() - npc->getPosition();
 
-		npc->setRotation((float)atan2(distance.z, distance.x) + glm::radians(90.0f));			
+		if(attacked)
+			npc->setRotation((float)atan2(distance.z, distance.x) + glm::radians(90.0f));	
+
+		this->target = target;
 	}
 }
 

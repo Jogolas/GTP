@@ -26,6 +26,15 @@ public:
 	GLfloat getRotation() { return rotation; }
 	GLfloat setRotation(GLfloat rot) { return rotation = rot; }
 
+	float removeHealth(float amount) 
+	{ 
+		std::cout << "\n Health Before Hit: " << health << std::endl;
+		health -= amount; 
+		std::cout << "\n Health After Hit: " << health << std::endl;
+
+		return health;
+	}
+
 public:
 	Camera cam;
 

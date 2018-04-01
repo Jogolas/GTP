@@ -287,6 +287,9 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractAISpell.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cubeMap.frag">

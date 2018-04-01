@@ -184,20 +184,6 @@ bool CollisionData::CollisionAgainstPlane(Collider* source, Collider* plane)
 
 bool CollisionData::CollisionAgainstBox(Collider* source, Collider* target)
 {
-	//const Uint8* keys = SDL_GetKeyboardState(NULL);
-
-	//glm::vec3 vBegin = source->getPosition() + glm::vec3(0, 0, 0);
-	//glm::vec3 vEnd;
-	//
-	//if (keys[SDL_SCANCODE_W]) vEnd = moveToSide(source->getPosition(), source->getRotation(), 0.5, source);
-	//if (keys[SDL_SCANCODE_A]) vEnd = moveForward(source->getPosition(), source->getRotation(), 0.5, source);
-	//if (keys[SDL_SCANCODE_S]) vEnd = moveToSide(source->getPosition(), source->getRotation(),-0.5, source);
-	//if (keys[SDL_SCANCODE_D]) vEnd = moveForward(source->getPosition(), source->getRotation(), -0.5, source);
-
-	//glm::vec3 testIntersection;
-
-	//if (lineAABBIntersection(target->getAABB() + target->getPosition(), vBegin, vEnd, testIntersection, 0)) return true;
-
 	if (AABBIntersection(source->getAABB() + source->getPosition(), target->getAABB() + target->getPosition())) 
 		return true;
 	 

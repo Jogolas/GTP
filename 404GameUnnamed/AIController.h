@@ -13,8 +13,10 @@ public:
 
 	void moveNPC();
 	void setTarget(Player* target);
+	Player* getTarget() { return target; }
 	void switchState();
 	void handleState();
+
 
 	//variables
 public:
@@ -26,6 +28,8 @@ private:
 
 	AbstractAI* npc;
 	AbstractAIState *current, *idle, *attack;
+
+	Player* target;
 };
 
 #endif // !AICONTROLLER_H

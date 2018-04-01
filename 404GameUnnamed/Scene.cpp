@@ -179,6 +179,15 @@ void Scene::drawScene()
 
 	lampShader.setMat4("model", model);
 	cubeObject.DrawMesh(lampShader);
+
+	//boss spell
+	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
+		model = glm::mat4(1.0);
+		model = glm::translate(model, dynamic_cast<NPC*>(boss)->getSpell()->getPosition());
+		model = glm::scale(model, glm::vec3(0.2f));
+		lampShader.setMat4("model", model);
+		cubeObject.DrawMesh(lampShader);
+	}
 }
 
 
@@ -214,6 +223,4 @@ void Scene::updateScene()
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
-
-
 }

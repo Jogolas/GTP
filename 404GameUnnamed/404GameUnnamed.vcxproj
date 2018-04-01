@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="AbstractAI.h" />
+    <ClInclude Include="AbstractAISpell.h" />
     <ClInclude Include="AbstractAIState.h" />
     <ClInclude Include="AIController.h" />
     <ClInclude Include="AISpellDecorator.h" />

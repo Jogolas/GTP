@@ -11,5 +11,6 @@ public:
 public:
 	bool chasing = false;
 	bool fireProjectile = true;
+	bool spellFired = false;
 	float timer = 500;
 };

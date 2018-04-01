@@ -59,13 +59,19 @@ void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
 	}
 }
 
+void CollisionHandler::AISpellPlayerCollision(Collider* source, Collider* target)
+{
+	if (col.CollisionAgainstBox(source, target)) {
+
+		source->setPosition(moveForward(source->getPosition(), -0.301, source));
+	}
+}
+
 void CollisionHandler::npcBoxCollision(Collider* source, Collider* target)
 {
 	if (col.CollisionAgainstBox(source, target)) {
 
 		// need to handle npc collision in here.
-
-
 		source->setPosition(moveForward(source->getPosition(), -0.1f, source));
 		source->setPosition(moveToSide(source->getPosition(), -0.1f, source));
 	}
