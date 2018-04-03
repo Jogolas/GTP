@@ -46,7 +46,7 @@ private:
 
 	Collider* colObj;
 	DrawableObject* d_object;
-	GLuint health = 100;
+	float health = 100;
 
 	glm::vec3 position;
 	glm::vec3 eye;

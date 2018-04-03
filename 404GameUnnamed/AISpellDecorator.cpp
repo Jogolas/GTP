@@ -5,7 +5,7 @@ AISpellDecorator::AISpellDecorator(AbstractAISpell* spell, AbstractAI* npc)
 {
 	this->npc = npc;
 	this->spell = spell;
-	damage = 100.0f;
+	damage += 100.0f + spell->spellDamage(0);
 	colObj = new Colliable(position, glm::vec3(0.2, 0.2, 0.2));
 }
 
@@ -27,7 +27,8 @@ void AISpellDecorator::handleSpell(Player* target)
 		rotation = npc->getRotation();
 	}
 	else 
-		position = moveSpell(position, 0.29, rotation);
+		position = moveSpell(position, velocity, rotation);
+
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
@@ -35,6 +36,7 @@ void AISpellDecorator::handleSpell(Player* target)
 	if (cd.CollisionAgainstBox(colObj, target->getColObject())) {
 		colObj->setPosition(glm::vec3(-100.0f)); // throwing the col box away outside as a temp measure.
 		position = colObj->getPosition();
+
 		target->removeHealth(damage);
 	}
 }
@@ -43,8 +45,8 @@ void AISpellDecorator::handleSpell(Player* target)
 //// SpellType class
 SpellType::SpellType(const char* name, float inidmg)
 {
-	AISpellDecorator::abilityName(name);
-	AISpellDecorator::abilityDmg(inidmg);
+	abilityName(name);
+	damage += inidmg;
 }
 
 SpellType::~SpellType()

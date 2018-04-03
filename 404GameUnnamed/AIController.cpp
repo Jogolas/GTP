@@ -14,7 +14,9 @@ AIController::AIController(AbstractAI* npc)
 
 void AIController::moveNPC()
 {
-	if (moving) {
+	auto distance = target->getPosition() - npc->getPosition();
+
+	if (moving && glm::length(distance) > 5) {
 		glm::vec3 velocity = moveNPCForward(npc->getPosition(), npc->getRotation(), 0.1f);
 		npc->setPosition(velocity);
 	}

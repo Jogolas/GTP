@@ -13,6 +13,8 @@ Player::Player(glm::vec3 pos)
 	cam = Camera(eye = glm::vec3(0.0f, 1.0f, 5.0f)); // left, up, forward
 	at = glm::vec3(0.0f, 1.0f, 3.0f);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	health = 100.0f;
 }
 
 void Player::update()
@@ -28,8 +30,6 @@ void Player::update()
 	at = glm::vec3(position.x, position.y + 1, position.z);
 
 	cam.Position = moveToSide(at, camRot, -5.0);
-
-	health = 1000.0f;
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);

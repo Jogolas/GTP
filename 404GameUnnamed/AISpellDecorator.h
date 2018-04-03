@@ -23,6 +23,8 @@ public:
 
 	bool abilityFired = false;
 	const char* name;
+
+	float velocity;
 private:
 	AbstractAISpell* spell;
 
