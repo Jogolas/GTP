@@ -59,11 +59,11 @@ void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
 	}
 }
 
-void CollisionHandler::AISpellPlayerCollision(Collider* source, Collider* target)
+void CollisionHandler::AISpellBoxCollision(Collider* source, Collider* target)
 {
 	if (col.CollisionAgainstBox(source, target)) {
 
-		source->setPosition(moveForward(source->getPosition(), -0.301, source));
+		source->setPosition(glm::vec3(-100.0f));
 	}
 }
 

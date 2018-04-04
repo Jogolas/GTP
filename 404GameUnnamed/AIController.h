@@ -30,6 +30,8 @@ private:
 	AbstractAIState *current, *idle, *attack;
 
 	Player* target;
+
+	float meleeInterval;
 };
 
 #endif // !AICONTROLLER_H

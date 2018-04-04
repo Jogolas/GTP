@@ -22,6 +22,7 @@ public:
 	void handleSpell(AbstractAI* npc, Player* target);
 	float spellDamage(float dmg) { return damage += dmg; }
 
+	Collider* getColObj() { return colObj; }
 
 	bool abilityFired = false;
 	const char* name;

@@ -6,7 +6,7 @@
 
 Scene::Scene(bool active)
 {
-	player = new Player(glm::vec3(0.0f, 0.0f, 5.0f));
+	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
 	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
 
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
@@ -27,6 +27,7 @@ Scene::Scene(bool active)
 
 	lightingShader = Shader("phongShader.vert", "phongShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
+	celShader = Shader("celShader.vert", "celShader.frag");
 
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
@@ -35,6 +36,8 @@ Scene::Scene(bool active)
 	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("boxImageEmission.png");
 	PlayerHUD = Renderer::pngLoader("HUDforProjectcopy.png");
+	playerDiffuse = Renderer::pngLoader("PlayerDiffuse.png");
+	playerSpecular = Renderer::pngLoader("PlayerSpecular.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -107,22 +110,31 @@ void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm:
 
 void Scene::drawScene()
 {
-	// be sure to activate shader when setting uniforms and drawing objects
-	lightingShader.use();
-	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
-
-	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	lightingShader.setVec4("light.position", lightPos);;
-
-
-	lightingShader.setVec3("viewPos", player->cam.Position);
-
 	// view and projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 800.0f / 600.0f, 1.0f, 500.0f);
 	glm::mat4 view = player->cam.GetViewMatrix();
 
-	lightingShader.setMat4("projection", projection);
-	lightingShader.setMat4("view", view);
+	celShader.use();
+
+	setupMaterial(celShader, 32.0f);
+	setupLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+	celShader.setVec4("light.position", lightPos);
+
+	celShader.setMat4("projection", projection);
+	celShader.setMat4("view", view);
+
+	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, playerDiffuse);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, playerSpecular);
+
+	//player
+	glm::mat4 model = player->draw();
+	celShader.setMat4("model", model);
+	bossObject.DrawMesh(celShader);
 
 	// binding diffuse material
 	glActiveTexture(GL_TEXTURE0);
@@ -132,11 +144,16 @@ void Scene::drawScene()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, specularMap);
 
-	//player
-	glm::mat4 model = player->draw();
-	lightingShader.setMat4("model", model);
-	bossObject.DrawMesh(lightingShader);
+	// be sure to activate shader when setting uniforms and drawing objects
+	lightingShader.use();
+	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
 
+	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+	lightingShader.setVec4("light.position", lightPos);
+
+	lightingShader.setVec3("viewPos", player->cam.Position);
+	lightingShader.setMat4("projection", projection);
+	lightingShader.setMat4("view", view);
 
 	//boss
 	if (boss != nullptr) {
@@ -194,8 +211,8 @@ void Scene::drawScene()
 	projection = glm::mat4(1.0); //reset projection matrix for HUD
 	projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 1.0f, 150.0f);
 
-	//glDepthMask(GL_FALSE);
-	//glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, PlayerHUD);
@@ -209,6 +226,7 @@ void Scene::drawScene()
 	lampShader.setMat4("view", projection);
 	cubeObject.DrawMesh(lampShader);
 
+	glBindTexture(GL_TEXTURE_2D, 0); // remember to unbind textures
 	//remember to turn on depth test.
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -228,7 +246,13 @@ void Scene::collisions()
 		player->setPosition(player->getColObject()->getPosition());
 		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->getColObject(), crates[i]->getColObject());
 		boss->setPosition(dynamic_cast<NPC*>(boss)->getColObject()->getPosition());
+
+		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
+			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->getColObject());
+			dynamic_cast<NPC*>(boss)->getSpell()->setPosition(dynamic_cast<NPC*>(boss)->getSpell()->getColObj()->getPosition());
+		}
 	}
+
 }
 
 

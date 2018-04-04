@@ -10,6 +10,8 @@ AIController::AIController(AbstractAI* npc)
 	attack = new AttackState(npc);
 
 	current = idle;
+
+	meleeInterval = 150.0f;
 }
 
 void AIController::moveNPC()
@@ -19,6 +21,17 @@ void AIController::moveNPC()
 	if (moving && glm::length(distance) > 5) {
 		glm::vec3 velocity = moveNPCForward(npc->getPosition(), npc->getRotation(), 0.1f);
 		npc->setPosition(velocity);
+	}
+	else {
+		if (meleeInterval >= 150.0f) {
+			target->removeHealth(50.0f);
+			target->setPosition(glm::vec3(target->getPosition().x, target->getPosition().y + 2.5f, target->getPosition().z));
+			target->setPosition(moveNPCForward(target->getPosition(), npc->getRotation(), 5.0f));
+
+			meleeInterval = 0.0f;
+		}
+
+		meleeInterval++;
 	}
 }
 

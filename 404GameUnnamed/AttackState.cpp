@@ -7,6 +7,9 @@
 AttackState::AttackState(AbstractAI* npc)
 {
 	spells.setupSpell();
+	chasing = true;
+	fireProjectile = false;
+	spellFired = false;
 }
 
 void AttackState::handle(AbstractAI* npc)
@@ -16,7 +19,7 @@ void AttackState::handle(AbstractAI* npc)
 		if(dynamic_cast<NPC*>(npc)->getSpell() != nullptr)
 			dynamic_cast<AISpellDecorator*>(dynamic_cast<NPC*>(npc)->getSpell())->abilityFired = false;
 
-		timer -= 100;
+		timer--;
 	}
 	else {
 		dynamic_cast<NPC*>(npc)->controller.moving = false;
@@ -43,7 +46,7 @@ void AttackState::handle(AbstractAI* npc)
 		}
 
 		// fires after the first spell
-		if (abs(timer) == 300.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[0]) {
+		if (abs(timer) == 200.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[0]) {
 			// update the spell rotation so it fires towards the player.
 			spells.fireSpell(npc, spells.spells[1]);
 			dynamic_cast<NPC*>(npc)->getSpell()->setRotation(npc->getRotation());
@@ -52,7 +55,7 @@ void AttackState::handle(AbstractAI* npc)
 		}
 
 		//fires after the second spell
-		if (abs(timer) == 600.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[1]) {
+		if (abs(timer) == 400.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[1]) {
 			// update the spell rotation so it fires towards the player.
 			spells.fireSpell(npc, spells.spells[2]);
 			dynamic_cast<NPC*>(npc)->getSpell()->setRotation(npc->getRotation());
@@ -62,16 +65,15 @@ void AttackState::handle(AbstractAI* npc)
 
 
 		// if the npc has set up a spell, handle it appropriately.
-		if (dynamic_cast<NPC*>(npc)->getSpell() != nullptr) {
+		if (dynamic_cast<NPC*>(npc)->getSpell() != nullptr) 
 			dynamic_cast<NPC*>(npc)->getSpell()->handleSpell(npc, dynamic_cast<NPC*>(npc)->controller.getTarget());
-		}
 	}
 
 
-	if (timer >= 1000) {
+	if (timer >= 600) {
 		chasing = true;
 		spellFired = false;
-		dynamic_cast<NPC*>(npc)->setSpell(nullptr);
+		dynamic_cast<NPC*>(npc)->setSpell(nullptr); // when chasing the boss shouldn't use spells.
 	}
 	else if (timer <= 1) {
 		chasing = false;

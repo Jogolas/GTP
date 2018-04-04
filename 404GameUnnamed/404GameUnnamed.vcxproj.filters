@@ -325,5 +325,11 @@
     <None Include="Spotlight.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="celShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="celShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

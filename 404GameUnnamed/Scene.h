@@ -30,9 +30,9 @@ public:
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint diffuseMap, specularMap, emissionMap;
-	GLuint PlayerHUD;
+	GLuint PlayerHUD, playerDiffuse, playerSpecular;
 
-	glm::vec4 lightPos = glm::vec4(-0.2f, 10.0f, -0.3f, 1.0f);
+	glm::vec4 lightPos = glm::vec4(-0.2f, 3.0f, -0.3f, 1.0f);
 
 	glm::vec3 orange = glm::vec3(1.0f, 0.5f, 0.31f);
 	glm::vec3 green = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -42,7 +42,7 @@ private:
 	glm::vec3 cyan = glm::vec3(0.5f, 1.0f, 1.0f);
 
 	Model cubeObject, bossObject;
-	Shader lightingShader, lampShader;
+	Shader lightingShader, lampShader, celShader;
 
 	Player* player;
 

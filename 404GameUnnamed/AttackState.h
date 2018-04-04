@@ -11,8 +11,8 @@ public:
 
 public:
 	AISpellList spells;
-	bool chasing = false;
-	bool fireProjectile = true;
-	bool spellFired = false;
+	bool chasing;
+	bool fireProjectile;
+	bool spellFired;
 	float timer = 500;
 };
