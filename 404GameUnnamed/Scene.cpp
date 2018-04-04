@@ -34,6 +34,7 @@ Scene::Scene(bool active)
 	diffuseMap = Renderer::pngLoader("boxImage.png");
 	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("boxImageEmission.png");
+	PlayerHUD = Renderer::pngLoader("HUDforProjectcopy.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -182,12 +183,35 @@ void Scene::drawScene()
 
 	//boss spell
 	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-		model = glm::mat4(1.0);
-		model = glm::translate(model, dynamic_cast<NPC*>(boss)->getSpell()->getPosition());
-		model = glm::scale(model, glm::vec3(0.2f));
+		model = dynamic_cast<NPC*>(boss)->getSpell()->draw();
 		lampShader.setMat4("model", model);
 		cubeObject.DrawMesh(lampShader);
 	}
+
+
+
+	// HUD ELEMENTS
+	projection = glm::mat4(1.0); //reset projection matrix for HUD
+	projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 1.0f, 150.0f);
+
+	//glDepthMask(GL_FALSE);
+	//glDisable(GL_DEPTH_TEST);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, PlayerHUD);
+
+	projection = glm::translate(projection, glm::vec3(400.0f, 300.0f, 1.0f));
+	projection = glm::scale(projection, glm::vec3(100.0f, 500.0f, 0.0f));
+	projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	projection = glm::rotate(projection, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+	lampShader.setMat4("model", projection);
+	lampShader.setMat4("view", projection);
+	cubeObject.DrawMesh(lampShader);
+
+	//remember to turn on depth test.
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
 }
 
 

@@ -32,12 +32,15 @@ public: //methods
 
 	Collider* getColObject() { return colObj; }
 
-	AbstractAISpell* getSpell() { return fastSpell; }
+	AbstractAISpell* getSpell() { return spell; }
+
+	AbstractAISpell* setSpell(AbstractAISpell* spell) { return this->spell = spell; }
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
 public:
 	AIController controller;
+	AbstractAISpell* spell;
 
 private:
 	float rotation = 0.0f;
@@ -46,9 +49,9 @@ private:
 	Collider* colObj;
 	Mesh mesh;
 
-	DrawableObject* d_object;
 
-	AbstractAISpell* fastSpell;
+
+	DrawableObject* d_object;
 
 	glm::vec3 position;
 	glm::vec3 scale;

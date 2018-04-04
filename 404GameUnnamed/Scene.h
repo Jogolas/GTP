@@ -30,6 +30,7 @@ public:
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint diffuseMap, specularMap, emissionMap;
+	GLuint PlayerHUD;
 
 	glm::vec4 lightPos = glm::vec4(-0.2f, 10.0f, -0.3f, 1.0f);
 

@@ -8,8 +8,10 @@ class AISpellDecorator : public AbstractAISpell
 {
 public:
 	AISpellDecorator() {}
-	AISpellDecorator(AbstractAISpell* spell, AbstractAI* npc);
+	AISpellDecorator(AbstractAISpell* spell, glm::vec3 scale);
 	~AISpellDecorator();
+
+	glm::mat4 draw();
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
@@ -17,7 +19,7 @@ public:
 	float getRotation() { return rotation; }
 	float setRotation(float rot) { return rotation = rot; }
 
-	virtual void handleSpell(Player* target);
+	void handleSpell(AbstractAI* npc, Player* target);
 	float spellDamage(float dmg) { return damage += dmg; }
 
 
@@ -25,6 +27,8 @@ public:
 	const char* name;
 
 	float velocity;
+
+	glm::vec3 scale;
 private:
 	AbstractAISpell* spell;
 
@@ -32,8 +36,6 @@ protected:
 	float damage; //allow subclasses to change this variable.
 	Collider* colObj;
 	CollisionData cd;
-
-	AbstractAI* npc;
 
 	glm::vec3 position;
 	float rotation;
@@ -46,10 +48,9 @@ protected:
 class SpellType : public AISpellDecorator
 {
 public:
-	SpellType( const char* name, float spellIniDmg);
+	SpellType( const char* name, float spellIniDmg, float speed);
 	~SpellType();
 
-	void handleSpell(Player* target);
 	float spellDamage(float dmg) { return damage += dmg; }
 };
 
@@ -60,7 +61,6 @@ public:
 	SpellEffect();
 	~SpellEffect();
 
-	void handleSpell(Player* target);
 	float spellDamage(float dmg) { return damage += dmg; }
 };
 

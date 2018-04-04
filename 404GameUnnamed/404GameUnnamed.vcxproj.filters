@@ -290,6 +290,9 @@
     <ClInclude Include="AbstractAISpell.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="SpellList.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cubeMap.frag">

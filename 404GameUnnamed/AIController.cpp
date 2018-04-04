@@ -7,7 +7,7 @@ AIController::AIController(AbstractAI* npc)
 	this->npc = npc;
 
 	idle = new IdleState();
-	attack = new AttackState();
+	attack = new AttackState(npc);
 
 	current = idle;
 }

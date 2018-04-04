@@ -1,12 +1,15 @@
 #include "AISpellDecorator.h"
 
 //// AISpellDecorator Class
-AISpellDecorator::AISpellDecorator(AbstractAISpell* spell, AbstractAI* npc)
+AISpellDecorator::AISpellDecorator(AbstractAISpell* spell, glm::vec3 scale)
 {
-	this->npc = npc;
 	this->spell = spell;
+	this->scale = scale;
 	damage += 100.0f + spell->spellDamage(0);
-	colObj = new Colliable(position, glm::vec3(0.2, 0.2, 0.2));
+	velocity += 0.0f + dynamic_cast<SpellType*>(spell)->velocity;
+	name = dynamic_cast<SpellType*>(spell)->name;
+	scale = glm::vec3(1.0f);
+	colObj = new Colliable(position, this->scale);
 }
 
 AISpellDecorator::~AISpellDecorator()
@@ -20,7 +23,17 @@ glm::vec3 moveSpell(glm::vec3 pos, float d, float angle)
 	return glm::vec3(pos.x + d * std::sin(angle), pos.y, pos.z - d * std::cos(angle)); // using the bosses angle, so radians have already been set
 }
 
-void AISpellDecorator::handleSpell(Player* target)
+glm::mat4 AISpellDecorator::draw()
+{
+	glm::mat4 model(1.0);
+	model = glm::translate(model, position);
+	model = glm::rotate(model, rotation, glm::vec3(0, 1, 0));
+	model = glm::scale(model, scale);
+
+	return model;
+}
+
+void AISpellDecorator::handleSpell(AbstractAI* npc, Player* target)
 {
 	if (!abilityFired) {
 		position = npc->getPosition();
@@ -43,20 +56,16 @@ void AISpellDecorator::handleSpell(Player* target)
 
 
 //// SpellType class
-SpellType::SpellType(const char* name, float inidmg)
+SpellType::SpellType(const char* name, float inidmg, float speed)
 {
 	abilityName(name);
 	damage += inidmg;
+	velocity += speed;
 }
 
 SpellType::~SpellType()
 {
 	//AISpellDecorator::~AISpellDecorator();
-}
-
-void SpellType::handleSpell(Player* target)
-{
-	AISpellDecorator::handleSpell(target);
 }
 
 
@@ -69,9 +78,4 @@ SpellEffect::SpellEffect()
 SpellEffect::~SpellEffect()
 {
 	//AISpellDecorator::~AISpellDecorator();
-}
-
-void SpellEffect::handleSpell(Player* target)
-{
-	AISpellDecorator::handleSpell(target);
 }
