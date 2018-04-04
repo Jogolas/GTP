@@ -20,8 +20,12 @@ struct MouseHandler
 		int yoffset = lastMouseY - y;
 
 		// when the mouse is pressed, update the camera's view with respect to the offsets
-		if (mouse && SDL_BUTTON(SDL_BUTTON_LEFT))
+		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 			player->cam.ProcessMouseMovement(xoffset, yoffset);
+		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT))
+			player->setRotation(player->cam.angView.y);
+
+
 
 		// record the last position of the mouse.
 		lastMouseX = x;

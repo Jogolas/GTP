@@ -21,7 +21,6 @@ void Player::update()
 {
 
 	float camRot = cam.angView.y;
-	rotation = camRot;
 
 	inputHandler();
 
@@ -30,6 +29,7 @@ void Player::update()
 	at = glm::vec3(position.x, position.y + 1, position.z);
 
 	cam.Position = moveToSide(at, camRot, -5.0);
+	cam.Position.y = position.y + 2;
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
