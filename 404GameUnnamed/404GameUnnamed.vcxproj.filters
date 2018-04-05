@@ -147,9 +147,6 @@
     <ClCompile Include="CollisionHandler.cpp">
       <Filter>Source Files\Collisions</Filter>
     </ClCompile>
-    <ClCompile Include="GObject.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="renderer.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
@@ -194,9 +191,6 @@
     <ClInclude Include="Forces.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Mass.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
@@ -217,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="GravityForce.h">
       <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files\Utilities</Filter>
@@ -271,9 +262,6 @@
     </ClInclude>
     <ClInclude Include="CollisionHandler.h">
       <Filter>Header Files\Collisions</Filter>
-    </ClInclude>
-    <ClInclude Include="GObject.h">
-      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files\Rendering</Filter>

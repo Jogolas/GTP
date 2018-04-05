@@ -16,7 +16,7 @@ AIController::AIController(AbstractAI* npc)
 
 void AIController::moveNPC()
 {
-	auto distance = target->getPosition() - npc->getPosition();
+	auto distance = target->g_object.position - npc->getPosition();
 
 	if (moving && glm::length(distance) > 5) {
 		glm::vec3 velocity = moveNPCForward(npc->getPosition(), npc->getRotation(), 0.1f);
@@ -25,8 +25,8 @@ void AIController::moveNPC()
 	else {
 		if (meleeInterval >= 150.0f) {
 			target->removeHealth(50.0f);
-			target->setPosition(glm::vec3(target->getPosition().x, target->getPosition().y + 2.5f, target->getPosition().z));
-			target->setPosition(moveNPCForward(target->getPosition(), npc->getRotation(), 5.0f));
+			target->g_object.position = glm::vec3(target->g_object.position.x, target->g_object.position.y + 2.5f, target->g_object.position.z);
+			target->g_object.position = moveNPCForward(target->g_object.position, npc->getRotation(), 5.0f);
 
 			meleeInterval = 0.0f;
 		}
@@ -38,7 +38,7 @@ void AIController::moveNPC()
 void AIController::setTarget(Player* target)
 {
 	if (target != nullptr) {
-		auto distance = target->getPosition() - npc->getPosition();
+		auto distance = target->g_object.position - npc->getPosition();
 
 		if(attacked)
 			npc->setRotation((float)atan2(distance.z, distance.x) + glm::radians(90.0f));	

@@ -56,6 +56,7 @@ private:
 	Environment* crates[8];
 
 	MouseHandler mouse;
+	KeyboardHandler keyboard;
 	CollisionHandler cd;
 
 };

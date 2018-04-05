@@ -46,7 +46,7 @@ void AISpellDecorator::handleSpell(AbstractAI* npc, Player* target)
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
 
-	if (cd.CollisionAgainstBox(colObj, target->getColObject())) {
+	if (cd.CollisionAgainstBox(colObj, target->g_object.colObj)) {
 		colObj->setPosition(glm::vec3(-100.0f)); // throwing the col box away outside as a temp measure.
 		position = colObj->getPosition();
 

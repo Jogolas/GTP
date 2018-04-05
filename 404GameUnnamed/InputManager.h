@@ -20,10 +20,13 @@ struct MouseHandler
 		int yoffset = lastMouseY - y;
 
 		// when the mouse is pressed, update the camera's view with respect to the offsets
-		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
+		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT)) 
 			player->cam.ProcessMouseMovement(xoffset, yoffset);
-		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT))
-			player->setRotation(player->cam.angView.y);
+		else if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+			player->cam.ProcessMouseMovement(xoffset, yoffset);
+			player->g_object.angle = player->cam.angView.y;
+		} 
+
 
 
 
@@ -41,5 +44,35 @@ struct MouseHandler
 
 struct KeyboardHandler
 {
+	void handlePlayerkeyboard(Player* player)
+	{
+		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+		// player movements
+		if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_Q]) {
+			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity * 0.66f);
+			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity * 0.66f);
+		}
+		else if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_E]) {
+			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity * 0.66f);
+			player->g_object.position = player->tMat.moveForward(player->g_object, -player->g_object.velocity * 0.66f);
+		}
+		else if (keys[SDL_SCANCODE_W])
+			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity);
+		else if (keys[SDL_SCANCODE_Q])
+			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity);
+		else if (keys[SDL_SCANCODE_E])
+			player->g_object.position = player->tMat.moveForward(player->g_object, -player->g_object.velocity);
+		else if (keys[SDL_SCANCODE_S]) 
+			player->g_object.position = player->tMat.moveToSide(player->g_object, -player->g_object.velocity);
+
+
+
+
+		// rotates the player
+		if (keys[SDL_SCANCODE_A])
+			player->g_object.angle -= 1.0f;
+		if (keys[SDL_SCANCODE_D])
+			player->g_object.angle += 1.0f;
+	}
 };

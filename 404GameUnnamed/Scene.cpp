@@ -263,15 +263,15 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	cd.planeCollision(player->getColObject(), ground->getColObject());
+	cd.planeCollision(player->g_object.colObj, ground->getColObject());
 
 	//player wall/box collisions
 	for (int i = 0; i < 8; i++) {
 
-		if (i < 4) cd.playerBoxCollision(player->getColObject(), wall[i]->getColObject());
+		if (i < 4) cd.playerBoxCollision(player->g_object, wall[i]->getColObject());
 
-		cd.playerBoxCollision(player->getColObject(), crates[i]->getColObject());
-		player->setPosition(player->getColObject()->getPosition());
+		cd.playerBoxCollision(player->g_object, crates[i]->getColObject());
+		player->g_object.position = player->g_object.colObj->getPosition();
 		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->getColObject(), crates[i]->getColObject());
 		boss->setPosition(dynamic_cast<NPC*>(boss)->getColObject()->getPosition());
 
@@ -287,9 +287,10 @@ void Scene::collisions()
 void Scene::updateScene()
 {
 	dynamic_cast<NPC*>(boss)->update(player);
+	keyboard.handlePlayerkeyboard(player);
 	player->update();
-	collisions();
 	mouse.MouseMotion(player);
+	collisions();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 

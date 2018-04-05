@@ -44,18 +44,50 @@ void CollisionHandler::planeCollision(Collider* source, Collider* target)
 		source->setPosition(glm::vec3(source->getPosition().x, source->getPosition().y - 0.35f, source->getPosition().z)); //gravity
 }
 
-void CollisionHandler::playerBoxCollision(Collider* source, Collider* target)
+void CollisionHandler::playerBoxCollision(Entity source, Collider* target)
 {
-	////this is another way of brute forcing..., but less messy
-	if (col.CollisionAgainstBox(source, target)) {
+	if (col.CollisionAgainstBox(source.colObj, target)) {
 
-		const Uint8* keys = SDL_GetKeyboardState(NULL);
+		//only need to check x and z coords as we won't have any reason to be ontop of the boxes.
+		for (int i = 0; i < 2; i++)
+		{
+			if (i == 0) { //for x
+				if (source.position.x > target->getAABB().vecMax.x + target->getPosition().x) {
+					source.colObj->setPosition(glm::vec3(source.position.x + (source.velocity + 0.001f), source.position.y, source.position.z));
+				}
+				if (source.position.x < target->getAABB().vecMin.x + target->getPosition().x) {
+					source.colObj->setPosition(glm::vec3(source.position.x - (source.velocity + 0.001f), source.position.y, source.position.z));
+				}
+			}
+			if (i == 1) { //for z
+				if (source.position.z > target->getAABB().vecMax.z + target->getPosition().z) {
+					source.colObj->setPosition(glm::vec3(source.position.x, source.position.y, source.position.z + (source.velocity + 0.001f)));
+				}
+				if (source.position.z < target->getAABB().vecMin.z + target->getPosition().z) {
+					source.colObj->setPosition(glm::vec3(source.position.x, source.position.y, source.position.z - (source.velocity + 0.001f)));
+				}
+			}
+		}
 
-		if (keys[SDL_SCANCODE_W]) source->setPosition(moveToSide(source->getPosition(), -0.301, source));
-		if (keys[SDL_SCANCODE_A]) source->setPosition(moveForward(source->getPosition(), -0.301, source));
-		if (keys[SDL_SCANCODE_S]) source->setPosition(moveToSide(source->getPosition(), 0.301, source));
-		if (keys[SDL_SCANCODE_D]) source->setPosition(moveForward(source->getPosition(), 0.301, source));
 
+		//// ye lets not do this.
+		//const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+		//// player movements
+		//if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_Q]) {
+		//	source.colObj->setPosition(moveToSide(source.position, (source.velocity * 0.66f + 0.01f) * -1.0f, source.colObj));
+		//}
+		//else if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_E]) {
+		//	source.colObj->setPosition(moveToSide(source.position, (source.velocity * 0.66f + 0.01f) * -1.0f, source.colObj));
+		//}
+		//else if (keys[SDL_SCANCODE_W])
+		//	source.colObj->setPosition(moveToSide(source.position, (source.velocity + 0.01f) * -1.0f, source.colObj));
+		//else if (keys[SDL_SCANCODE_Q])
+		//	source.colObj->setPosition(moveForward(source.position, (source.velocity + 0.01f) * -1.0f, source.colObj));
+		//else if (keys[SDL_SCANCODE_E])
+		//	source.colObj->setPosition(moveForward(source.position, (-source.velocity - 0.01f) * -1.0f, source.colObj));
+		//else if (keys[SDL_SCANCODE_S])
+		//	source.colObj->setPosition(moveToSide(source.position, (-source.velocity + 0.01f) * -1.0f, source.colObj));
 	}
 }
 
@@ -73,6 +105,6 @@ void CollisionHandler::npcBoxCollision(Collider* source, Collider* target)
 
 		// need to handle npc collision in here.
 		source->setPosition(moveForward(source->getPosition(), -0.1f, source));
-		source->setPosition(moveToSide(source->getPosition(), -0.1f, source));
+		//source->setPosition(moveToSide(source->getPosition(), -0.1f, source));
 	}
 }

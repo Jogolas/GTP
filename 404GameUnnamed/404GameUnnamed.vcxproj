@@ -139,7 +139,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="FrictionForce.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GObject.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GravityForce.cpp" />
     <ClCompile Include="IdleState.cpp" />
@@ -181,13 +180,10 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="FrictionForce.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GObject.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GravityForce.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Mass.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="NPC.h" />

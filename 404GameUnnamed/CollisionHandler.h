@@ -1,5 +1,6 @@
 #pragma once
 #include "CollisionData.h"
+#include "Entity.h"
 
 class Colliable : public Collider
 {
@@ -28,7 +29,7 @@ struct CollisionHandler
 {
 	CollisionData col;
 	void planeCollision(Collider* source, Collider* target);
-	void playerBoxCollision(Collider* source, Collider* target);
+	void playerBoxCollision(Entity source, Collider* target);
 	void AISpellBoxCollision(Collider* source, Collider* target);
 	void npcBoxCollision(Collider* source, Collider* target);
 };
