@@ -99,7 +99,7 @@ void main()
 	}
 
 
-	vec4 result = colorA * metallic;
+	vec4 result = (colorA * metallic) + vec4(emission, 1.0);
 
 	FragColor = result;
 }

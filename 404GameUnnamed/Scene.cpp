@@ -9,21 +9,23 @@ Scene::Scene(bool active)
 	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
 	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
 
+	glm::vec3 crateScale(6, 30, 6);
+
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
 	wall[0] = new Environment(glm::vec3(75, 49, 0), glm::vec3(2, 50, 75), 0, glm::vec3(0, 1, 0));
 	wall[1] = new Environment(glm::vec3(0, 49, 75), glm::vec3(75, 50, 2), 0, glm::vec3(0, 1, 0));
 	wall[2] = new Environment(glm::vec3(-75, 49, 0), glm::vec3(2, 50, 75), 0, glm::vec3(0, 1, 0));
 	wall[3] = new Environment(glm::vec3(0, 49, -75), glm::vec3(75, 50, 2), 0, glm::vec3(0, 1, 0));
 
-	crates[0] = new Environment(glm::vec3(45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[1] = new Environment(glm::vec3(45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[2] = new Environment(glm::vec3(-45, 2, -45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[3] = new Environment(glm::vec3(-45, 2, 45), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[0] = new Environment(glm::vec3(45, 29, 45), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[1] = new Environment(glm::vec3(45, 29, -45), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[2] = new Environment(glm::vec3(-45, 29, -45), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[3] = new Environment(glm::vec3(-45, 29, 45), crateScale, 0, glm::vec3(0, 1, 0));
 
-	crates[4] = new Environment(glm::vec3(0, 2, -36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[5] = new Environment(glm::vec3(0, 2, 36), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[6] = new Environment(glm::vec3(-36, 2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
-	crates[7] = new Environment(glm::vec3(36, 2, 0), glm::vec3(12, 3, 12), 0, glm::vec3(0, 1, 0));
+	crates[4] = new Environment(glm::vec3(0, 29, -57), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[5] = new Environment(glm::vec3(0, 29, 57), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[6] = new Environment(glm::vec3(-57, 29, 0), crateScale, 0, glm::vec3(0, 1, 0));
+	crates[7] = new Environment(glm::vec3(57, 29, 0), crateScale, 0, glm::vec3(0, 1, 0));
 
 	lightingShader = Shader("phongShader.vert", "phongShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
@@ -36,9 +38,14 @@ Scene::Scene(bool active)
 	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("boxImageEmission.png");
 
+	groundDiffuse = Renderer::pngLoader("groundDiffuse.png");
+	groundSpecular = Renderer::pngLoader("boxImageSpecularMap.png");
+	groundEmission = Renderer::pngLoader("groundEmission.png");
+
 	PlayerHUD = Renderer::pngLoader("HUDforProjectcopy.png");
 	playerDiffuse = Renderer::pngLoader("PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("PlayerSpecular.png");
+	playerEmission = Renderer::pngLoader("PlayerEmission.png");
 
 	bossDiffuse = Renderer::pngLoader("bossDiffuse.png");
 	bossSpecular = Renderer::pngLoader("bossSpecular.png");
@@ -108,8 +115,8 @@ void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm:
 	shader.setVec3("light.specular", specular);
 
 	shader.setFloat("light.constant", 1.0);
-	shader.setFloat("light.linear", 0.007);
-	shader.setFloat("light.quadratic", 0.0002);
+	shader.setFloat("light.linear", 0.014);
+	shader.setFloat("light.quadratic", 0.0007);
 }
 
 void Scene::useTexture(GLuint diffuse, GLuint specular, GLuint emission)
@@ -145,7 +152,7 @@ void Scene::drawScene()
 
 	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
 
-	useTexture(playerDiffuse, playerSpecular, NULL);
+	useTexture(playerDiffuse, playerSpecular, playerEmission);
 
 	//player
 	glm::mat4 model = player->draw();
@@ -163,6 +170,9 @@ void Scene::drawScene()
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
+	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
+
+
 	useTexture(bossDiffuse, bossSpecular, NULL);
 
 	//boss
@@ -172,14 +182,20 @@ void Scene::drawScene()
 		bossObject.DrawMesh(lightingShader);
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
 
-	useTexture(diffuseMap, specularMap, NULL);
+
+	useTexture(groundDiffuse, NULL, groundEmission);
 
 	//ground
 	model = ground->draw();
 	lightingShader.setMat4("model", model);
 	cubeObject.DrawMesh(lightingShader);
 
+	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+	useTexture(diffuseMap, specularMap, NULL);
 
 	//walls
 	for (int i = 0; i < 4; i++) {
@@ -196,7 +212,7 @@ void Scene::drawScene()
 		cubeObject.DrawMesh(lightingShader);
 	}
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
 
 	//light position
 	lampShader.use();
