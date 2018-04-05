@@ -26,11 +26,13 @@ public:
 	void collisions();
 	void setupMaterial(Shader shader, float shininess);
 	void setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	void useTexture(GLuint diffuse, GLuint specular, GLuint emission);
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint diffuseMap, specularMap, emissionMap;
 	GLuint PlayerHUD, playerDiffuse, playerSpecular;
+	GLuint bossDiffuse, bossSpecular;
 
 	glm::vec4 lightPos = glm::vec4(-0.2f, 3.0f, -0.3f, 1.0f);
 

@@ -35,9 +35,13 @@ Scene::Scene(bool active)
 	diffuseMap = Renderer::pngLoader("boxImage.png");
 	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("boxImageEmission.png");
+
 	PlayerHUD = Renderer::pngLoader("HUDforProjectcopy.png");
 	playerDiffuse = Renderer::pngLoader("PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("PlayerSpecular.png");
+
+	bossDiffuse = Renderer::pngLoader("bossDiffuse.png");
+	bossSpecular = Renderer::pngLoader("bossSpecular.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -108,6 +112,22 @@ void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm:
 	shader.setFloat("light.quadratic", 0.0002);
 }
 
+void Scene::useTexture(GLuint diffuse, GLuint specular, GLuint emission)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, diffuse);
+
+	if (specular != NULL) {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specular);
+	}
+
+	if (emission != NULL) {
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emission);
+	}
+}
+
 void Scene::drawScene()
 {
 	// view and projection transformations
@@ -125,24 +145,12 @@ void Scene::drawScene()
 
 	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, playerDiffuse);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, playerSpecular);
+	useTexture(playerDiffuse, playerSpecular, NULL);
 
 	//player
 	glm::mat4 model = player->draw();
 	celShader.setMat4("model", model);
 	bossObject.DrawMesh(celShader);
-
-	// binding diffuse material
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-
-	// binding specular material
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
 
 	// be sure to activate shader when setting uniforms and drawing objects
 	lightingShader.use();
@@ -155,6 +163,8 @@ void Scene::drawScene()
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
+	useTexture(bossDiffuse, bossSpecular, NULL);
+
 	//boss
 	if (boss != nullptr) {
 		model = dynamic_cast<NPC*>(boss)->draw();
@@ -162,6 +172,8 @@ void Scene::drawScene()
 		bossObject.DrawMesh(lightingShader);
 	}
 
+
+	useTexture(diffuseMap, specularMap, NULL);
 
 	//ground
 	model = ground->draw();
