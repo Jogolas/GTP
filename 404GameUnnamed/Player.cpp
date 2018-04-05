@@ -20,16 +20,17 @@ Player::Player(glm::vec3 pos)
 void Player::update()
 {
 
-	float camRot = cam.angView.y;
+	float camRotX = cam.angView.y;
+	float camRotY = cam.angView.p;
 
 	inputHandler();
 
-	auto camoffset = moveToSide(position, rotation, -5.0);
-
 	at = glm::vec3(position.x, position.y + 1, position.z);
 
-	cam.Position = moveToSide(at, camRot, -5.0);
-	cam.Position.y = position.y + 2;
+	//auto camX.y = glm::vec3(camX.x, -5.0f * std::sin(glm::radians(camRotY)), camX.z);
+
+	cam.Position = moveToSide(at, camRotX, -5.0);
+	cam.Position.y = position.y + (-5.0f * std::sin(glm::radians(camRotY))) + 1;
 
 	colObj->setPosition(position);
 	colObj->setRotation(rotation);
