@@ -50,23 +50,31 @@ struct KeyboardHandler
 
 		// player movements
 		if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_Q]) {
-			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity * 0.66f);
-			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity * 0.66f);
+			player->g_object.velocity = 0.3f * 0.5f;
+			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity);
+			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity);
 		}
 		else if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_E]) {
-			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity * 0.66f);
-			player->g_object.position = player->tMat.moveForward(player->g_object, -player->g_object.velocity * 0.66f);
-		}
-		else if (keys[SDL_SCANCODE_W])
+			player->g_object.velocity = 0.3f * 0.5f;
 			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity);
-		else if (keys[SDL_SCANCODE_Q])
-			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity);
-		else if (keys[SDL_SCANCODE_E])
 			player->g_object.position = player->tMat.moveForward(player->g_object, -player->g_object.velocity);
-		else if (keys[SDL_SCANCODE_S]) 
+		}
+		else if (keys[SDL_SCANCODE_W]) {
+			player->g_object.velocity = 0.3f;
+			player->g_object.position = player->tMat.moveToSide(player->g_object, player->g_object.velocity);
+		}
+		else if (keys[SDL_SCANCODE_Q]) {
+			player->g_object.velocity = 0.15f;
+			player->g_object.position = player->tMat.moveForward(player->g_object, player->g_object.velocity);
+		}
+		else if (keys[SDL_SCANCODE_E]) {
+			player->g_object.velocity = 0.15f;
+			player->g_object.position = player->tMat.moveForward(player->g_object, -player->g_object.velocity);
+		}
+		else if (keys[SDL_SCANCODE_S]) {
+			player->g_object.velocity = 0.15f;
 			player->g_object.position = player->tMat.moveToSide(player->g_object, -player->g_object.velocity);
-
-
+		}
 
 
 		// rotates the player
