@@ -25,7 +25,8 @@ public:
 
 	void collisions();
 	void setupMaterial(Shader shader, float shininess);
-	void setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	void setupPointLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	void setupDirLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 	void useTexture(GLuint diffuse, GLuint specular, GLuint emission);
 	void unbindTextures();
 
@@ -36,7 +37,15 @@ private:
 	GLuint PlayerHUD, playerDiffuse, playerSpecular, playerEmission;
 	GLuint bossDiffuse, bossSpecular, bossEmission;
 
-	glm::vec4 lightPos = glm::vec4(-0.2f, 3.0f, -0.3f, 1.0f);
+	glm::vec3 pointLightPositions[4] = 
+	{
+		glm::vec3(25.0f, 5.0f, 25.0f),
+		glm::vec3(25.0f, 5.0f, -25.0f),
+		glm::vec3(-25.0f, 5.0f, 25.0f),
+		glm::vec3(-25.0f, 5.0f, -25.0f)
+	};
+
+	glm::vec3 dirLightPosition = glm::vec3(-20.0f, -10.0f, -20.0f);
 
 	glm::vec3 orange = glm::vec3(1.0f, 0.5f, 0.31f);
 	glm::vec3 green = glm::vec3(0.0f, 1.0f, 0.0f);

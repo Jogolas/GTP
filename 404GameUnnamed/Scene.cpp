@@ -109,15 +109,55 @@ void Scene::setupMaterial(Shader shader, float shininess)
 	shader.setFloat("material.shininess", shininess);
 }
 
-void Scene::setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+void Scene::setupPointLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
 {
-	shader.setVec3("light.ambient", ambient);
-	shader.setVec3("light.diffuse", diffuse);
-	shader.setVec3("light.specular", specular);
+	// postions
+	shader.setVec3("pLights[0].position", pointLightPositions[0]);
+	shader.setVec3("pLights[1].position", pointLightPositions[1]);
+	shader.setVec3("pLights[2].position", pointLightPositions[2]);
+	shader.setVec3("pLights[3].position", pointLightPositions[3]);
 
-	shader.setFloat("light.constant", 1.0);
-	shader.setFloat("light.linear", 0.014);
-	shader.setFloat("light.quadratic", 0.0007);
+	// light values
+	shader.setVec3("pLights[0].ambient", ambient);
+	shader.setVec3("pLights[0].diffuse", diffuse);
+	shader.setVec3("pLights[0].specular", specular);
+
+	shader.setVec3("pLights[1].ambient", ambient);
+	shader.setVec3("pLights[1].diffuse", diffuse);
+	shader.setVec3("pLights[1].specular", specular);
+
+	shader.setVec3("pLights[2].ambient", ambient);
+	shader.setVec3("pLights[2].diffuse", diffuse);
+	shader.setVec3("pLights[2].specular", specular);
+
+	shader.setVec3("pLights[3].ambient", ambient);
+	shader.setVec3("pLights[3].diffuse", diffuse);
+	shader.setVec3("pLights[3].specular", specular);
+
+	// attenuation values
+	shader.setFloat("pLights[0].constant", 1.0);
+	shader.setFloat("pLights[0].linear", 0.07);
+	shader.setFloat("pLights[0].quadratic", 0.017);
+
+	shader.setFloat("pLights[1].constant", 1.0);
+	shader.setFloat("pLights[1].linear", 0.07);
+	shader.setFloat("pLights[1].quadratic", 0.017);
+
+	shader.setFloat("pLights[2].constant", 1.0);
+	shader.setFloat("pLights[2].linear", 0.07);
+	shader.setFloat("pLights[2].quadratic", 0.017);
+
+	shader.setFloat("pLights[3].constant", 1.0);
+	shader.setFloat("pLights[3].linear", 0.07);
+	shader.setFloat("pLights[3].quadratic", 0.017);
+}
+
+void Scene::setupDirLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+{
+	shader.setVec3("dLight.direction", dirLightPosition);
+	shader.setVec3("dLight.ambient", ambient);
+	shader.setVec3("dLight.diffuse", diffuse);
+	shader.setVec3("dLight.specular", specular);
 }
 
 void Scene::useTexture(GLuint diffuse, GLuint specular, GLuint emission)
@@ -157,8 +197,8 @@ void Scene::drawScene()
 	celShader.use();
 
 	setupMaterial(celShader, 32.0f);
-	setupLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	celShader.setVec4("light.position", lightPos);
+	setupDirLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+	setupPointLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
 	celShader.setMat4("projection", projection);
 	celShader.setMat4("view", view);
 	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
@@ -186,8 +226,8 @@ void Scene::drawScene()
 	lightingShader.use();
 	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
 
-	setupLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	lightingShader.setVec4("light.position", lightPos);
+	setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f));
+	setupPointLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f));
 
 	lightingShader.setVec3("viewPos", player->cam.Position);
 	lightingShader.setMat4("projection", projection);
@@ -227,12 +267,15 @@ void Scene::drawScene()
 	lampShader.setMat4("projection", projection);
 	lampShader.setMat4("view", view);
 
-	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(lightPos));
-	model = glm::scale(model, glm::vec3(0.2f));
+	for (int i = 0; i < 4; i++) {
+		model = glm::mat4(1.0);
+		model = glm::translate(model, pointLightPositions[i]);
+		model = glm::scale(model, glm::vec3(0.2f));
 
-	lampShader.setMat4("model", model);
-	cubeObject.DrawMesh(lampShader);
+		lampShader.setMat4("model", model);
+		cubeObject.DrawMesh(lampShader);
+	}
+
 
 	//boss spell
 	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
@@ -298,13 +341,4 @@ void Scene::updateScene()
 	player->update();
 	mouse.MouseMotion(player);
 	collisions();
-
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
-
-	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
-	if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
-	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
-	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
-	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
-	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 }
