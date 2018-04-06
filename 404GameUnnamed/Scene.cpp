@@ -272,8 +272,8 @@ void Scene::collisions()
 
 		cd.playerBoxCollision(player->g_object, crates[i]->getColObject());
 		player->g_object.position = player->g_object.colObj->getPosition();
-		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->getColObject(), crates[i]->getColObject());
-		boss->setPosition(dynamic_cast<NPC*>(boss)->getColObject()->getPosition());
+		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object.colObj, crates[i]->getColObject());
+		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
 		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
 			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->getColObject());

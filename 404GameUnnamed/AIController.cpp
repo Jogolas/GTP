@@ -12,6 +12,8 @@ AIController::AIController(AbstractAI* npc)
 	current = idle;
 
 	meleeInterval = 150.0f;
+
+	
 }
 
 void AIController::moveNPC()
@@ -19,14 +21,13 @@ void AIController::moveNPC()
 	auto distance = target->g_object.position - npc->getPosition();
 
 	if (moving && glm::length(distance) > 5) {
-		glm::vec3 velocity = moveNPCForward(npc->getPosition(), npc->getRotation(), 0.1f);
-		npc->setPosition(velocity);
+		npc->setPosition(dynamic_cast<NPC*>(npc)->tMat.moveForwardDegrees(dynamic_cast<NPC*>(npc)->g_object, dynamic_cast<NPC*>(npc)->g_object.velocity));
 	}
-	else {
+	else { // if boss is in melee range, it will push the player.
 		if (meleeInterval >= 150.0f) {
 			target->removeHealth(50.0f);
 			target->g_object.position = glm::vec3(target->g_object.position.x, target->g_object.position.y + 2.5f, target->g_object.position.z);
-			target->g_object.position = moveNPCForward(target->g_object.position, npc->getRotation(), 5.0f);
+			target->g_object.position = target->tMat.moveForwardAngle(target->g_object, npc->getRotation(), 5.0f);
 
 			meleeInterval = 0.0f;
 		}
@@ -57,9 +58,4 @@ void AIController::handleState()
 {
 	if (current == idle) current->handle(npc);
 	if (current == attack) current->handle(npc);
-}
-
-glm::vec3 AIController::moveNPCForward(glm::vec3 position, float angle, float d)
-{
-	return glm::vec3(position.x + (d * std::sin(angle)), position.y, position.z - (d * std::cos(angle)));
 }

@@ -24,13 +24,11 @@ public: //methods
 
 	GLfloat getHealth() { return health; }
 
-	glm::vec3 getPosition() { return position; }
-	glm::vec3 setPosition(glm::vec3 pos) { return position = pos; }
+	glm::vec3 getPosition() { return g_object.position; }
+	glm::vec3 setPosition(glm::vec3 pos) { return g_object.position = pos; }
 
-	float getRotation() { return rotation; }
-	float setRotation(float rot) { return rotation = rot; }
-
-	Collider* getColObject() { return colObj; }
+	float getRotation() { return g_object.angle; }
+	float setRotation(float rot) { return g_object.angle = rot; }
 
 	AbstractAISpell* getSpell() { return spell; }
 
@@ -42,18 +40,13 @@ public:
 	AIController controller;
 	AbstractAISpell* spell;
 
+	Entity g_object;
+	Transform tMat;
+
 private:
-	float rotation = 0.0f;
 	float health;
-
-	Collider* colObj;
-	Mesh mesh;
-
-
 
 	DrawableObject* d_object;
 
-	glm::vec3 position;
 	glm::vec3 scale;
-	glm::vec3 veloctiy;
 };

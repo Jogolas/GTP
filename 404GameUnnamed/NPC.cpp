@@ -6,28 +6,27 @@ NPC::NPC()
 	health = 100.0;
 
 	d_object = new D_Object();
-	colObj = new Colliable();
 }
 
 NPC::NPC(glm::vec3 position, glm::vec3 scale, float health)
 {
 	d_object = new D_Object();
-	colObj = new Colliable(position, scale);
 
 	controller = AIController(this);
 
 	this->health = health;
-	this->position = position;
 	this->scale = scale;
+
+	g_object.setup(new Colliable(position, scale), position, 0.1f, 0.0f);
 }
 
 glm::mat4 NPC::draw()
 {
 	glm::mat4 model(1.0);
 
-	model = glm::translate(model, position);
+	model = glm::translate(model, g_object.position);
 	model = glm::scale(model, scale);
-	model = glm::rotate(model, rotation, glm::vec3(0, -1, 0));
+	model = glm::rotate(model, g_object.angle, glm::vec3(0, -1, 0));
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
 
 	return model;
@@ -41,6 +40,6 @@ void NPC::update(Player* p)
 
 	controller.handleState();
 
-	colObj->setPosition(position);
-	colObj->setRotation(rotation);
+	g_object.colObj->setPosition(g_object.position);
+	g_object.colObj->setRotation(g_object.angle);
 }
