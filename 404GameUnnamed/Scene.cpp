@@ -33,7 +33,6 @@ Scene::Scene(bool active)
 
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
-	LampObject = Model("models/bossAbility.obj");
 
 	diffuseMap = Renderer::pngLoader("Textures/Environment/boxImage.png");
 	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
