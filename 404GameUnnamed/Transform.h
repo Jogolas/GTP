@@ -22,8 +22,8 @@ struct Transform
 	glm::vec3 moveForwardAngle(Entity object, float angle, float d)
 	{
 		return glm::vec3(object.position.x + (d * std::sin(angle)),
-			object.position.y,
-			object.position.z - (d * std::cos(angle)));
+						object.position.y,
+						object.position.z - (d * std::cos(angle)));
 	}
 
 	glm::vec3 moveForwardDegrees(Entity object, float d)

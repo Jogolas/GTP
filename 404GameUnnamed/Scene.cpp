@@ -33,22 +33,24 @@ Scene::Scene(bool active)
 
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
+	LampObject = Model("models/bossAbility.obj");
 
-	diffuseMap = Renderer::pngLoader("boxImage.png");
-	specularMap = Renderer::pngLoader("boxImageSpecularMap.png");
-	emissionMap = Renderer::pngLoader("boxImageEmission.png");
+	diffuseMap = Renderer::pngLoader("Textures/Environment/boxImage.png");
+	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
+	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
 
-	groundDiffuse = Renderer::pngLoader("groundDiffuse.png");
-	groundSpecular = Renderer::pngLoader("boxImageSpecularMap.png");
-	groundEmission = Renderer::pngLoader("groundEmission.png");
+	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
+	groundSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png"); // need some specular for the ground
+	groundEmission = Renderer::pngLoader("Textures/Environment/groundEmission.png");
 
-	PlayerHUD = Renderer::pngLoader("HUDforProjectcopy.png");
-	playerDiffuse = Renderer::pngLoader("PlayerDiffuse.png");
-	playerSpecular = Renderer::pngLoader("PlayerSpecular.png");
-	playerEmission = Renderer::pngLoader("PlayerEmission.png");
+	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
+	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
+	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
+	playerEmission = Renderer::pngLoader("Textures/Player/PlayerEmission.png");
 
-	bossDiffuse = Renderer::pngLoader("bossDiffuse.png");
-	bossSpecular = Renderer::pngLoader("bossSpecular.png");
+	bossDiffuse = Renderer::pngLoader("Textures/Boss/bossDiffuse.png");
+	bossSpecular = Renderer::pngLoader("Textures/Boss/bossSpecular.png");
+	bossEmission = Renderer::pngLoader("Textures/Boss/bossEmission.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -135,6 +137,18 @@ void Scene::useTexture(GLuint diffuse, GLuint specular, GLuint emission)
 	}
 }
 
+void Scene::unbindTextures()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Scene::drawScene()
 {
 	// view and projection transformations
@@ -146,18 +160,28 @@ void Scene::drawScene()
 	setupMaterial(celShader, 32.0f);
 	setupLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
 	celShader.setVec4("light.position", lightPos);
-
 	celShader.setMat4("projection", projection);
 	celShader.setMat4("view", view);
-
 	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
 
-	useTexture(playerDiffuse, playerSpecular, playerEmission);
 
 	//player
+	useTexture(playerDiffuse, playerSpecular, playerEmission);
 	glm::mat4 model = player->draw();
 	celShader.setMat4("model", model);
 	bossObject.DrawMesh(celShader);
+	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+	//boss
+	useTexture(bossDiffuse, bossSpecular, bossEmission);
+	if (boss != nullptr) {
+		model = dynamic_cast<NPC*>(boss)->draw();
+		celShader.setMat4("model", model);
+		bossObject.DrawMesh(celShader);
+	}
+	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
 
 	// be sure to activate shader when setting uniforms and drawing objects
 	lightingShader.use();
@@ -170,34 +194,18 @@ void Scene::drawScene()
 	lightingShader.setMat4("projection", projection);
 	lightingShader.setMat4("view", view);
 
-	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	useTexture(bossDiffuse, bossSpecular, NULL);
-
-	//boss
-	if (boss != nullptr) {
-		model = dynamic_cast<NPC*>(boss)->draw();
-		lightingShader.setMat4("model", model);
-		bossObject.DrawMesh(lightingShader);
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	useTexture(groundDiffuse, NULL, groundEmission);
 
 	//ground
+	useTexture(groundDiffuse, NULL, groundEmission);
 	model = ground->draw();
 	lightingShader.setMat4("model", model);
 	cubeObject.DrawMesh(lightingShader);
 
-	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
+	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 
-
-	useTexture(diffuseMap, specularMap, NULL);
 
 	//walls
+	useTexture(diffuseMap, specularMap, NULL);
 	for (int i = 0; i < 4; i++) {
 		model = wall[i]->draw();
 		lightingShader.setMat4("model", model);
@@ -212,7 +220,8 @@ void Scene::drawScene()
 		cubeObject.DrawMesh(lightingShader);
 	}
 
-	glBindTexture(GL_TEXTURE_2D, 0); //remember to unbind textures after you apply them, and before using a new texture.
+	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
 
 	//light position
 	lampShader.use();
@@ -242,8 +251,7 @@ void Scene::drawScene()
 	glDepthMask(GL_FALSE);
 	glDisable(GL_DEPTH_TEST);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, PlayerHUD);
+	useTexture(PlayerHUD, NULL, NULL);
 
 	projection = glm::translate(projection, glm::vec3(400.0f, 300.0f, 1.0f));
 	projection = glm::scale(projection, glm::vec3(100.0f, 500.0f, 0.0f));
@@ -254,7 +262,7 @@ void Scene::drawScene()
 	lampShader.setMat4("view", projection);
 	cubeObject.DrawMesh(lampShader);
 
-	glBindTexture(GL_TEXTURE_2D, 0); // remember to unbind textures
+	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 	//remember to turn on depth test.
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);

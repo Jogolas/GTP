@@ -27,13 +27,14 @@ public:
 	void setupMaterial(Shader shader, float shininess);
 	void setupLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 	void useTexture(GLuint diffuse, GLuint specular, GLuint emission);
+	void unbindTextures();
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint diffuseMap, specularMap, emissionMap;
 	GLuint groundDiffuse, groundSpecular, groundEmission;
 	GLuint PlayerHUD, playerDiffuse, playerSpecular, playerEmission;
-	GLuint bossDiffuse, bossSpecular;
+	GLuint bossDiffuse, bossSpecular, bossEmission;
 
 	glm::vec4 lightPos = glm::vec4(-0.2f, 3.0f, -0.3f, 1.0f);
 
@@ -44,7 +45,7 @@ private:
 	glm::vec3 pink = glm::vec3(1.0f, 0.5f, 1.0f);
 	glm::vec3 cyan = glm::vec3(0.5f, 1.0f, 1.0f);
 
-	Model cubeObject, bossObject;
+	Model cubeObject, bossObject, LampObject;
 	Shader lightingShader, lampShader, celShader;
 
 	Player* player;
