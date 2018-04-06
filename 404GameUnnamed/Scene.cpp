@@ -109,6 +109,7 @@ void Scene::setupMaterial(Shader shader, float shininess)
 	shader.setFloat("material.shininess", shininess);
 }
 
+// should really read from a file rather than hard code this.
 void Scene::setupPointLight(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
 {
 	// postions
@@ -226,8 +227,8 @@ void Scene::drawScene()
 	lightingShader.use();
 	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
 
-	setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f));
-	setupPointLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f));
+	setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.5f), glm::vec3(1.0f));
+	setupPointLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
 
 	lightingShader.setVec3("viewPos", player->cam.Position);
 	lightingShader.setMat4("projection", projection);
@@ -313,20 +314,20 @@ void Scene::drawScene()
 
 void Scene::collisions()
 {
-	cd.planeCollision(player->g_object.colObj, ground->getColObject());
+	cd.planeCollision(player->g_object.colObj, ground->g_object.colObj);
 
 	//player wall/box collisions
 	for (int i = 0; i < 8; i++) {
 
-		if (i < 4) cd.playerBoxCollision(player->g_object, wall[i]->getColObject());
+		if (i < 4) cd.playerBoxCollision(player->g_object, wall[i]->g_object.colObj);
 
-		cd.playerBoxCollision(player->g_object, crates[i]->getColObject());
+		cd.playerBoxCollision(player->g_object, crates[i]->g_object.colObj);
 		player->g_object.position = player->g_object.colObj->getPosition();
-		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object.colObj, crates[i]->getColObject());
+		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object, crates[i]->g_object.colObj);
 		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
 		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->getColObject());
+			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->g_object.colObj);
 			dynamic_cast<NPC*>(boss)->getSpell()->setPosition(dynamic_cast<NPC*>(boss)->getSpell()->getColObj()->getPosition());
 		}
 	}

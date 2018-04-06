@@ -3,9 +3,8 @@
 
 #include "glm.hpp"
 
-class EAngle
+struct EAngle
 {
-public:
 	EAngle()
 	{
 		p = y = r = 0;
@@ -22,7 +21,6 @@ public:
 	glm::vec3 ToVector() const;
 	void Normalize();
 
-public:
 	float p;
 	float y;
 	float r;
