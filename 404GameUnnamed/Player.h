@@ -26,6 +26,8 @@ public:
 		return health;
 	}
 
+	float getHealth() { return health; }
+
 public:
 	Camera cam;
 	Entity g_object;

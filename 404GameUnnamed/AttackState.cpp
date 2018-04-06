@@ -15,13 +15,17 @@ AttackState::AttackState(AbstractAI* npc)
 void AttackState::handle(AbstractAI* npc)
 {
 	if (chasing) {
+		dynamic_cast<NPC*>(npc)->g_object.velocity += 0.0003f;
 		dynamic_cast<NPC*>(npc)->controller.moving = true;
 		if(dynamic_cast<NPC*>(npc)->getSpell() != nullptr)
 			dynamic_cast<AISpellDecorator*>(dynamic_cast<NPC*>(npc)->getSpell())->abilityFired = false;
 
+
+		std::cout << "boss speed " << dynamic_cast<NPC*>(npc)->g_object.velocity << std::endl;
 		timer--;
 	}
 	else {
+		dynamic_cast<NPC*>(npc)->g_object.velocity = 0.1f;
 		dynamic_cast<NPC*>(npc)->controller.moving = false;
 		if (dynamic_cast<NPC*>(npc)->getSpell() != nullptr)
 			dynamic_cast<AISpellDecorator*>(dynamic_cast<NPC*>(npc)->getSpell())->abilityFired = true;
@@ -46,7 +50,7 @@ void AttackState::handle(AbstractAI* npc)
 		}
 
 		// fires after the first spell
-		if (abs(timer) == 200.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[0]) {
+		if (abs(timer) == 300.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[0]) {
 			// update the spell rotation so it fires towards the player.
 			spells.fireSpell(npc, spells.spells[1]);
 			dynamic_cast<NPC*>(npc)->getSpell()->setRotation(npc->getRotation());
@@ -55,7 +59,7 @@ void AttackState::handle(AbstractAI* npc)
 		}
 
 		//fires after the second spell
-		if (abs(timer) == 400.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[1]) {
+		if (abs(timer) == 600.0f && dynamic_cast<NPC*>(npc)->getSpell() == spells.spells[1]) {
 			// update the spell rotation so it fires towards the player.
 			spells.fireSpell(npc, spells.spells[2]);
 			dynamic_cast<NPC*>(npc)->getSpell()->setRotation(npc->getRotation());
@@ -70,7 +74,7 @@ void AttackState::handle(AbstractAI* npc)
 	}
 
 
-	if (timer >= 600) {
+	if (timer >= 900) {
 		chasing = true;
 		spellFired = false;
 		dynamic_cast<NPC*>(npc)->setSpell(nullptr); // when chasing the boss shouldn't use spells.

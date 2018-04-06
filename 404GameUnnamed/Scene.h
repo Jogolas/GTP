@@ -20,7 +20,7 @@ class Scene
 public:
 	Scene() {}
 	Scene(bool active);
-	void updateScene();
+	bool updateScene();
 	void drawScene();
 
 	void collisions();
@@ -55,7 +55,7 @@ private:
 	glm::vec3 cyan = glm::vec3(0.5f, 1.0f, 1.0f);
 
 	Model cubeObject, bossObject, LampObject;
-	Shader lightingShader, lampShader, celShader;
+	Shader lightingShader, lampShader, celShader, outlineShader;
 
 	Player* player;
 

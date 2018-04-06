@@ -8,7 +8,7 @@ Player::Player(glm::vec3 pos)
 
 	cam = Camera(glm::vec3(0.0f, 1.0f, 5.0f)); // left, up, forward
 
-	health = 100.0f;
+	health = 1000.0f;
 
 	g_object.setup(new Colliable(pos, glm::vec3(1, 1, 1)), pos, 0.3f, 0);
 }
@@ -37,7 +37,6 @@ glm::mat4 Player::draw()
 	//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 	model = glm::rotate(model, glm::radians(-g_object.angle), glm::vec3(0, 1, 0));
 	model = glm::scale(model, glm::vec3(0.5f));
-
 
 	//d_object->resetMatrix();
 	//d_object->Translation();

@@ -88,28 +88,7 @@ vec4 calcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
-	vec4 tempColor = vec4(vec3(diffuse + specular), 1.0);
-	vec4 litColor = tempColor;
-	vec4 amb = min(vec4(ambient.rgb, 1.0), vec4(1.0f));
-
-	litColor = min(litColor + amb, vec4(objectColor, 1.0));
-	vec4 shade1 = smoothstep(vec4(0.2f), vec4(0.21f), litColor);
-	vec4 shade2 = smoothstep(vec4(0.4f), vec4(0.41f), litColor);
-	vec4 shade3 = smoothstep(vec4(0.8f), vec4(0.81f), litColor);
-
-	// cel metallic shade
-	float metallic = dot(normal, ex_V);
-	metallic = smoothstep(0.4, 0.6, metallic);
-	metallic = metallic / 2 + 1.0;
-
-	vec4 colorA = max(max(0.3 * shade1, 0.5 * shade2), shade3);
-
-	if(abs(dot(normal, ex_V)) < 0.25)
-	{
-		colorA = vec4(vec3(0.0), 1.0) * metallic;
-	}
-
-	return vec4((ambient + diffuse + specular), 1.0) * colorA;
+	return vec4((ambient + diffuse + specular), 1.0);
 }
 
 vec4 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -131,11 +110,11 @@ vec4 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
-	ambient *= attenuation;
+	//ambient *= attenuation;
 	diffuse *= attenuation;
     specular *= attenuation;
 
-		vec4 tempColor = vec4(vec3(diffuse + specular), 1.0);
+	vec4 tempColor = vec4(vec3(diffuse + specular), 1.0);
 	vec4 litColor = tempColor;
 	vec4 amb = min(vec4(ambient.rgb, 1.0), vec4(1.0f));
 

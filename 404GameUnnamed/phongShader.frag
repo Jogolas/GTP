@@ -47,6 +47,14 @@ in vec2 TexCoords;
 vec3 calcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
+float near = 0.1;
+float far = 100.0;
+
+float LinearizeDepth(float depth)
+{
+	float z = depth * 2.0 - 1.0; // back to NDC
+	return (2.0 * near * far) / (z * (far - near) - (far + near));
+}
 
 void main()
 {
@@ -66,6 +74,11 @@ void main()
 
 	// setting up emission
 	vec3 emission = texture(material.emission, TexCoords).rgb;
+
+	// depth testing
+	//float depth = LinearizeDepth(gl_FragCoord.z);
+	//float grey = (near + depth) / (near - far);
+	//FragColor = vec4(vec3(grey), 1.0);
 
 	FragColor = vec4(output + emission, 1.0);
 }

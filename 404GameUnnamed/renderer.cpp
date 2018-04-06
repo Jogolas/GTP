@@ -108,6 +108,7 @@ SDL_Window * Renderer::createWindow(SDL_GLContext &context) //pass in a window s
 		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8); // 8 bit alpha buffering
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 
 														   // Create 800x600 window
 		window = SDL_CreateWindow("dis is da gam", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);

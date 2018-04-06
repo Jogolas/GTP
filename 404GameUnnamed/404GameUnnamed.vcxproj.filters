@@ -310,5 +310,11 @@
     <None Include="celShader.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="StencilTest.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="StencilTest.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

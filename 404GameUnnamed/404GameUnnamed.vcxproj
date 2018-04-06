@@ -208,6 +208,8 @@
     <None Include="simpleShader.vert" />
     <None Include="Spotlight.frag" />
     <None Include="Spotlight.vert" />
+    <None Include="StencilTest.frag" />
+    <None Include="StencilTest.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

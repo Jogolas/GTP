@@ -30,6 +30,7 @@ Scene::Scene(bool active)
 	lightingShader = Shader("phongShader.vert", "phongShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
 	celShader = Shader("celShader.vert", "celShader.frag");
+	outlineShader = Shader("StencilTest.vert", "StencilTest.frag");
 
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
@@ -39,7 +40,7 @@ Scene::Scene(bool active)
 	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
 
 	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
-	groundSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png"); // need some specular for the ground
+	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
 	groundEmission = Renderer::pngLoader("Textures/Environment/groundEmission.png");
 
 	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
@@ -191,124 +192,136 @@ void Scene::unbindTextures()
 
 void Scene::drawScene()
 {
+
 	// view and projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 800.0f / 600.0f, 1.0f, 500.0f);
 	glm::mat4 view = player->cam.GetViewMatrix();
+	glm::mat4 model;
 
-	celShader.use();
+	for (int pass = 0; pass < 2; pass++) {
 
-	setupMaterial(celShader, 32.0f);
-	setupDirLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	setupPointLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	celShader.setMat4("projection", projection);
-	celShader.setMat4("view", view);
-	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
+		if (pass == 0) { // first pass
 
-
-	//player
-	useTexture(playerDiffuse, playerSpecular, playerEmission);
-	glm::mat4 model = player->draw();
-	celShader.setMat4("model", model);
-	bossObject.DrawMesh(celShader);
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
 
 
-	//boss
-	useTexture(bossDiffuse, bossSpecular, bossEmission);
-	if (boss != nullptr) {
-		model = dynamic_cast<NPC*>(boss)->draw();
-		celShader.setMat4("model", model);
-		bossObject.DrawMesh(celShader);
+			celShader.use();
+			setupMaterial(celShader, 32.0f);
+			setupDirLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+			setupPointLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+			celShader.setMat4("projection", projection);
+			celShader.setMat4("view", view);
+			celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
+
+
+			//player
+			useTexture(playerDiffuse, playerSpecular, playerEmission);
+			model = player->draw();
+			celShader.setMat4("model", model);
+			bossObject.DrawMesh(celShader);
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+			glStencilMask(0x00);
+
+			//boss
+			useTexture(bossDiffuse, bossSpecular, bossEmission);
+			if (boss != nullptr) {
+				model = dynamic_cast<NPC*>(boss)->draw();
+				celShader.setMat4("model", model);
+				bossObject.DrawMesh(celShader);
+			}
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			// be sure to activate shader when setting uniforms and drawing objects
+			lightingShader.use();
+			setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
+
+			setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.5f), glm::vec3(1.0f));
+			setupPointLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+
+			lightingShader.setVec3("viewPos", player->cam.Position);
+			lightingShader.setMat4("projection", projection);
+			lightingShader.setMat4("view", view);
+
+
+			//ground
+			useTexture(groundDiffuse, groundSpecular, groundEmission);
+			model = ground->draw();
+			lightingShader.setMat4("model", model);
+			cubeObject.DrawMesh(lightingShader);
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			//walls
+			useTexture(diffuseMap, specularMap, NULL);
+			for (int i = 0; i < 4; i++) {
+				model = wall[i]->draw();
+				lightingShader.setMat4("model", model);
+				cubeObject.DrawMesh(lightingShader);
+			}
+
+
+			//crates
+			for (int i = 0; i < 8; i++) {
+				model = crates[i]->draw();
+				lightingShader.setMat4("model", model);
+				cubeObject.DrawMesh(lightingShader);
+			}
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			//light position
+			lampShader.use();
+			lampShader.setMat4("projection", projection);
+			lampShader.setMat4("view", view);
+
+			for (int i = 0; i < 4; i++) {
+				model = glm::mat4(1.0);
+				model = glm::translate(model, pointLightPositions[i]);
+				model = glm::scale(model, glm::vec3(0.2f));
+
+				lampShader.setMat4("model", model);
+				cubeObject.DrawMesh(lampShader);
+			}
+
+
+			//boss spell
+			if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
+				model = dynamic_cast<NPC*>(boss)->getSpell()->draw();
+				lampShader.setMat4("model", model);
+				cubeObject.DrawMesh(lampShader);
+			}
+
+		}
+
+		if (pass == 1) { // second pass
+
+
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+			glStencilMask(0x00);
+			glDepthMask(GL_FALSE);
+			glDisable(GL_DEPTH_TEST);
+
+			outlineShader.use();
+			outlineShader.setMat4("view", view);
+			outlineShader.setMat4("projection", projection);
+
+			useTexture(playerDiffuse, NULL, NULL);
+			model = glm::mat4(1.0);
+			model = glm::translate(model, player->g_object.position);
+			model = glm::rotate(model, glm::radians(-player->g_object.angle), glm::vec3(0, 1, 0));
+			model = glm::scale(model, glm::vec3(0.51f));
+			outlineShader.setMat4("model", model);
+			bossObject.DrawMesh(outlineShader);
+			glStencilMask(0xFF);
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(GL_TRUE);
+		}
 	}
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	// be sure to activate shader when setting uniforms and drawing objects
-	lightingShader.use();
-	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
-
-	setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.5f), glm::vec3(1.0f));
-	setupPointLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-
-	lightingShader.setVec3("viewPos", player->cam.Position);
-	lightingShader.setMat4("projection", projection);
-	lightingShader.setMat4("view", view);
-
-
-	//ground
-	useTexture(groundDiffuse, NULL, groundEmission);
-	model = ground->draw();
-	lightingShader.setMat4("model", model);
-	cubeObject.DrawMesh(lightingShader);
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	//walls
-	useTexture(diffuseMap, specularMap, NULL);
-	for (int i = 0; i < 4; i++) {
-		model = wall[i]->draw();
-		lightingShader.setMat4("model", model);
-		cubeObject.DrawMesh(lightingShader);
-	}
-
-
-	//crates
-	for (int i = 0; i < 8; i++) {
-		model = crates[i]->draw();
-		lightingShader.setMat4("model", model);
-		cubeObject.DrawMesh(lightingShader);
-	}
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	//light position
-	lampShader.use();
-	lampShader.setMat4("projection", projection);
-	lampShader.setMat4("view", view);
-
-	for (int i = 0; i < 4; i++) {
-		model = glm::mat4(1.0);
-		model = glm::translate(model, pointLightPositions[i]);
-		model = glm::scale(model, glm::vec3(0.2f));
-
-		lampShader.setMat4("model", model);
-		cubeObject.DrawMesh(lampShader);
-	}
-
-
-	//boss spell
-	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-		model = dynamic_cast<NPC*>(boss)->getSpell()->draw();
-		lampShader.setMat4("model", model);
-		cubeObject.DrawMesh(lampShader);
-	}
-
-
-
-	// HUD ELEMENTS
-	projection = glm::mat4(1.0); //reset projection matrix for HUD
-	projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 1.0f, 150.0f);
-
-	glDepthMask(GL_FALSE);
-	glDisable(GL_DEPTH_TEST);
-
-	useTexture(PlayerHUD, NULL, NULL);
-
-	projection = glm::translate(projection, glm::vec3(400.0f, 300.0f, 1.0f));
-	projection = glm::scale(projection, glm::vec3(100.0f, 500.0f, 0.0f));
-	projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	projection = glm::rotate(projection, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-	lampShader.setMat4("model", projection);
-	lampShader.setMat4("view", projection);
-	cubeObject.DrawMesh(lampShader);
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-	//remember to turn on depth test.
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
 }
 
 
@@ -335,11 +348,19 @@ void Scene::collisions()
 }
 
 
-void Scene::updateScene()
+bool Scene::updateScene()
 {
 	dynamic_cast<NPC*>(boss)->update(player);
 	keyboard.handlePlayerkeyboard(player);
 	player->update();
 	mouse.MouseMotion(player);
 	collisions();
+
+
+	// lose condition, will close the application if this happens
+	if (player->getHealth() <= 0.0f)
+		return false;
+
+
+	return true;
 }
