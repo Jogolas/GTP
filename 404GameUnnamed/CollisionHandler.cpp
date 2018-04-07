@@ -71,7 +71,7 @@ void CollisionHandler::playerBoxCollision(Entity source, Collider* target)
 	}
 }
 
-void CollisionHandler::AISpellBoxCollision(Collider* source, Collider* target)
+void CollisionHandler::SpellBoxCollision(Collider* source, Collider* target)
 {
 	if (col.CollisionAgainstBox(source, target)) {
 

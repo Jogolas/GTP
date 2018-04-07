@@ -30,6 +30,8 @@ public: //methods
 	float getRotation() { return g_object.angle; }
 	float setRotation(float rot) { return g_object.angle = rot; }
 
+	float removeHealth(float amount) { health -= amount; }
+
 	AbstractAISpell* getSpell() { return spell; }
 
 	AbstractAISpell* setSpell(AbstractAISpell* spell) { return this->spell = spell; }
@@ -44,7 +46,7 @@ public:
 	Transform tMat;
 
 private:
-	float health;
+	float health = 10000.0f;
 
 	DrawableObject* d_object;
 

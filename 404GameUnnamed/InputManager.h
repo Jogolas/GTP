@@ -1,5 +1,6 @@
 #pragma once
 #include "Camera.h"
+#include "SpellList.h"
 #include "SDL.h"
 
 struct MouseHandler
@@ -46,6 +47,7 @@ struct KeyboardHandler
 {
 	void handlePlayerkeyboard(Player* player)
 	{
+
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 		// player movements
@@ -77,10 +79,18 @@ struct KeyboardHandler
 		}
 
 
+		if (keys[SDL_SCANCODE_1] && !dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell)
+			dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell = true;
+		else if (keys[SDL_SCANCODE_2] && !dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell)
+			dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell = true;
+		else if (keys[SDL_SCANCODE_3] && !dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell)
+			dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell = true;
+
 		// rotates the player
 		if (keys[SDL_SCANCODE_A])
 			player->g_object.angle -= 1.0f;
 		if (keys[SDL_SCANCODE_D])
 			player->g_object.angle += 1.0f;
+
 	}
 };

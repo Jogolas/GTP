@@ -1,6 +1,6 @@
 #pragma once
-
 #include "AISpellDecorator.h"
+#include "SpellDecorator.h"
 #include "NPC.h"
 
 struct AISpellList

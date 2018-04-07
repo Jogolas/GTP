@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "D_Object.h"
+#include "SpellDecorator.h"
 #include <cmath>
 
 Player::Player(glm::vec3 pos)
@@ -13,6 +14,13 @@ Player::Player(glm::vec3 pos)
 	g_object.setup(new Colliable(pos, glm::vec3(1, 1, 1)), pos, 0.3f, 0);
 }
 
+void Player::setupSpell()
+{
+	spells[0] = new SpellDecorator(this, "normal spell", 100.0f, 0.8f, 1.0f, 50.0f, 400.0f);
+	spells[1] = new SpellDecorator(this, "fast spell", 50.0f, 1.2f, 0.5f, 50.0f, 200.0f);
+	spells[2] = new SpellDecorator(this, "strong spell", 300.0f, 0.8f, 1.5f, 50.0f, 800.0f);
+}
+
 void Player::update()
 {
 	float camRotY = cam.angView.p;
@@ -21,11 +29,15 @@ void Player::update()
 	at.angle = cam.angView.y;
 	at.position.y += 1.0f;
 
-	cam.Position = tMat.moveToSide(at, -5.0f);
+	cam.Position = tMat.moveToSide(at, fov);
 	cam.Position.y = g_object.position.y + (-5.0f * std::sin(glm::radians(camRotY))) + 1;
 
 	g_object.colObj->setPosition(g_object.position);
 	g_object.colObj->setRotation(g_object.angle);
+
+
+	for(int i = 0; i < 3; i++)
+			spells[i]->handleSpell();
 }
 
 

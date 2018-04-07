@@ -5,6 +5,7 @@
 #include "DrawableObject.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "AbstractSpell.h"
 
 
 class Player
@@ -28,15 +29,20 @@ public:
 
 	float getHealth() { return health; }
 
+	void setupSpell();
+
 public:
 	Camera cam;
 	Entity g_object;
 	Transform tMat;
+	AbstractSpell* spells[3];
+	bool spellFired = false;
 
 private:
 
 	DrawableObject* d_object;
 	float health = 100;
+	float fov = -5.0f;
 
 	const Uint8 *keys;
 	GLuint mouse;

@@ -9,6 +9,8 @@ Scene::Scene(bool active)
 	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
 	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
 
+	player->setupSpell();
+
 	glm::vec3 crateScale(6, 30, 6);
 
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
@@ -194,7 +196,7 @@ void Scene::drawScene()
 {
 
 	// view and projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 800.0f / 600.0f, 1.0f, 500.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 1280.0f / 720.0f, 1.0f, 500.0f);
 	glm::mat4 view = player->cam.GetViewMatrix();
 	glm::mat4 model;
 
@@ -232,6 +234,7 @@ void Scene::drawScene()
 				bossObject.DrawMesh(celShader);
 			}
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
 
 
 			// be sure to activate shader when setting uniforms and drawing objects
@@ -296,10 +299,15 @@ void Scene::drawScene()
 				cubeObject.DrawMesh(lampShader);
 			}
 
+			for (int i = 0; i < 3; i++) {
+				model = player->spells[i]->draw();
+				lampShader.setMat4("model", model);
+				cubeObject.DrawMesh(lampShader);
+			}
 		}
 
-		if (pass == 1) { // second pass
 
+		if (pass == 1) { // second pass
 
 			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 			glStencilMask(0x00);
@@ -317,6 +325,7 @@ void Scene::drawScene()
 			model = glm::scale(model, glm::vec3(0.52f));
 			outlineShader.setMat4("model", model);
 			bossObject.DrawMesh(outlineShader);
+
 			glStencilMask(0xFF);
 			glEnable(GL_DEPTH_TEST);
 			glDepthMask(GL_TRUE);
@@ -339,8 +348,13 @@ void Scene::collisions()
 		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object, crates[i]->g_object.colObj);
 		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
+		for (int i = 0; i < 3; i++) {
+			cd.SpellBoxCollision(dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
+			dynamic_cast<SpellDecorator*>(player->spells[i])->object.position = dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj->getPosition();
+		}
+
 		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->g_object.colObj);
+			cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->g_object.colObj);
 			dynamic_cast<NPC*>(boss)->getSpell()->setPosition(dynamic_cast<NPC*>(boss)->getSpell()->getColObj()->getPosition());
 		}
 	}

@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{a9f7e048-e26e-4156-a601-90fed440248a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PlayerSpell">
+      <UniqueIdentifier>{7df5555d-059b-4deb-9a01-2fed03b5ebaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PlayerSpell">
+      <UniqueIdentifier>{bdb1451b-2aca-4266-bc7b-8ec690d8d03a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SpellDecorator.cpp">
+      <Filter>Source Files\PlayerSpell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="SpellList.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractSpell.h">
+      <Filter>Header Files\PlayerSpell</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellDecorator.h">
+      <Filter>Header Files\PlayerSpell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

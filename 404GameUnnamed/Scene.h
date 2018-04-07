@@ -47,13 +47,6 @@ private:
 
 	glm::vec3 dirLightPosition = glm::vec3(-20.0f, -10.0f, -20.0f);
 
-	glm::vec3 orange = glm::vec3(1.0f, 0.5f, 0.31f);
-	glm::vec3 green = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 white = glm::vec3(1.0f);
-	glm::vec3 grey = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::vec3 pink = glm::vec3(1.0f, 0.5f, 1.0f);
-	glm::vec3 cyan = glm::vec3(0.5f, 1.0f, 1.0f);
-
 	Model cubeObject, bossObject, LampObject;
 	Shader lightingShader, lampShader, celShader, outlineShader;
 

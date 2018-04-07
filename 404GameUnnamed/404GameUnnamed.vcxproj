@@ -151,6 +151,7 @@
     <ClCompile Include="rt3dObjLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SpellDecorator.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="AbstractAI.h" />
     <ClInclude Include="AbstractAISpell.h" />
     <ClInclude Include="AbstractAIState.h" />
+    <ClInclude Include="AbstractSpell.h" />
     <ClInclude Include="AIController.h" />
     <ClInclude Include="AISpellDecorator.h" />
     <ClInclude Include="AStar_pathing.h" />
@@ -190,6 +192,7 @@
     <ClInclude Include="rt3dObjLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpellDecorator.h" />
     <ClInclude Include="SpellList.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Transform.h" />
