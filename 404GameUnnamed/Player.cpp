@@ -26,6 +26,7 @@ void Player::update()
 
 	g_object.colObj->setPosition(g_object.position);
 	g_object.colObj->setRotation(g_object.angle);
+
 }
 
 

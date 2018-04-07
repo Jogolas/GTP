@@ -32,6 +32,7 @@ public:
 	Camera cam;
 	Entity g_object;
 	Transform tMat;
+	bool grounded = true;
 
 private:
 

@@ -68,6 +68,7 @@ private:
 	MouseHandler mouse;
 	KeyboardHandler keyboard;
 	CollisionHandler cd;
+	CollisionData c_data;
 
 };
 

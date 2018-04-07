@@ -19,6 +19,27 @@ struct Transform
 						object.position.z - (d * std::cos(glm::radians(object.angle))));
 	}
 
+	glm::vec3 moveUp(Entity object, float d)
+	{
+		return glm::vec3(object.position.x,
+			object.position.y += object.velocity,
+			object.position.z);
+	}
+
+	glm::vec3 moveToSideUp(Entity object, float d)
+	{
+		return glm::vec3(object.position.x + (d * std::cos(glm::radians(object.angle))),
+			object.position.y += object.velocity,
+			object.position.z + (d * std::sin(glm::radians(object.angle))));
+	}
+
+	glm::vec3 moveForwardUp(Entity object, float d)
+	{
+		return glm::vec3(object.position.x + (d * std::sin(glm::radians(object.angle))),
+			object.position.y += object.velocity,
+			object.position.z - (d * std::cos(glm::radians(object.angle))));
+	}
+
 	glm::vec3 moveForwardAngle(Entity object, float angle, float d)
 	{
 		return glm::vec3(object.position.x + (d * std::sin(angle)),
