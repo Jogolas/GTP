@@ -29,8 +29,6 @@ public:
 
 	float getHealth() { return health; }
 
-	void setupSpell();
-
 public:
 	Camera cam;
 	Entity g_object;

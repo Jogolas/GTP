@@ -12,10 +12,7 @@ Player::Player(glm::vec3 pos)
 	health = 1000.0f;
 
 	g_object.setup(new Colliable(pos, glm::vec3(1, 1, 1)), pos, 0.3f, 0);
-}
 
-void Player::setupSpell()
-{
 	spells[0] = new SpellDecorator(this, "normal spell", 100.0f, 0.8f, 1.0f, 50.0f, 400.0f);
 	spells[1] = new SpellDecorator(this, "fast spell", 50.0f, 1.2f, 0.5f, 50.0f, 200.0f);
 	spells[2] = new SpellDecorator(this, "strong spell", 300.0f, 0.8f, 1.5f, 50.0f, 800.0f);

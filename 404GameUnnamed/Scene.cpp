@@ -9,8 +9,6 @@ Scene::Scene(bool active)
 	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
 	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 10000.0f);
 
-	player->setupSpell();
-
 	glm::vec3 crateScale(6, 30, 6);
 
 	ground = new Environment(glm::vec3(0, -2, 0), glm::vec3(75, 1, 75), 0, glm::vec3(0, 1, 0));
@@ -293,7 +291,7 @@ void Scene::drawScene()
 
 
 			//boss spell
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 				if (dynamic_cast<NPC*>(boss)->getSpell(i) != nullptr) {
 					model = dynamic_cast<NPC*>(boss)->getSpell(i)->draw();
 					lampShader.setMat4("model", model);
@@ -310,6 +308,7 @@ void Scene::drawScene()
 			//HUD
 			glDisable(GL_DEPTH_TEST);
 			useTexture(PlayerHUD, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 			model = glm::mat4(1.0);
 			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
@@ -318,6 +317,60 @@ void Scene::drawScene()
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
 			cubeObject.DrawMesh(lampShader);
+
+
+			useTexture(bossDiffuse, NULL, NULL);
+
+			model = glm::mat4(1.0);
+
+			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			model = glm::translate(model, glm::vec3(-0.18f, -0.79f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+
+			if (dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.06f, -0.79f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+
+			if (dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.06f, -0.79f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+
+
 			glEnable(GL_DEPTH_TEST);
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 		}
