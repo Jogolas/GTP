@@ -293,11 +293,12 @@ void Scene::drawScene()
 
 
 			//boss spell
-			if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-				model = dynamic_cast<NPC*>(boss)->getSpell()->draw();
-				lampShader.setMat4("model", model);
-				cubeObject.DrawMesh(lampShader);
-			}
+			for(int i = 0; i < 3; i++)
+				if (dynamic_cast<NPC*>(boss)->getSpell(i) != nullptr) {
+					model = dynamic_cast<NPC*>(boss)->getSpell(i)->draw();
+					lampShader.setMat4("model", model);
+					cubeObject.DrawMesh(lampShader);
+				}
 
 			for (int i = 0; i < 3; i++) {
 				model = player->spells[i]->draw();
@@ -353,10 +354,11 @@ void Scene::collisions()
 			dynamic_cast<SpellDecorator*>(player->spells[i])->object.position = dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj->getPosition();
 		}
 
-		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-			cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->g_object.colObj);
-			dynamic_cast<NPC*>(boss)->getSpell()->setPosition(dynamic_cast<NPC*>(boss)->getSpell()->getColObj()->getPosition());
-		}
+		for(int i = 0; i< 3; i++)
+			if (dynamic_cast<NPC*>(boss)->getSpell(i) != nullptr) {
+				cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell(i)->getColObj(), crates[i]->g_object.colObj);
+				dynamic_cast<NPC*>(boss)->getSpell(i)->setPosition(dynamic_cast<NPC*>(boss)->getSpell(i)->getColObj()->getPosition());
+			}
 	}
 
 }

@@ -12,11 +12,5 @@ struct AISpellList
 		spells[2] = new AISpellDecorator(new SpellType("normal Spell", 40.0f, 0.8f), glm::vec3(0.6f));
 	}
 
-	void fireSpell(AbstractAI* npc, AbstractAISpell* spell)
-	{
-		dynamic_cast<NPC*>(npc)->setSpell(spell);
-		spell = dynamic_cast<NPC*>(npc)->getSpell();
-	}
-
 	AbstractAISpell* spells[3];
 };

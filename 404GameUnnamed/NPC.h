@@ -20,6 +20,7 @@ public: //methods
 	}
 
 	void update(Player* p);
+
 	glm::mat4 draw();
 
 	GLfloat getHealth() { return health; }
@@ -36,21 +37,20 @@ public: //methods
 		return health -= amount;
 	}
 
-	AbstractAISpell* getSpell() { return spell; }
-	AbstractAISpell* setSpell(AbstractAISpell* spell) { return this->spell = spell; }
+	AbstractAISpell* getSpell(int i) { return spells[i]; }
+	void addSpell(AbstractAISpell* spell, int index);
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
 public:
 	AIController controller;
-	AbstractAISpell* spell;
 
 	Entity g_object;
 	Transform tMat;
 
 private:
 	float health = 10000.0f;
-
+	AbstractAISpell* spells[3];
 	DrawableObject* d_object;
 
 	glm::vec3 scale;
