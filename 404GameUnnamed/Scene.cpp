@@ -37,7 +37,7 @@ Scene::Scene(bool active)
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
 
-	diffuseMap = Renderer::pngLoader("Textures/Environment/boxImage.png");
+	diffuseMap = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
 	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
 
@@ -305,6 +305,21 @@ void Scene::drawScene()
 				lampShader.setMat4("model", model);
 				cubeObject.DrawMesh(lampShader);
 			}
+
+
+			//HUD
+			glDisable(GL_DEPTH_TEST);
+			useTexture(PlayerHUD, NULL, NULL);
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+			glEnable(GL_DEPTH_TEST);
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 		}
 
 
@@ -328,6 +343,8 @@ void Scene::drawScene()
 			bossObject.DrawMesh(outlineShader);
 
 			glStencilMask(0xFF);
+
+
 			glEnable(GL_DEPTH_TEST);
 			glDepthMask(GL_TRUE);
 		}
