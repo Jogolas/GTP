@@ -7,7 +7,7 @@
 Scene::Scene(bool active)
 {
 	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
-	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
+	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 10000.0f);
 
 	player->setupSpell();
 
@@ -349,7 +349,7 @@ void Scene::collisions()
 		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
 		for (int i = 0; i < 3; i++) {
-			cd.SpellBoxCollision(dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
+			cd.SpellBoxCollision(player->spells[i], boss, dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
 			dynamic_cast<SpellDecorator*>(player->spells[i])->object.position = dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj->getPosition();
 		}
 
@@ -374,7 +374,8 @@ bool Scene::updateScene()
 	// lose condition, will close the application if this happens
 	if (player->getHealth() <= 0.0f)
 		return false;
-
+	else if (dynamic_cast<NPC*>(boss)->getHealth() <= 0.0f)
+		return false;
 
 	return true;
 }

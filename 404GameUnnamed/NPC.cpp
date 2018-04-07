@@ -3,7 +3,7 @@
 
 NPC::NPC()
 {
-	health = 100.0;
+	health = 10000.0;
 
 	d_object = new D_Object();
 }

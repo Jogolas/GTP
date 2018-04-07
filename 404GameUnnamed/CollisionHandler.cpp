@@ -1,4 +1,5 @@
 #include "CollisionHandler.h"
+#include "SpellDecorator.h"
 
 #include <iostream>
 
@@ -76,6 +77,15 @@ void CollisionHandler::SpellBoxCollision(Collider* source, Collider* target)
 	if (col.CollisionAgainstBox(source, target)) {
 
 		source->setPosition(glm::vec3(-100.0f));
+	}
+}
+
+void CollisionHandler::SpellBoxCollision(AbstractSpell* spell, AbstractAI* npc, Collider* source, Collider* target)
+{
+	if (col.CollisionAgainstBox(source, target)) {
+
+		source->setPosition(glm::vec3(-100.0f));
+		npc->removeHealth(dynamic_cast<SpellDecorator*>(spell)->damage);
 	}
 }
 

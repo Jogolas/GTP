@@ -30,10 +30,13 @@ public: //methods
 	float getRotation() { return g_object.angle; }
 	float setRotation(float rot) { return g_object.angle = rot; }
 
-	float removeHealth(float amount) { health -= amount; }
+	float removeHealth(float amount) 
+	{ 
+		std::cout << "Boss Health " << health << std::endl;
+		return health -= amount;
+	}
 
 	AbstractAISpell* getSpell() { return spell; }
-
 	AbstractAISpell* setSpell(AbstractAISpell* spell) { return this->spell = spell; }
 
 	DrawableObject* getDrawingObject() { return d_object; }

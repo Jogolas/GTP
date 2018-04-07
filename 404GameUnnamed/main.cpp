@@ -60,7 +60,18 @@ int main(int argc, char *argv[])
 	while (running) {
 		while (SDL_PollEvent(&sdlEvent)) {
 			if (sdlEvent.type == SDL_QUIT) running = false;
+
+			if (sdlEvent.type == SDL_KEYDOWN)
+			{
+				if(sdlEvent.key.repeat == 0)
+					if(sdlEvent.key.keysym.scancode == SDL_SCANCODE_0)
+						Renderer::toggleFullScreen();
+			}
 		}
+
+
+
+		Renderer::setFullScreen(hWindow);
 
 		running = update(scene);
 		draw(hWindow, scene);
