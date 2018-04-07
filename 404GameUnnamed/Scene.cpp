@@ -312,9 +312,9 @@ void Scene::drawScene()
 
 			useTexture(playerDiffuse, NULL, NULL);
 			model = glm::mat4(1.0);
-			model = glm::translate(model, player->g_object.position);
+			model = glm::translate(model, glm::vec3(player->g_object.position.x, player->g_object.position.y - 0.02f, player->g_object.position.z));
 			model = glm::rotate(model, glm::radians(-player->g_object.angle), glm::vec3(0, 1, 0));
-			model = glm::scale(model, glm::vec3(0.51f));
+			model = glm::scale(model, glm::vec3(0.52f));
 			outlineShader.setMat4("model", model);
 			bossObject.DrawMesh(outlineShader);
 			glStencilMask(0xFF);
