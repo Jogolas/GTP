@@ -349,18 +349,14 @@ void Scene::collisions()
 		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object, crates[i]->g_object.colObj);
 		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
-		for (int i = 0; i < 3; i++) {
-			cd.SpellBoxCollision(player->spells[i], boss, dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
-			dynamic_cast<SpellDecorator*>(player->spells[i])->object.position = dynamic_cast<SpellDecorator*>(player->spells[i])->object.colObj->getPosition();
+		for (int j = 0; j < 3; j++) {
+			cd.SpellBoxCollision(player->spells[j], boss, dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
+			dynamic_cast<SpellDecorator*>(player->spells[j])->object.position = dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj->getPosition();
+
+			cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj(), crates[i]->g_object.colObj);
+			dynamic_cast<NPC*>(boss)->getSpell(j)->setPosition(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj()->getPosition());
 		}
-
-		for(int i = 0; i< 3; i++)
-			if (dynamic_cast<NPC*>(boss)->getSpell(i) != nullptr) {
-				cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell(i)->getColObj(), crates[i]->g_object.colObj);
-				dynamic_cast<NPC*>(boss)->getSpell(i)->setPosition(dynamic_cast<NPC*>(boss)->getSpell(i)->getColObj()->getPosition());
-			}
 	}
-
 }
 
 
