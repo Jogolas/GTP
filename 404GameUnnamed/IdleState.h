@@ -8,5 +8,6 @@ public:
 	virtual ~IdleState() { }
 	void handle(AbstractAI* npc);
 
-	float timer = 500.0f;
+	float lastHealth;
+	bool firstRun = true;
 };

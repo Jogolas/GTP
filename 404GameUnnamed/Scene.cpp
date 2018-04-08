@@ -281,6 +281,8 @@ void Scene::drawScene()
 			lampShader.use();
 			lampShader.setMat4("projection", projection);
 			lampShader.setMat4("view", view);
+			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
 			useTexture(windowTexture, NULL, NULL);
 
 			for (int i = 0; i < 4; i++) {
