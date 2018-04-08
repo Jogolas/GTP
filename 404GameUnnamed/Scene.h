@@ -36,6 +36,7 @@ private:
 	GLuint groundDiffuse, groundSpecular, groundEmission;
 	GLuint PlayerHUD, playerDiffuse, playerSpecular, playerEmission;
 	GLuint bossDiffuse, bossSpecular, bossEmission;
+	GLuint windowTexture;
 
 	glm::vec3 pointLightPositions[4] = 
 	{

@@ -5,7 +5,7 @@
 
 void IdleState::handle(AbstractAI* npc)
 {
-	if (timer >= 0) timer -= 100;
+	if (timer >= 0); //timer -= 100;
 	else {
 		dynamic_cast<NPC*>(npc)->controller.attacked = true;
 		std::cout << "Boss was attacked" << std::endl;

@@ -43,6 +43,8 @@ Scene::Scene(bool active)
 	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
 	groundEmission = Renderer::pngLoader("Textures/Environment/groundEmission.png");
 
+	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
+
 	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
 	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
@@ -279,6 +281,7 @@ void Scene::drawScene()
 			lampShader.use();
 			lampShader.setMat4("projection", projection);
 			lampShader.setMat4("view", view);
+			useTexture(windowTexture, NULL, NULL);
 
 			for (int i = 0; i < 4; i++) {
 				model = glm::mat4(1.0);
@@ -318,6 +321,7 @@ void Scene::drawScene()
 			lampShader.setMat4("view", glm::mat4(1.0));
 			cubeObject.DrawMesh(lampShader);
 
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 
 			useTexture(bossDiffuse, NULL, NULL);
 
@@ -368,8 +372,6 @@ void Scene::drawScene()
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
 			cubeObject.DrawMesh(lampShader);
-
-
 
 			glEnable(GL_DEPTH_TEST);
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
