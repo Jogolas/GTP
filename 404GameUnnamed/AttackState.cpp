@@ -20,8 +20,7 @@ void AttackState::handle(AbstractAI* npc)
 		if(dynamic_cast<NPC*>(npc)->getSpell() != nullptr)
 			dynamic_cast<AISpellDecorator*>(dynamic_cast<NPC*>(npc)->getSpell())->abilityFired = false;
 
-
-		std::cout << "boss speed " << dynamic_cast<NPC*>(npc)->g_object.velocity << std::endl;
+		//std::cout << "boss speed " << dynamic_cast<NPC*>(npc)->g_object.velocity << std::endl;
 		timer--;
 	}
 	else {

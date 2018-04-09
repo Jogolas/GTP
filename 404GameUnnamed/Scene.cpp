@@ -39,11 +39,13 @@ Scene::Scene(bool active)
 	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
 	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
 
+	wallDiffuse = Renderer::pngLoader("Textures/Environment/stoneImage.png");
+
 	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
 	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
 	groundEmission = Renderer::pngLoader("Textures/Environment/groundEmission.png");
 
-	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
+	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy3.png");
 	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
 	playerEmission = Renderer::pngLoader("Textures/Player/PlayerEmission.png");
@@ -256,15 +258,17 @@ void Scene::drawScene()
 
 
 			//walls
-			useTexture(diffuseMap, specularMap, NULL);
+			useTexture(wallDiffuse, specularMap, NULL);
 			for (int i = 0; i < 4; i++) {
 				model = wall[i]->draw();
 				lightingShader.setMat4("model", model);
 				cubeObject.DrawMesh(lightingShader);
 			}
 
+			unbindTextures();
 
 			//crates
+			useTexture(diffuseMap, specularMap, NULL);
 			for (int i = 0; i < 8; i++) {
 				model = crates[i]->draw();
 				lightingShader.setMat4("model", model);
@@ -296,6 +300,28 @@ void Scene::drawScene()
 				cubeObject.DrawMesh(lampShader);
 			}
 
+			// HUD ELEMENTS
+			projection = glm::mat4(1.0); //reset projection matrix for HUD
+			projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 1.0f, 150.0f);
+
+			glDepthMask(GL_FALSE);
+			glDisable(GL_DEPTH_TEST);
+
+			useTexture(PlayerHUD, NULL, NULL);
+
+			projection = glm::translate(projection, glm::vec3(400.0f, 300.0f, 1.0f));
+			projection = glm::scale(projection, glm::vec3(100.0f, 500.0f, 0.0f));
+			projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			projection = glm::rotate(projection, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+			lampShader.setMat4("model", projection);
+			lampShader.setMat4("view", projection);
+			cubeObject.DrawMesh(lampShader);
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+							  //remember to turn on depth test.
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(GL_TRUE);
 		}
 
 		if (pass == 1) { // second pass
@@ -358,8 +384,8 @@ bool Scene::updateScene()
 
 
 	// lose condition, will close the application if this happens
-	if (player->getHealth() <= 0.0f)
-		return false;
+	//if (player->getHealth() <= 0.0f)
+		//return false;
 
 
 	return true;

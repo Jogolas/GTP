@@ -274,10 +274,28 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="celShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="celShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="cubeMap.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="cubeMap.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="EmissionMap.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="EmissionMap.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="phongShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="phongShader.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="simpleShader.frag">
@@ -286,31 +304,13 @@
     <None Include="simpleShader.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="phongShader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="phongShader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="EmissionMap.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="EmissionMap.frag">
+    <None Include="StencilTest.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Spotlight.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Spotlight.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="celShader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="celShader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="StencilTest.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="StencilTest.frag">
