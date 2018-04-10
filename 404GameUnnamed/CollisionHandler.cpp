@@ -98,6 +98,7 @@ void CollisionHandler::npcBoxCollision(Entity source, Collider* target)
 		for (int i = 0; i < 2; i++)
 		{
 			if (i == 0) { //for x
+				source.velocity = 0.3f;
 				if (source.position.x > target->getAABB().vecMax.x + target->getPosition().x) {
 					source.colObj->setPosition(glm::vec3(source.position.x + (source.velocity + 0.001f), source.position.y, source.position.z));
 				}
@@ -106,6 +107,7 @@ void CollisionHandler::npcBoxCollision(Entity source, Collider* target)
 				}
 			}
 			if (i == 1) { //for z
+				source.velocity = 0.3f;
 				if (source.position.z > target->getAABB().vecMax.z + target->getPosition().z) {
 					source.colObj->setPosition(glm::vec3(source.position.x, source.position.y, source.position.z + (source.velocity + 0.001f)));
 				}
