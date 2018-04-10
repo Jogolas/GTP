@@ -35,9 +35,10 @@ Scene::Scene(bool active)
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
 
-	diffuseMap = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
-	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
-	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
+	wallDiffuse = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
+
+	crateDiffuse = Renderer::pngLoader("Textures/Environment/boxImage.png");
+	crateSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
 
 	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
 	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
@@ -45,7 +46,8 @@ Scene::Scene(bool active)
 
 	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
 
-	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
+	PlayerHUD = Renderer::pngLoader("Textures/Player/PlayerHUDtwo.png");
+	PlayerHUDHealth = Renderer::pngLoader("Textures/Player/PlayerHUDHealth.png");
 	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
 	playerEmission = Renderer::pngLoader("Textures/Player/PlayerEmission.png");
@@ -259,15 +261,17 @@ void Scene::drawScene()
 
 
 			//walls
-			useTexture(diffuseMap, specularMap, NULL);
+			useTexture(wallDiffuse, NULL, NULL);
 			for (int i = 0; i < 4; i++) {
 				model = wall[i]->draw();
 				lightingShader.setMat4("model", model);
 				cubeObject.DrawMesh(lightingShader);
 			}
 
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 
 			//crates
+			useTexture(crateDiffuse, crateSpecular, NULL);
 			for (int i = 0; i < 8; i++) {
 				model = crates[i]->draw();
 				lightingShader.setMat4("model", model);
@@ -316,7 +320,7 @@ void Scene::drawScene()
 			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 			model = glm::mat4(1.0);
 			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
 			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
@@ -327,14 +331,27 @@ void Scene::drawScene()
 
 			useTexture(bossDiffuse, NULL, NULL);
 
-			model = glm::mat4(1.0);
+			//getting the health percentage for the HUD
+			float ph = (player->getHealth() / 1000.0f);
 
-			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
+			useTexture(PlayerHUDHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(0.0f + (1 - ph), 1.0f * ph, 0.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.2975f, 0.725f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.15f * (ph), 0.265f * (ph), 0.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+
+			/*if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
 				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
-
+			model = glm::mat4(1.0);
 			model = glm::translate(model, glm::vec3(-0.18f, -0.79f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
 			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
@@ -373,7 +390,7 @@ void Scene::drawScene()
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+			cubeObject.DrawMesh(lampShader);*/
 
 			glEnable(GL_DEPTH_TEST);
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
@@ -448,6 +465,7 @@ bool Scene::updateScene()
 		return false;
 	else if (dynamic_cast<NPC*>(boss)->getHealth() <= 0.0f)
 		return false;
+
 
 	return true;
 }
