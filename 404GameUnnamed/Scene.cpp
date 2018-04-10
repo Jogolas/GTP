@@ -374,7 +374,7 @@ void Scene::drawScene()
 			lampShader.setMat4("view", glm::mat4(1.0));
 			cubeObject.DrawMesh(lampShader);
 
-
+			//need this to push.
 
 			/*if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
 				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
