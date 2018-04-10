@@ -364,7 +364,11 @@ void Scene::drawScene()
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
 
 			float bhp = (dynamic_cast<NPC*>(boss)->getHealth() / 10000.0f);
 
@@ -378,7 +382,11 @@ void Scene::drawScene()
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
 
 			//BOSS HEALTH DISPLAY
 			useTexture(bossHealth, NULL, NULL);
@@ -390,8 +398,11 @@ void Scene::drawScene()
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
-
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
 
 			useTexture(elecHUD, NULL, NULL); //elec spell icon
 			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
