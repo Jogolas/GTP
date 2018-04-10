@@ -28,8 +28,6 @@ struct MouseHandler
 		} 
 
 
-
-
 		// record the last position of the mouse.
 		lastMouseX = x;
 		lastMouseY = y;
@@ -76,12 +74,18 @@ struct KeyboardHandler
 			player->g_object.position = player->tMat.moveToSide(player->g_object, -player->g_object.velocity);
 		}
 
-
+		
 		// rotates the player
 		if (keys[SDL_SCANCODE_A])
-			player->g_object.angle -= 1.0f;
+		{
+			player->cam.ProcessKeyboard(LEFT, 1);
+			player->g_object.angle = player->cam.angView.y;
+		}
 		if (keys[SDL_SCANCODE_D])
-			player->g_object.angle += 1.0f;
+		{
+			player->cam.ProcessKeyboard(RIGHT, 1);
+			player->g_object.angle = player->cam.angView.y;
+		}
 
 		// makes the player jump
 		if (keys[SDL_SCANCODE_SPACE] && player->grounded == true)
@@ -89,9 +93,9 @@ struct KeyboardHandler
 			do
 			{
 				player->grounded = false;
-				player->g_object.velocity += 0.3f;
+				player->g_object.velocity += 0.5f;
 				player->g_object.position = player->tMat.moveUp(player->g_object, -player->g_object.velocity);
-			} while (player->g_object.velocity <= 2.0f);
+			} while (player->g_object.velocity <= 2.0f  && player->grounded == false);
 		}
 	}
 };
