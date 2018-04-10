@@ -34,7 +34,8 @@ private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint diffuseMap, specularMap, emissionMap;
 	GLuint groundDiffuse, groundSpecular, groundEmission;
-	GLuint PlayerHUD, playerDiffuse, playerSpecular, playerEmission;
+	GLuint PlayerHUD, PlayerWin, PlayerLose, playerDiffuse, playerSpecular, playerEmission;
+	GLuint fireHUD, iceHUD, elecHUD;
 	GLuint bossDiffuse, bossSpecular, bossEmission;
 	GLuint windowTexture;
 
@@ -62,6 +63,10 @@ private:
 	MouseHandler mouse;
 	KeyboardHandler keyboard;
 	CollisionHandler cd;
+
+	//win/lose conditions
+	bool isWon = false, isLost = false, playing = true;
+	int winTimer = 500, loseTimer = 500;
 
 };
 

@@ -78,7 +78,6 @@ struct KeyboardHandler
 			player->g_object.position = player->tMat.moveToSide(player->g_object, -player->g_object.velocity);
 		}
 
-
 		if (keys[SDL_SCANCODE_1] && !dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell)
 			dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell = true;
 		else if (keys[SDL_SCANCODE_2] && !dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell)
@@ -91,6 +90,11 @@ struct KeyboardHandler
 			player->g_object.angle -= 1.0f;
 		if (keys[SDL_SCANCODE_D])
 			player->g_object.angle += 1.0f;
+
+		if (keys[SDL_SCANCODE_RETURN])
+		{
+			
+		}
 
 	}
 };

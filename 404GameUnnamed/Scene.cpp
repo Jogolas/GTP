@@ -45,7 +45,14 @@ Scene::Scene(bool active)
 
 	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
 
-	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
+	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy2.png");
+	PlayerWin = Renderer::pngLoader("Textures/Player/winHud.png");
+	PlayerLose = Renderer::pngLoader("Textures/Player/gameOverHud.png");
+
+	fireHUD = Renderer::pngLoader("Textures/Player/fireIcon.png");
+	iceHUD = Renderer::pngLoader("Textures/Player/iceIcon.png");
+	elecHUD = Renderer::pngLoader("Textures/Player/elecIcon.png");
+
 	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
 	playerEmission = Renderer::pngLoader("Textures/Player/PlayerEmission.png");
@@ -310,9 +317,21 @@ void Scene::drawScene()
 			}
 
 
-			//HUD
+			//HUD ELEMENTS
 			glDisable(GL_DEPTH_TEST);
-			useTexture(PlayerHUD, NULL, NULL);
+			if (playing) //display hud while playing
+			{
+				useTexture(PlayerHUD, NULL, NULL);
+			}
+			else if (isWon) //display win hud
+			{
+				useTexture(PlayerWin, NULL, NULL);
+			}
+			else if (isLost) //displays game over hud
+			{
+				useTexture(PlayerLose, NULL, NULL);
+			}
+
 			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 			model = glm::mat4(1.0);
 			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -325,55 +344,72 @@ void Scene::drawScene()
 
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 
-			useTexture(bossDiffuse, NULL, NULL);
+
+			useTexture(elecHUD, NULL, NULL); //elec spell icon
 
 			model = glm::mat4(1.0);
 
 			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
-				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 
-			model = glm::translate(model, glm::vec3(-0.18f, -0.79f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.905f, 0.87f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+			unbindTextures();
 
+			useTexture(iceHUD, NULL, NULL); //ice spell icon
 
 			if (dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell) {
-				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-0.06f, -0.79f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.72f, 0.87f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+			unbindTextures();
 
+			useTexture(fireHUD, NULL, NULL); // fire spell icon
 
 			if (dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell) {
-				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(0.06f, -0.79f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.52f, 0.87f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.05f, 0.05f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
-			cubeObject.DrawMesh(lampShader);
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
 
 			glEnable(GL_DEPTH_TEST);
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
@@ -436,18 +472,49 @@ void Scene::collisions()
 
 bool Scene::updateScene()
 {
-	dynamic_cast<NPC*>(boss)->update(player);
-	keyboard.handlePlayerkeyboard(player);
-	player->update();
-	mouse.MouseMotion(player);
-	collisions();
+	if (playing)
+	{
+		dynamic_cast<NPC*>(boss)->update(player);
+		keyboard.handlePlayerkeyboard(player);
+		mouse.MouseMotion(player);
+		player->update();
+		
+		collisions();
 
+		// lose condition, will close the application if this happens
+		if (player->getHealth() <= 0.0f)
+		{
+			isLost = true;
+			playing = false;
+		}
+		else if (dynamic_cast<NPC*>(boss)->getHealth() <= 0.0f)
+		{
+			isWon = true;
+			playing = false;
+		}
+	}
 
-	// lose condition, will close the application if this happens
-	if (player->getHealth() <= 0.0f)
-		return false;
-	else if (dynamic_cast<NPC*>(boss)->getHealth() <= 0.0f)
-		return false;
+	if (isWon && !playing)
+	{
+		winTimer -= 1;
+
+		if (winTimer == 0)
+		{
+			isWon = false;
+			winTimer = 500;
+			playing = true;
+		}
+	}
+
+	if (isLost && !playing)
+	{
+		loseTimer -= 1;
+
+		if (loseTimer == 0)
+		{
+			return false;
+		}
+	}
 
 	return true;
 }
