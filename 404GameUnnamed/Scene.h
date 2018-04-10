@@ -37,7 +37,7 @@ private:
 	GLuint PlayerHUD, PlayerWin, PlayerLose, playerDiffuse, playerSpecular, playerEmission;
 	GLuint fireHUD, iceHUD, elecHUD;
 	GLuint bossDiffuse, bossSpecular, bossEmission;
-	GLuint windowTexture;
+	GLuint windowTexture, PlayerHUDHealth, bossBar, bossHealth;
 
 	glm::vec3 pointLightPositions[4] = 
 	{

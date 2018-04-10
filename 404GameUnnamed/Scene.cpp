@@ -45,7 +45,7 @@ Scene::Scene(bool active)
 
 	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
 
-	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy2.png");
+	PlayerHUD = Renderer::pngLoader("Textures/Player/playerHUDtwo.png");
 	PlayerHUDHealth = Renderer::pngLoader("Textures/Player/PlayerHUDHealth.png");
 	PlayerWin = Renderer::pngLoader("Textures/Player/winHud.png");
 	PlayerLose = Renderer::pngLoader("Textures/Player/gameOverHud.png");
@@ -61,6 +61,9 @@ Scene::Scene(bool active)
 	bossDiffuse = Renderer::pngLoader("Textures/Boss/bossDiffuse.png");
 	bossSpecular = Renderer::pngLoader("Textures/Boss/bossSpecular.png");
 	bossEmission = Renderer::pngLoader("Textures/Boss/bossEmission.png");
+
+	bossBar = Renderer::pngLoader("Textures/Boss/bossHealthBar.png");
+	bossHealth = Renderer::pngLoader("Textures/Boss/bossHealthDisplay.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
