@@ -349,9 +349,19 @@ void Scene::drawScene()
 			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
 
 
-			useTexture(elecHUD, NULL, NULL); //elec spell icon
+			//getting the health percentage for the HUD
+			float ph = (player->getHealth() / 1000.0f);
 
+			useTexture(PlayerHUDHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(0.0f + (1 - ph), 1.0f * ph, 0.0f));
 			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.2975f, 0.725f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.15f * (ph), 0.265f * (ph), 0.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
 
 			float bhp = (dynamic_cast<NPC*>(boss)->getHealth() / 10000.0f);
 
@@ -381,12 +391,13 @@ void Scene::drawScene()
 
 
 
+			useTexture(elecHUD, NULL, NULL); //elec spell icon
 			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
-				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
-
+			model = glm::mat4(1.0);
 			model = glm::translate(model, glm::vec3(-0.905f, 0.87f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
 			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
@@ -495,6 +506,9 @@ void Scene::collisions()
 			cd.SpellBoxCollision(player->spells[j], boss, dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
 			dynamic_cast<SpellDecorator*>(player->spells[j])->object.position = dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj->getPosition();
 
+			cd.SpellBoxCollision(dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj, crates[i]->g_object.colObj);
+			dynamic_cast<SpellDecorator*>(player->spells[j])->object.position = dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj->getPosition();
+
 			cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj(), crates[i]->g_object.colObj);
 			dynamic_cast<NPC*>(boss)->getSpell(j)->setPosition(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj()->getPosition());
 		}
@@ -506,12 +520,13 @@ bool Scene::updateScene()
 {
 	if (playing)
 	{
+		collisions(); // call before objects update
 		dynamic_cast<NPC*>(boss)->update(player);
 		keyboard.handlePlayerkeyboard(player);
 		mouse.MouseMotion(player);
 		player->update();
 		
-		collisions();
+		collisions(); // call after objects update
 
 		// lose condition, will close the application if this happens
 		if (player->getHealth() <= 0.0f)
