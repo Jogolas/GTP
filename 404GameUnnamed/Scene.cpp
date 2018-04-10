@@ -55,6 +55,9 @@ Scene::Scene(bool active)
 	bossDiffuse = Renderer::pngLoader("Textures/Boss/bossDiffuse.png");
 	bossSpecular = Renderer::pngLoader("Textures/Boss/bossSpecular.png");
 	bossEmission = Renderer::pngLoader("Textures/Boss/bossEmission.png");
+
+	bossBar = Renderer::pngLoader("Textures/Boss/bossHealthBar.png");
+	bossHealth = Renderer::pngLoader("Textures/Boss/bossHealthDisplay.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -344,6 +347,33 @@ void Scene::drawScene()
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
 			cubeObject.DrawMesh(lampShader);
+
+			float bhp = (dynamic_cast<NPC*>(boss)->getHealth() / 10000.0f);
+
+			//BOSS HEALTH BAR
+			useTexture(bossBar, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.5f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+			//BOSS HEALTH DISPLAY
+			useTexture(bossHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.475f * bhp, 0.035f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
 
 
 			/*if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {

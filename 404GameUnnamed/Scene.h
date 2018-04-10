@@ -34,7 +34,7 @@ private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
 	GLuint groundDiffuse, groundSpecular, groundEmission;
 	GLuint PlayerHUD, PlayerHUDHealth, playerDiffuse, playerSpecular, playerEmission;
-	GLuint bossDiffuse, bossSpecular, bossEmission;
+	GLuint bossDiffuse, bossSpecular, bossEmission, bossBar, bossHealth;
 	GLuint crateDiffuse, crateSpecular, wallDiffuse;
 	GLuint windowTexture;
 
