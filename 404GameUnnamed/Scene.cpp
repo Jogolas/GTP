@@ -46,6 +46,7 @@ Scene::Scene(bool active)
 	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
 
 	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy2.png");
+	PlayerHUDHealth = Renderer::pngLoader("Textures/Player/PlayerHUDHealth.png");
 	PlayerWin = Renderer::pngLoader("Textures/Player/winHud.png");
 	PlayerLose = Renderer::pngLoader("Textures/Player/gameOverHud.png");
 
@@ -349,8 +350,36 @@ void Scene::drawScene()
 
 			model = glm::mat4(1.0);
 
+			float bhp = (dynamic_cast<NPC*>(boss)->getHealth() / 10000.0f);
+
+			//BOSS HEALTH BAR
+			useTexture(bossBar, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.5f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+			//BOSS HEALTH DISPLAY
+			useTexture(bossHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.475f * bhp, 0.035f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+
+
 			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
-				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
+				lampShader.setVec3("objectColor", glm::vec3(0.2, 1.0, 0.2));
 			}
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
