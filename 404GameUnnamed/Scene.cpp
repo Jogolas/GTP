@@ -35,9 +35,10 @@ Scene::Scene(bool active)
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
 
-	diffuseMap = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
-	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
-	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
+	wallDiffuse = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
+
+	crateDiffuse = Renderer::pngLoader("Textures/Environment/boxImage.png");
+	crateSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
 
 	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
 	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
@@ -270,14 +271,16 @@ void Scene::drawScene()
 
 
 			//walls
-			useTexture(diffuseMap, specularMap, NULL);
+			useTexture(wallDiffuse, NULL, NULL);
 			for (int i = 0; i < 4; i++) {
 				model = wall[i]->draw();
 				lightingShader.setMat4("model", model);
 				cubeObject.DrawMesh(lightingShader);
 			}
+			unbindTextures();
 
 
+			useTexture(crateDiffuse, crateSpecular, NULL);
 			//crates
 			for (int i = 0; i < 8; i++) {
 				model = crates[i]->draw();
@@ -390,7 +393,6 @@ void Scene::drawScene()
 			cubeObject.DrawMesh(lampShader);
 
 
-
 			useTexture(elecHUD, NULL, NULL); //elec spell icon
 			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
@@ -398,9 +400,9 @@ void Scene::drawScene()
 			else
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-0.905f, 0.87f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.90f, 0.865f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
@@ -420,9 +422,9 @@ void Scene::drawScene()
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-0.72f, 0.87f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.71f, 0.865f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
@@ -442,9 +444,9 @@ void Scene::drawScene()
 				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
 
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-0.52f, 0.87f, 0.0f));
+			model = glm::translate(model, glm::vec3(-0.5275f, 0.8655f, 0.0f));
 			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(0.1f, 0.13f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
 			lampShader.setMat4("projection", glm::mat4(1.0));
 			lampShader.setMat4("model", model);
 			lampShader.setMat4("view", glm::mat4(1.0));
