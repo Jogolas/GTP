@@ -21,12 +21,12 @@ struct MouseHandler
 		int yoffset = lastMouseY - y;
 
 		// when the mouse is pressed, update the camera's view with respect to the offsets
-		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT)) 
+		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 			player->cam.ProcessMouseMovement(xoffset, yoffset);
 		else if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
 			player->cam.ProcessMouseMovement(xoffset, yoffset);
 			player->g_object.angle = player->cam.angView.y;
-		} 
+		}
 
 
 
@@ -85,15 +85,21 @@ struct KeyboardHandler
 		else if (keys[SDL_SCANCODE_3] && !dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell)
 			dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell = true;
 
-		// rotates the player
-		if (keys[SDL_SCANCODE_A])
-			player->g_object.angle -= 1.0f;
-		if (keys[SDL_SCANCODE_D])
-			player->g_object.angle += 1.0f;
-
 		if (keys[SDL_SCANCODE_RETURN])
 		{
-			
+
+		}
+
+		// rotates the player and camera
+		if (keys[SDL_SCANCODE_A])
+		{
+			player->cam.ProcessKeyboard(LEFT, 1);
+			player->g_object.angle = player->cam.angView.y;
+		}
+		if (keys[SDL_SCANCODE_D])
+		{
+			player->cam.ProcessKeyboard(RIGHT, 1);
+			player->g_object.angle = player->cam.angView.y;
 		}
 
 		// makes the player jump
