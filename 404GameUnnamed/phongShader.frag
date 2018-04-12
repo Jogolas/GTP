@@ -47,7 +47,6 @@ in vec2 TexCoords;
 vec3 calcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-
 void main()
 {
 	// define an output color value

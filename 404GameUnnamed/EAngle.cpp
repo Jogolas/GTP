@@ -13,8 +13,8 @@ glm::vec3 EAngle::ToVector() const
 
 void EAngle::Normalize()
 {
-	if (p > 89) p = 89;
-	if (p < -89) p = -89;
+	if (p > 10) p = 10;
+	if (p < -35) p = -35;
 
 	while (y < -180)
 		y += 360;

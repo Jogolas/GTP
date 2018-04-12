@@ -20,7 +20,7 @@ class Scene
 public:
 	Scene() {}
 	Scene(bool active);
-	void updateScene();
+	bool updateScene();
 	void drawScene();
 
 	void collisions();
@@ -32,10 +32,12 @@ public:
 
 private:
 	GLuint loadCubeMap(const char *fname[6], GLuint *texID);
-	GLuint diffuseMap, specularMap, emissionMap;
+	GLuint crateDiffuse, crateSpecular, wallDiffuse;
 	GLuint groundDiffuse, groundSpecular, groundEmission;
-	GLuint PlayerHUD, playerDiffuse, playerSpecular, playerEmission;
+	GLuint PlayerHUD, PlayerWin, PlayerLose, playerDiffuse, playerSpecular, playerEmission;
+	GLuint fireHUD, iceHUD, elecHUD;
 	GLuint bossDiffuse, bossSpecular, bossEmission;
+	GLuint windowTexture, PlayerHUDHealth, bossBar, bossHealth;
 
 	glm::vec3 pointLightPositions[4] = 
 	{
@@ -47,15 +49,8 @@ private:
 
 	glm::vec3 dirLightPosition = glm::vec3(-20.0f, -10.0f, -20.0f);
 
-	glm::vec3 orange = glm::vec3(1.0f, 0.5f, 0.31f);
-	glm::vec3 green = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 white = glm::vec3(1.0f);
-	glm::vec3 grey = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::vec3 pink = glm::vec3(1.0f, 0.5f, 1.0f);
-	glm::vec3 cyan = glm::vec3(0.5f, 1.0f, 1.0f);
-
 	Model cubeObject, bossObject, LampObject;
-	Shader lightingShader, lampShader, celShader;
+	Shader lightingShader, lampShader, celShader, outlineShader;
 
 	Player* player;
 
@@ -69,6 +64,10 @@ private:
 	KeyboardHandler keyboard;
 	CollisionHandler cd;
 	CollisionData c_data;
+
+	//win/lose conditions
+	bool isWon = false, isLost = false, playing = true;
+	int winTimer = 500, loseTimer = 500;
 
 };
 

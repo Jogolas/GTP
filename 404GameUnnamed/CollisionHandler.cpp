@@ -1,4 +1,5 @@
 #include "CollisionHandler.h"
+#include "SpellDecorator.h"
 
 #include <iostream>
 
@@ -71,11 +72,20 @@ void CollisionHandler::playerBoxCollision(Entity source, Collider* target)
 	}
 }
 
-void CollisionHandler::AISpellBoxCollision(Collider* source, Collider* target)
+void CollisionHandler::SpellBoxCollision(Collider* source, Collider* target)
 {
 	if (col.CollisionAgainstBox(source, target)) {
 
 		source->setPosition(glm::vec3(-100.0f));
+	}
+}
+
+void CollisionHandler::SpellBoxCollision(AbstractSpell* spell, AbstractAI* npc, Collider* source, Collider* target)
+{
+	if (col.CollisionAgainstBox(source, target)) {
+
+		source->setPosition(glm::vec3(-100.0f));
+		npc->removeHealth(dynamic_cast<SpellDecorator*>(spell)->damage);
 	}
 }
 
@@ -88,6 +98,7 @@ void CollisionHandler::npcBoxCollision(Entity source, Collider* target)
 		for (int i = 0; i < 2; i++)
 		{
 			if (i == 0) { //for x
+				source.velocity = 0.3f;
 				if (source.position.x > target->getAABB().vecMax.x + target->getPosition().x) {
 					source.colObj->setPosition(glm::vec3(source.position.x + (source.velocity + 0.001f), source.position.y, source.position.z));
 				}
@@ -96,6 +107,7 @@ void CollisionHandler::npcBoxCollision(Entity source, Collider* target)
 				}
 			}
 			if (i == 1) { //for z
+				source.velocity = 0.3f;
 				if (source.position.z > target->getAABB().vecMax.z + target->getPosition().z) {
 					source.colObj->setPosition(glm::vec3(source.position.x, source.position.y, source.position.z + (source.velocity + 0.001f)));
 				}

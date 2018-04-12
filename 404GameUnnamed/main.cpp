@@ -12,13 +12,22 @@
 void init()
 {
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
-void update(Scene* game)
+bool update(Scene* game)
 {
-	game->updateScene();
+	return game->updateScene();
 }
 
 
@@ -26,7 +35,7 @@ void draw(SDL_Window * window, Scene* game)
 {
 	// clear the screen
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	game->drawScene();
 
@@ -55,9 +64,20 @@ int main(int argc, char *argv[])
 	while (running) {
 		while (SDL_PollEvent(&sdlEvent)) {
 			if (sdlEvent.type == SDL_QUIT) running = false;
+
+			if (sdlEvent.type == SDL_KEYDOWN)
+			{
+				if(sdlEvent.key.repeat == 0)
+					if(sdlEvent.key.keysym.scancode == SDL_SCANCODE_0)
+						Renderer::toggleFullScreen();
+			}
 		}
 
-		update(scene);
+
+
+		Renderer::setFullScreen(hWindow);
+
+		running = update(scene);
 		draw(hWindow, scene);
 		Renderer::setFullScreen(hWindow);
 	}

@@ -7,7 +7,7 @@
 Scene::Scene(bool active)
 {
 	player = new Player(glm::vec3(10.0f, 0.0f, 5.0f));
-	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 100.0f);
+	boss = new NPC(glm::vec3(0, 0, 0), glm::vec3(1.5f, 1.5f, 1.5f), 10000.0f);
 
 	glm::vec3 crateScale(6, 30, 6);
 
@@ -30,19 +30,31 @@ Scene::Scene(bool active)
 	lightingShader = Shader("phongShader.vert", "phongShader.frag");
 	lampShader = Shader("simpleShader.vert", "simpleShader.frag");
 	celShader = Shader("celShader.vert", "celShader.frag");
+	outlineShader = Shader("StencilTest.vert", "StencilTest.frag");
 
 	bossObject = Model("models/BossModel.obj");
 	cubeObject = Model("models/TexturedCube.obj");
 
-	diffuseMap = Renderer::pngLoader("Textures/Environment/boxImage.png");
-	specularMap = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
-	emissionMap = Renderer::pngLoader("Textures/Environment/boxImageEmission.png");
+	wallDiffuse = Renderer::pngLoader("Textures/Environment/stoneTexture.png");
+
+	crateDiffuse = Renderer::pngLoader("Textures/Environment/boxImage.png");
+	crateSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png");
 
 	groundDiffuse = Renderer::pngLoader("Textures/Environment/groundDiffuse.png");
-	groundSpecular = Renderer::pngLoader("Textures/Environment/boxImageSpecularMap.png"); // need some specular for the ground
+	groundSpecular = Renderer::pngLoader("Textures/Environment/groundSpecular.png");
 	groundEmission = Renderer::pngLoader("Textures/Environment/groundEmission.png");
 
-	PlayerHUD = Renderer::pngLoader("Textures/Player/HUDforProjectcopy.png");
+	windowTexture = Renderer::pngLoader("Textures/Environment/blending_transparent_window.png");
+
+	PlayerHUD = Renderer::pngLoader("Textures/Player/playerHUDtwo.png");
+	PlayerHUDHealth = Renderer::pngLoader("Textures/Player/PlayerHUDHealth.png");
+	PlayerWin = Renderer::pngLoader("Textures/Player/winHud.png");
+	PlayerLose = Renderer::pngLoader("Textures/Player/gameOverHud.png");
+
+	fireHUD = Renderer::pngLoader("Textures/Player/fireIcon.png");
+	iceHUD = Renderer::pngLoader("Textures/Player/iceIcon.png");
+	elecHUD = Renderer::pngLoader("Textures/Player/elecIcon.png");
+
 	playerDiffuse = Renderer::pngLoader("Textures/Player/PlayerDiffuse.png");
 	playerSpecular = Renderer::pngLoader("Textures/Player/PlayerSpecular.png");
 	playerEmission = Renderer::pngLoader("Textures/Player/PlayerEmission.png");
@@ -50,6 +62,9 @@ Scene::Scene(bool active)
 	bossDiffuse = Renderer::pngLoader("Textures/Boss/bossDiffuse.png");
 	bossSpecular = Renderer::pngLoader("Textures/Boss/bossSpecular.png");
 	bossEmission = Renderer::pngLoader("Textures/Boss/bossEmission.png");
+
+	bossBar = Renderer::pngLoader("Textures/Boss/bossHealthBar.png");
+	bossHealth = Renderer::pngLoader("Textures/Boss/bossHealthDisplay.png");
 }
 
 GLuint Scene::loadCubeMap(const char *fname[6], GLuint *texID)
@@ -191,124 +206,298 @@ void Scene::unbindTextures()
 
 void Scene::drawScene()
 {
+
 	// view and projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 800.0f / 600.0f, 1.0f, 500.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(player->cam.Zoom), 1280.0f / 720.0f, 1.0f, 500.0f);
 	glm::mat4 view = player->cam.GetViewMatrix();
+	glm::mat4 model;
 
-	celShader.use();
+	for (int pass = 0; pass < 2; pass++) {
 
-	setupMaterial(celShader, 32.0f);
-	setupDirLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	setupPointLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-	celShader.setMat4("projection", projection);
-	celShader.setMat4("view", view);
-	celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
+		if (pass == 0) { // first pass
 
-
-	//player
-	useTexture(playerDiffuse, playerSpecular, playerEmission);
-	glm::mat4 model = player->draw();
-	celShader.setMat4("model", model);
-	bossObject.DrawMesh(celShader);
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
 
 
-	//boss
-	useTexture(bossDiffuse, bossSpecular, bossEmission);
-	if (boss != nullptr) {
-		model = dynamic_cast<NPC*>(boss)->draw();
-		celShader.setMat4("model", model);
-		bossObject.DrawMesh(celShader);
+			celShader.use();
+			setupMaterial(celShader, 32.0f);
+			setupDirLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+			setupPointLight(celShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+			celShader.setMat4("projection", projection);
+			celShader.setMat4("view", view);
+			celShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.3f));
+
+
+			//player
+			useTexture(playerDiffuse, playerSpecular, playerEmission);
+			model = player->draw();
+			celShader.setMat4("model", model);
+			bossObject.DrawMesh(celShader);
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+			glStencilMask(0x00);
+
+			//boss
+			useTexture(bossDiffuse, bossSpecular, bossEmission);
+			if (boss != nullptr) {
+				model = dynamic_cast<NPC*>(boss)->draw();
+				celShader.setMat4("model", model);
+				bossObject.DrawMesh(celShader);
+			}
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+
+			// be sure to activate shader when setting uniforms and drawing objects
+			lightingShader.use();
+			setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
+
+			setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.5f), glm::vec3(1.0f));
+			setupPointLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
+
+			lightingShader.setVec3("viewPos", player->cam.Position);
+			lightingShader.setMat4("projection", projection);
+			lightingShader.setMat4("view", view);
+
+
+			//ground
+			useTexture(groundDiffuse, groundSpecular, groundEmission);
+			model = ground->draw();
+			lightingShader.setMat4("model", model);
+			cubeObject.DrawMesh(lightingShader);
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			//walls
+			useTexture(wallDiffuse, NULL, NULL);
+			for (int i = 0; i < 4; i++) {
+				model = wall[i]->draw();
+				lightingShader.setMat4("model", model);
+				cubeObject.DrawMesh(lightingShader);
+			}
+			unbindTextures();
+
+
+			useTexture(crateDiffuse, crateSpecular, NULL);
+			//crates
+			for (int i = 0; i < 8; i++) {
+				model = crates[i]->draw();
+				lightingShader.setMat4("model", model);
+				cubeObject.DrawMesh(lightingShader);
+			}
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			//light position
+			lampShader.use();
+			lampShader.setMat4("projection", projection);
+			lampShader.setMat4("view", view);
+			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			useTexture(windowTexture, NULL, NULL);
+
+			for (int i = 0; i < 4; i++) {
+				model = glm::mat4(1.0);
+				model = glm::translate(model, pointLightPositions[i]);
+				model = glm::scale(model, glm::vec3(0.2f));
+
+				lampShader.setMat4("model", model);
+				cubeObject.DrawMesh(lampShader);
+			}
+
+
+			//boss spell
+			for (int i = 0; i < 3; i++)
+				if (dynamic_cast<NPC*>(boss)->getSpell(i) != nullptr) {
+					model = dynamic_cast<NPC*>(boss)->getSpell(i)->draw();
+					lampShader.setMat4("model", model);
+					cubeObject.DrawMesh(lampShader);
+				}
+
+			for (int i = 0; i < 3; i++) {
+				model = player->spells[i]->draw();
+				lampShader.setMat4("model", model);
+				cubeObject.DrawMesh(lampShader);
+			}
+
+
+			//HUD ELEMENTS
+			glDisable(GL_DEPTH_TEST);
+			if (playing) //display hud while playing
+			{
+				useTexture(PlayerHUD, NULL, NULL);
+			}
+			else if (isWon) //display win hud
+			{
+				useTexture(PlayerWin, NULL, NULL);
+			}
+			else if (isLost) //displays game over hud
+			{
+				useTexture(PlayerLose, NULL, NULL);
+			}
+
+			lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			cubeObject.DrawMesh(lampShader);
+
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+
+
+			//getting the health percentage for the HUD
+			float ph = (player->getHealth() / 1000.0f);
+
+			useTexture(PlayerHUDHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(0.0f + (1 - ph), 1.0f * ph, 0.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.2975f, 0.725f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.15f * (ph), 0.265f * (ph), 0.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+
+			float bhp = (dynamic_cast<NPC*>(boss)->getHealth() / 10000.0f);
+
+			//BOSS HEALTH BAR
+			useTexture(bossBar, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.5f, 0.05f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+
+			//BOSS HEALTH DISPLAY
+			useTexture(bossHealth, NULL, NULL);
+			lampShader.setVec3("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, -0.9f, 0.0f));
+			//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1, 0, 0));
+			model = glm::scale(model, glm::vec3(0.475f * bhp, 0.035f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+
+			useTexture(elecHUD, NULL, NULL); //elec spell icon
+			if (dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.90f, 0.865f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+			unbindTextures();
+
+			useTexture(iceHUD, NULL, NULL); //ice spell icon
+
+			if (dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.71f, 0.865f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+			unbindTextures();
+
+			useTexture(fireHUD, NULL, NULL); // fire spell icon
+
+			if (dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell) {
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 0.2, 0.2));
+			}
+			else
+				lampShader.setVec3("objectColor", glm::vec3(1.0, 1.0, 1.0));
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.5275f, 0.8655f, 0.0f));
+			model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			model = glm::scale(model, glm::vec3(0.095f, 0.127f, 1.0f));
+			lampShader.setMat4("projection", glm::mat4(1.0));
+			lampShader.setMat4("model", model);
+			lampShader.setMat4("view", glm::mat4(1.0));
+			
+			if (playing) //display icon while playing
+			{
+				cubeObject.DrawMesh(lampShader);
+			}
+
+			glEnable(GL_DEPTH_TEST);
+			unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
+		}
+
+
+		if (pass == 1) { // second pass
+
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+			glStencilMask(0x00);
+			glDepthMask(GL_FALSE);
+			glDisable(GL_DEPTH_TEST);
+
+			outlineShader.use();
+			outlineShader.setMat4("view", view);
+			outlineShader.setMat4("projection", projection);
+
+			useTexture(playerDiffuse, NULL, NULL);
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(player->g_object.position.x, player->g_object.position.y - 0.02f, player->g_object.position.z));
+			model = glm::rotate(model, glm::radians(-player->g_object.angle), glm::vec3(0, 1, 0));
+			model = glm::scale(model, glm::vec3(0.52f));
+			outlineShader.setMat4("model", model);
+			bossObject.DrawMesh(outlineShader);
+
+			glStencilMask(0xFF);
+
+
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(GL_TRUE);
+		}
 	}
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	// be sure to activate shader when setting uniforms and drawing objects
-	lightingShader.use();
-	setupMaterial(lightingShader, 32.0f); // this only needs to be called if the material is different for each object.
-
-	setupDirLight(lightingShader, glm::vec3(0.05f), glm::vec3(0.5f), glm::vec3(1.0f));
-	setupPointLight(lightingShader, glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f));
-
-	lightingShader.setVec3("viewPos", player->cam.Position);
-	lightingShader.setMat4("projection", projection);
-	lightingShader.setMat4("view", view);
-
-
-	//ground
-	useTexture(groundDiffuse, NULL, groundEmission);
-	model = ground->draw();
-	lightingShader.setMat4("model", model);
-	cubeObject.DrawMesh(lightingShader);
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	//walls
-	useTexture(diffuseMap, specularMap, NULL);
-	for (int i = 0; i < 4; i++) {
-		model = wall[i]->draw();
-		lightingShader.setMat4("model", model);
-		cubeObject.DrawMesh(lightingShader);
-	}
-
-
-	//crates
-	for (int i = 0; i < 8; i++) {
-		model = crates[i]->draw();
-		lightingShader.setMat4("model", model);
-		cubeObject.DrawMesh(lightingShader);
-	}
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-
-
-	//light position
-	lampShader.use();
-	lampShader.setMat4("projection", projection);
-	lampShader.setMat4("view", view);
-
-	for (int i = 0; i < 4; i++) {
-		model = glm::mat4(1.0);
-		model = glm::translate(model, pointLightPositions[i]);
-		model = glm::scale(model, glm::vec3(0.2f));
-
-		lampShader.setMat4("model", model);
-		cubeObject.DrawMesh(lampShader);
-	}
-
-
-	//boss spell
-	if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-		model = dynamic_cast<NPC*>(boss)->getSpell()->draw();
-		lampShader.setMat4("model", model);
-		cubeObject.DrawMesh(lampShader);
-	}
-
-
-
-	// HUD ELEMENTS
-	projection = glm::mat4(1.0); //reset projection matrix for HUD
-	projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 1.0f, 150.0f);
-
-	glDepthMask(GL_FALSE);
-	glDisable(GL_DEPTH_TEST);
-
-	useTexture(PlayerHUD, NULL, NULL);
-
-	projection = glm::translate(projection, glm::vec3(400.0f, 300.0f, 1.0f));
-	projection = glm::scale(projection, glm::vec3(100.0f, 500.0f, 0.0f));
-	projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	projection = glm::rotate(projection, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-	lampShader.setMat4("model", projection);
-	lampShader.setMat4("view", projection);
-	cubeObject.DrawMesh(lampShader);
-
-	unbindTextures(); //remember to unbind textures after you apply them, and before using a new texture.
-	//remember to turn on depth test.
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
 }
 
 
@@ -327,20 +516,66 @@ void Scene::collisions()
 		cd.npcBoxCollision(dynamic_cast<NPC*>(boss)->g_object, crates[i]->g_object.colObj);
 		boss->setPosition(dynamic_cast<NPC*>(boss)->g_object.colObj->getPosition());
 
-		if (dynamic_cast<NPC*>(boss)->getSpell() != nullptr) {
-			cd.AISpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell()->getColObj(), crates[i]->g_object.colObj);
-			dynamic_cast<NPC*>(boss)->getSpell()->setPosition(dynamic_cast<NPC*>(boss)->getSpell()->getColObj()->getPosition());
+		for (int j = 0; j < 3; j++) {
+			cd.SpellBoxCollision(player->spells[j], boss, dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj, dynamic_cast<NPC*>(boss)->g_object.colObj);
+			dynamic_cast<SpellDecorator*>(player->spells[j])->object.position = dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj->getPosition();
+
+			cd.SpellBoxCollision(dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj, crates[i]->g_object.colObj);
+			dynamic_cast<SpellDecorator*>(player->spells[j])->object.position = dynamic_cast<SpellDecorator*>(player->spells[j])->object.colObj->getPosition();
+
+			cd.SpellBoxCollision(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj(), crates[i]->g_object.colObj);
+			dynamic_cast<NPC*>(boss)->getSpell(j)->setPosition(dynamic_cast<NPC*>(boss)->getSpell(j)->getColObj()->getPosition());
 		}
 	}
-
 }
 
 
-void Scene::updateScene()
+bool Scene::updateScene()
 {
-	dynamic_cast<NPC*>(boss)->update(player);
-	keyboard.handlePlayerkeyboard(player);
-	player->update();
-	mouse.MouseMotion(player);
-	collisions();
+	if (playing)
+	{
+		collisions(); // call before objects update
+		dynamic_cast<NPC*>(boss)->update(player);
+		keyboard.handlePlayerkeyboard(player);
+		mouse.MouseMotion(player);
+		player->update();
+		
+		collisions(); // call after objects update
+
+		// lose condition, will close the application if this happens
+		if (player->getHealth() <= 0.0f)
+		{
+			isLost = true;
+			playing = false;
+		}
+		else if (dynamic_cast<NPC*>(boss)->getHealth() <= 0.0f)
+		{
+			isWon = true;
+			playing = false;
+		}
+	}
+
+	if (isWon && !playing)
+	{
+		winTimer -= 1;
+
+		if (winTimer == 0)
+		{
+			isWon = false;
+			winTimer = 500;
+			playing = true;
+		}
+	}
+
+	if (isLost && !playing)
+	{
+		loseTimer -= 1;
+
+		if (loseTimer == 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

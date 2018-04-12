@@ -9,7 +9,9 @@ AISpellDecorator::AISpellDecorator(AbstractAISpell* spell, glm::vec3 scale)
 	velocity += 0.0f + dynamic_cast<SpellType*>(spell)->velocity;
 	name = dynamic_cast<SpellType*>(spell)->name;
 	scale = glm::vec3(1.0f);
+	position = glm::vec3(-100);
 	colObj = new Colliable(position, this->scale);
+
 }
 
 AISpellDecorator::~AISpellDecorator()
@@ -35,11 +37,7 @@ glm::mat4 AISpellDecorator::draw()
 
 void AISpellDecorator::handleSpell(AbstractAI* npc, Player* target)
 {
-	if (!abilityFired) {
-		position = npc->getPosition();
-		rotation = npc->getRotation();
-	}
-	else 
+	if (abilityFired)
 		position = moveSpell(position, velocity, rotation);
 
 

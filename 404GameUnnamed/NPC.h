@@ -20,6 +20,7 @@ public: //methods
 	}
 
 	void update(Player* p);
+
 	glm::mat4 draw();
 
 	GLfloat getHealth() { return health; }
@@ -30,22 +31,26 @@ public: //methods
 	float getRotation() { return g_object.angle; }
 	float setRotation(float rot) { return g_object.angle = rot; }
 
-	AbstractAISpell* getSpell() { return spell; }
+	float removeHealth(float amount) 
+	{ 
+		std::cout << "Boss Health " << health << std::endl;
+		return health -= amount;
+	}
 
-	AbstractAISpell* setSpell(AbstractAISpell* spell) { return this->spell = spell; }
+	AbstractAISpell* getSpell(int i) { return spells[i]; }
+	void addSpell(AbstractAISpell* spell, int index);
 
 	DrawableObject* getDrawingObject() { return d_object; }
 
 public:
 	AIController controller;
-	AbstractAISpell* spell;
 
 	Entity g_object;
 	Transform tMat;
 
 private:
-	float health;
-
+	float health = 10000.0f;
+	AbstractAISpell* spells[3];
 	DrawableObject* d_object;
 
 	glm::vec3 scale;

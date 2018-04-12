@@ -3,7 +3,7 @@
 
 NPC::NPC()
 {
-	health = 100.0;
+	health = 10000.0;
 
 	d_object = new D_Object();
 }
@@ -32,6 +32,12 @@ glm::mat4 NPC::draw()
 	return model;
 }
 
+void NPC::addSpell(AbstractAISpell* spell, int index)
+{
+	if(index < 3)
+		spells[index] = spell;
+	else std::cout << "Index is out of range " << std::endl;
+}
 
 void NPC::update(Player* p)
 {

@@ -10,4 +10,6 @@ public:
 
 	virtual float getRotation() = 0;
 	virtual float setRotation(float rot) = 0;
+
+	virtual float removeHealth(float amount) = 0;
 };

@@ -26,14 +26,13 @@ void AIController::moveNPC()
 	else { // if boss is in melee range, it will push the player.
 		if (meleeInterval >= 150.0f) {
 			target->removeHealth(50.0f);
-			target->g_object.position = glm::vec3(target->g_object.position.x, target->g_object.position.y + 2.5f, target->g_object.position.z);
-			target->g_object.position = target->tMat.moveForwardAngle(target->g_object, npc->getRotation(), 5.0f);
+			target->g_object.position = target->tMat.moveForwardAngle(target->g_object, npc->getRotation(), dynamic_cast<NPC*>(npc)->g_object.velocity);
 
 			meleeInterval = 0.0f;
 		}
-
-		meleeInterval++;
 	}
+
+	meleeInterval++;
 }
 
 void AIController::setTarget(Player* target)

@@ -1,6 +1,8 @@
 #pragma once
 #include "CollisionData.h"
 #include "Entity.h"
+#include "AbstractAI.h"
+#include "AbstractSpell.h"
 
 class Colliable : public Collider
 {
@@ -30,6 +32,7 @@ struct CollisionHandler
 	CollisionData col;
 	void planeCollision(Collider* source, Collider* target);
 	void playerBoxCollision(Entity source, Collider* target);
-	void AISpellBoxCollision(Collider* source, Collider* target);
+	void SpellBoxCollision(Collider* source, Collider* target);
+	void SpellBoxCollision(AbstractSpell* spell, AbstractAI* npc, Collider* source, Collider* target);
 	void npcBoxCollision(Entity source, Collider* target);
 };
