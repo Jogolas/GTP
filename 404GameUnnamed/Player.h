@@ -15,6 +15,7 @@ public:
 	Player(glm::vec3 pos);
 	void update();
 	glm::mat4 draw();
+	bool grounded = true;
 
 	DrawableObject* getDrawingObject() { return d_object; }
 

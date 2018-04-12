@@ -96,5 +96,16 @@ struct KeyboardHandler
 			
 		}
 
+		// makes the player jump
+		if (keys[SDL_SCANCODE_SPACE] && player->grounded == true)
+		{
+			do
+			{
+				player->grounded = false;
+				player->g_object.velocity += 0.5f;
+				player->g_object.position = player->tMat.moveUp(player->g_object, -player->g_object.velocity);
+			} while (player->g_object.velocity <= 2.0f  && player->grounded == false);
+		}
+
 	}
 };
