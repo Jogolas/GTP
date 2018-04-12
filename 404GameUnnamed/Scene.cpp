@@ -315,6 +315,7 @@ void Scene::drawScene()
 void Scene::collisions()
 {
 	cd.planeCollision(player->g_object.colObj, ground->g_object.colObj);
+	player->grounded = c_data.CollisionAgainstPlane(player->g_object.colObj, ground->g_object.colObj);
 
 	//player wall/box collisions
 	for (int i = 0; i < 8; i++) {
