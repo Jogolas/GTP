@@ -78,17 +78,13 @@ struct KeyboardHandler
 			player->g_object.position = player->tMat.moveToSide(player->g_object, -player->g_object.velocity);
 		}
 
-		if (keys[SDL_SCANCODE_1] && !dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell)
+		//use number keys or key pad to fire spells
+		if (keys[SDL_SCANCODE_1] || keys[SDL_SCANCODE_KP_1] && !dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell)
 			dynamic_cast<SpellDecorator*>(player->spells[0])->moveSpell = true;
-		else if (keys[SDL_SCANCODE_2] && !dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell)
+		else if (keys[SDL_SCANCODE_2] || keys[SDL_SCANCODE_KP_2] && !dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell)
 			dynamic_cast<SpellDecorator*>(player->spells[1])->moveSpell = true;
-		else if (keys[SDL_SCANCODE_3] && !dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell)
+		else if (keys[SDL_SCANCODE_3] || keys[SDL_SCANCODE_KP_3] && !dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell)
 			dynamic_cast<SpellDecorator*>(player->spells[2])->moveSpell = true;
-
-		if (keys[SDL_SCANCODE_RETURN])
-		{
-
-		}
 
 		// rotates the player and camera
 		if (keys[SDL_SCANCODE_A])
@@ -102,8 +98,8 @@ struct KeyboardHandler
 			player->g_object.angle = player->cam.angView.y;
 		}
 
-		// makes the player jump
-		if (keys[SDL_SCANCODE_SPACE] && player->grounded == true)
+		// makes the player jump //EXPERIMENTAL//
+		if (keys[SDL_SCANCODE_SPACE] && player->grounded == true) 
 		{
 			do
 			{
