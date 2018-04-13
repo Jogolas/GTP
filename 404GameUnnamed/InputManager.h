@@ -108,6 +108,5 @@ struct KeyboardHandler
 				player->g_object.position = player->tMat.moveUp(player->g_object, -player->g_object.velocity);
 			} while (player->g_object.velocity <= 2.0f  && player->grounded == false);
 		}
-
 	}
 };
